@@ -1,0 +1,13 @@
+.main-content {
+  height: calc(100vh - 78px);
+  flex-grow: 1;
+  padding: 1rem;
+  background-color: #fff;
+  transition: margin-left 0.3s ease;
+  margin-left: 0;
+}
+
+.main-content.shifted {
+  margin-left: 250px;
+}
+

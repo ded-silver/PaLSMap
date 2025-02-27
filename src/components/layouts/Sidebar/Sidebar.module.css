@@ -1,0 +1,29 @@
+.sidebar {
+  width: 250px;
+  background-color: #333;
+  color: white;
+  padding: 1rem;
+  height: calc(100vh - 78px);
+  position: fixed;
+  top: 78px;
+  left: -250px;
+  transition: left 0.3s ease;
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  padding: 0.5rem 0;
+  cursor: pointer;
+}
+
+.sidebar ul li:hover {
+  background-color: #555;
+}

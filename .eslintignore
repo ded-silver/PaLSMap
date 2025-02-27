@@ -1,0 +1,7 @@
+.eslintrc.js
+/node_modules
+/build
+/config
+.vs
+.vscode
+.git
