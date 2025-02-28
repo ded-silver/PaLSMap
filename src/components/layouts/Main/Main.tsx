@@ -10,28 +10,34 @@ import {
   addEdge,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { SquareNode, TableNode } from '../../Nodes';
+import {
+  HorizontalCirclesNode,
+  SquareNode,
+  StickNode,
+  TableNode,
+  TripleCirclesNode,
+  VerticalCirclesNode,
+} from '../../Nodes';
 import { useCallback } from 'react';
-import { StickNode } from '../../Nodes/StickNode';
 
 const initialNodes: Node[] = [
   {
-    id: '10',
+    id: '1',
     position: { x: 0, y: 0 },
     data: {
       tableName: ['ПС Сыктывкар'],
       tableData: [],
       handlers: [
         {
-          id: '10',
+          id: '1',
           type: 'source',
         },
         {
-          id: '11',
+          id: '2',
           type: 'source',
         },
         {
-          id: '12',
+          id: '3',
           type: 'source',
         },
       ],
@@ -39,10 +45,10 @@ const initialNodes: Node[] = [
     type: 'Stick',
   },
   {
-    id: '1',
+    id: '2',
     position: { x: 200, y: 150 },
     data: {
-      label: '1',
+      label: '2',
       tableName: [],
       tableData: [],
       handlers: [
@@ -59,10 +65,10 @@ const initialNodes: Node[] = [
     type: 'Square',
   },
   {
-    id: '5',
+    id: '3',
     position: { x: 200, y: 700 },
     data: {
-      label: '5',
+      label: '3',
       tableName: [],
       tableData: [],
       handlers: [
@@ -79,10 +85,10 @@ const initialNodes: Node[] = [
     type: 'Square',
   },
   {
-    id: '2',
+    id: '4',
     position: { x: 400, y: 100 },
     data: {
-      label: '2',
+      label: '4',
       tableName: ['з.1', 'ВЛ-181'],
       tableData: [
         {
@@ -135,10 +141,10 @@ const initialNodes: Node[] = [
     type: 'Table',
   },
   {
-    id: '3',
+    id: '5',
     position: { x: 800, y: 150 },
     data: {
-      label: '3',
+      label: '5',
       tableName: ['Т1', 'Западная'],
       tableData: [
         {
@@ -159,6 +165,26 @@ const initialNodes: Node[] = [
       ],
     },
     type: 'Table',
+  },
+  {
+    id: '6',
+    position: { x: 800, y: -100 },
+    data: {
+      label: '',
+      tableName: [],
+      tableData: [],
+      handlers: [
+        {
+          id: '10',
+          type: 'source',
+        },
+        {
+          id: '11',
+          type: 'target',
+        },
+      ],
+    },
+    type: 'TripleCircles',
   },
 ];
 
@@ -185,9 +211,9 @@ const initialEdges = [
   // },
   {
     type: 'step',
-    source: '3',
-    target: '4',
-    id: '3',
+    source: '30',
+    target: '40',
+    id: '30',
     style: {
       strokeWidth: 1,
       stroke: 'black',
@@ -195,9 +221,9 @@ const initialEdges = [
   },
   {
     type: 'step',
-    source: '4',
-    target: '5',
-    id: '4',
+    source: '40',
+    target: '50',
+    id: '40',
     style: {
       strokeWidth: 1,
       stroke: 'black',
@@ -209,6 +235,9 @@ const nodeTypes = {
   Table: TableNode,
   Square: SquareNode,
   Stick: StickNode,
+  HorizontalCircles: HorizontalCirclesNode,
+  VerticalCircles: VerticalCirclesNode,
+  TripleCircles: TripleCirclesNode,
 };
 
 export const Main = () => {
