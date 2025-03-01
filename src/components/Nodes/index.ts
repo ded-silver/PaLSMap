@@ -4,3 +4,4 @@ export { StickNode } from './StickNode';
 export { VerticalCirclesNode } from './VerticalCirclesNode';
 export { HorizontalCirclesNode } from './HorizontalCirclesNode';
 export { TripleCirclesNode } from './TripleCirclesNode';
+export { VoltageNode } from './VoltageNode';
