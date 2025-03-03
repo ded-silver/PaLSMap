@@ -1,15 +1,10 @@
-.horizontal-circles-container {
+.circle-container {
   position: relative;
-  width: 190px;
-  height: 200px;
-  display: flex;
-}
-
-.circle-wrapper {
+  width: 100px;
+  height: 100px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: -10px;
 }
 
 .circle {
@@ -17,6 +12,5 @@
   height: 100px;
   border-radius: 50%;
   background-color: transparent;
-  border: 1px solid black;
-  margin: 0 0 0 0px;
+  border: 2px solid black;
 }
