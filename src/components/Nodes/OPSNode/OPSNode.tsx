@@ -16,7 +16,20 @@ import {
 import styles from './OPSNode.module.css';
 import { nanoid } from 'nanoid';
 import { CustomNode } from '../../../types/nodeTypes';
-import { Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@mui/material';
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from '@mui/material';
 import { useCallback, useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -151,9 +164,26 @@ export const OPSNode = ({ data }: NodeProps<CustomNode>) => {
     setOpen(true);
   };
 
+  function createData(
+    name: string,
+    type: string,
+    ampere: string,
+    time: string,
+    disconnectable_connection: string,
+    note: string,
+  ) {
+    return { name, type, ampere, time, disconnectable_connection, note };
+  }
+
   const handleClose = () => {
     setOpen(false);
   };
+
+  const rows = [
+    createData('Диффзащита РНТ-565', '159', '6.0', '0', 'Т-1-40000', 'W1ур = 9вит'),
+    createData('Газовая защита', ' ', '1 м/с', '0', 'Т-1-40000', 'W1ур = 9вит'),
+    createData('Газовая защита РПН', '', '0.9 м/с', '0', 'Т-1-40000', 'W1ур = 9вит'),
+  ];
 
   return (
     <>
@@ -193,22 +223,59 @@ export const OPSNode = ({ data }: NodeProps<CustomNode>) => {
         </DialogTitle>
 
         <DialogContent>
-          <ReactFlowProvider>
-            <ReactFlow
-              nodes={nodes}
-              edges={edges}
-              onNodesChange={onNodesChange}
-              onEdgesChange={onEdgesChange}
-              onConnect={onConnect}
-              className="react-flow-subflows-example"
-              fitView
-              style={{ backgroundColor: '#F7F9FB' }}
-              nodesDraggable={false}
-            >
-              <Controls />
-              <Background color="#E6E6E6" />
-            </ReactFlow>
-          </ReactFlowProvider>
+          <div className={styles.container}>
+            <div className={styles.diagram}>
+              <ReactFlowProvider>
+                <ReactFlow
+                  nodes={nodes}
+                  edges={edges}
+                  onNodesChange={onNodesChange}
+                  onEdgesChange={onEdgesChange}
+                  onConnect={onConnect}
+                  className="react-flow-subflows-example"
+                  fitView
+                  style={{ backgroundColor: '#F7F9FB', width: '100%', height: '400px' }} // Устанавливаем размер диаграммы
+                  nodesDraggable={false}
+                >
+                  <Controls />
+                  <Background color="#E6E6E6" />
+                </ReactFlow>
+              </ReactFlowProvider>
+            </div>
+            <div className={styles.table}>
+              <TableContainer component={Paper}>
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Защита и автоматика</TableCell>
+                      <TableCell align="right">Тип тт, К тт</TableCell>
+                      <TableCell align="right">Iсз/Iср&nbsp;(g)</TableCell>
+                      <TableCell align="right">tcp сек&nbsp;(g)</TableCell>
+                      <TableCell align="right">Отключаемое присоединение&nbsp;(g)</TableCell>
+                      <TableCell align="right">Примечание&nbsp;(g)</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {rows.map((row) => (
+                      <TableRow
+                        key={row.name}
+                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                      >
+                        <TableCell component="th" scope="row">
+                          {row.name}
+                        </TableCell>
+                        <TableCell align="right">{row.type}</TableCell>
+                        <TableCell align="right">{row.ampere}</TableCell>
+                        <TableCell align="right">{row.time}</TableCell>
+                        <TableCell align="right">{row.disconnectable_connection}</TableCell>
+                        <TableCell align="right">{row.note}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
     </>
