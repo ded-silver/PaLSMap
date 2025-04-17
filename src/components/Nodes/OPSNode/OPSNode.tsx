@@ -180,9 +180,16 @@ export const OPSNode = ({ data }: NodeProps<CustomNode>) => {
   };
 
   const rows = [
-    createData('Диффзащита РНТ-565', '159', '6.0', '0', 'Т-1-40000', 'W1ур = 9вит'),
-    createData('Газовая защита', ' ', '1 м/с', '0', 'Т-1-40000', 'W1ур = 9вит'),
-    createData('Газовая защита РПН', '', '0.9 м/с', '0', 'Т-1-40000', 'W1ур = 9вит'),
+    // createData('Диффзащита РНТ-565', '159', '6.0', '0', 'Т-1-40000', 'W1ур = 9вит'),
+    // createData('Газовая защита', ' ', '1 м/с', '0', 'Т-1-40000', 'W1ур = 9вит'),
+    // createData('Газовая защита РПН', '', '0.9 м/с', '0', 'Т-1-40000', 'W1ур = 9вит'),
+    createData('КППСОД', '1 сек', '***', '***', '', ''),
+    createData('ФГУ', '1 сек', '***', '***', '', ''),
+    createData('ПНС', '1 сек', '***', '***', '', ''),
+    createData('ПНА', '1 сек', '***', '***', '', ''),
+    createData('МНС', '1 сек', '***', '***', '', ''),
+    createData('МНА', '1 сек', '***', '***', '', ''),
+    createData('САР', '1 сек', '***', '***', '', ''),
   ];
 
   return (
@@ -248,9 +255,7 @@ export const OPSNode = ({ data }: NodeProps<CustomNode>) => {
                   <TableHead>
                     <TableRow>
                       <TableCell>Защита и автоматика</TableCell>
-                      <TableCell align="right">Тип тт, К тт</TableCell>
-                      <TableCell align="right">Iсз/Iср&nbsp;(g)</TableCell>
-                      <TableCell align="right">tcp сек&nbsp;(g)</TableCell>
+                      <TableCell align="right">Время срабатывания</TableCell>
                       <TableCell align="right">Отключаемое присоединение&nbsp;(g)</TableCell>
                       <TableCell align="right">Примечание&nbsp;(g)</TableCell>
                     </TableRow>

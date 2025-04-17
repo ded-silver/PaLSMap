@@ -1,5 +1,6 @@
 .main-content {
-  height: calc(100vh - 78px);
+  height: calc(100vh - 78px - 2rem); /* 1rem сверху и снизу */
+  overflow: hidden;
   flex-grow: 1;
   padding: 1rem;
   background-color: #fff;
@@ -10,4 +11,3 @@
 .main-content.shifted {
   margin-left: 250px;
 }
-

@@ -9,6 +9,8 @@ import {
   Edge,
   addEdge,
   ReactFlowProvider,
+  ReactFlowInstance,
+  useReactFlow,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import {
@@ -20,7 +22,9 @@ import {
   VerticalCirclesNode,
   VoltageNode,
 } from '../../Nodes';
-import { useCallback } from 'react';
+import { DragEventHandler, useCallback, useRef, useState } from 'react';
+import { DnDProvider, useDnD } from '../../../hooks/DnDContext';
+import { DnDSidebar } from '../DnDSidebar';
 
 const initialNodes: Node[] = [
   {
@@ -88,16 +92,17 @@ const nodeTypes = {
   Voltage: VoltageNode,
 };
 
-export const Main = () => {
+const MMMain = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>(initialEdges);
+  const { screenToFlowPosition } = useReactFlow();
   const onConnect = useCallback(
     (params: Connection | Edge) => {
       setEdges((eds) => {
         if (params.targetHandle) {
           const customEdge = {
             ...params,
-            type: 'step',
+            type: 'straight',
             style: {
               strokeWidth: 2,
               stroke: 'black',
@@ -111,15 +116,76 @@ export const Main = () => {
     },
     [setEdges],
   );
+  const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
+  const { type } = useDnD();
+  const onDrop = useCallback(
+    (event: React.DragEvent) => {
+      event.preventDefault();
+      console.log(type);
+      // if (!type) return;
+
+      const position = screenToFlowPosition({
+        x: event.clientX,
+        y: event.clientY,
+      });
+
+      const newNode: Node = {
+        id: `${+new Date()}`,
+        type: 'OPS',
+        position,
+        data: {
+          label: `${nodes.length + 1}`,
+          tableName: ['НПС Новая'],
+          tableData: [],
+          handlers: [
+            {
+              id: `${+new Date()}-source`,
+              type: 'source',
+            },
+            {
+              id: `${+new Date()}-target`,
+              type: 'target',
+            },
+          ],
+        },
+      };
+      setNodes((nds) => nds.concat(newNode));
+      console.log(nodes);
+      console.log(newNode);
+    },
+    [reactFlowInstance, nodes.length, setNodes],
+  );
+
+  const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+  }, []);
 
   return (
     <div className={styles['main-content']}>
       <h1>Карта уставок защиты</h1>
-      <ReactFlowProvider>
-        <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes} onConnect={onConnect} fitView>
-          <Controls />
-        </ReactFlow>
-      </ReactFlowProvider>
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        nodeTypes={nodeTypes}
+        onConnect={onConnect}
+        onInit={setReactFlowInstance}
+        onDrop={onDrop}
+        onDragOver={onDragOver}
+        fitView
+      >
+        <Controls />
+        <DnDSidebar />
+      </ReactFlow>
+      
     </div>
   );
 };
+
+export default () => (
+  <ReactFlowProvider>
+    <DnDProvider>
+      <MMMain />
+    </DnDProvider>
+  </ReactFlowProvider>
+);

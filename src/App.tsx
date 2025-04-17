@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import './App.css';
-import { Header, Main, Sidebar } from './components/layouts';
+import { Header, Sidebar } from './components/layouts';
+import Main from './components/layouts/Main/Main';
+import { DnDSidebar } from './components/layouts/DnDSidebar/DnDSidebar';
+import { ReactFlowProvider } from '@xyflow/react';
+import { DnDProvider } from './hooks/DnDContext';
 
 function App() {
   const [isSidebarOpen, setSidebarOpen] = useState<boolean>(false);
@@ -8,12 +12,19 @@ function App() {
   const toggleSidebar = () => {
     setSidebarOpen(!isSidebarOpen);
   };
+
   return (
-    <div>
-      <Header toggleSidebar={toggleSidebar} />
-      <Sidebar isOpen={isSidebarOpen} />
-      <Main />
-    </div>
+    <ReactFlowProvider>
+      <div className="app-layout">
+        <Header toggleSidebar={toggleSidebar} />
+        <div className="content-layout">
+          <Sidebar isOpen={isSidebarOpen} />
+          <div style={{ flexGrow: 1 }}>
+            <Main />
+          </div>
+        </div>
+      </div>
+    </ReactFlowProvider>
   );
 }
 
