@@ -1,4 +1,4 @@
-import styles from './Main.module.css';
+import React, { useCallback, useRef, useState } from 'react';
 import {
   ReactFlow,
   Controls,
@@ -13,6 +13,7 @@ import {
   useReactFlow,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
+import { DnDSidebar } from '../DnDSidebar';
 import {
   OPSNode,
   SquareNode,
@@ -22,9 +23,8 @@ import {
   VerticalCirclesNode,
   VoltageNode,
 } from '../../Nodes';
-import { DragEventHandler, useCallback, useRef, useState } from 'react';
 import { DnDProvider, useDnD } from '../../../hooks/DnDContext';
-import { DnDSidebar } from '../DnDSidebar';
+import styles from './Main.module.css';
 
 const initialNodes: Node[] = [
   {
@@ -35,14 +35,8 @@ const initialNodes: Node[] = [
       tableName: ['НПС Ухта'],
       tableData: [],
       handlers: [
-        {
-          id: '1',
-          type: 'source',
-        },
-        {
-          id: '1',
-          type: 'target',
-        },
+        { id: '1', type: 'source' },
+        { id: '1', type: 'target' },
       ],
     },
     type: 'OPS',
@@ -55,14 +49,8 @@ const initialNodes: Node[] = [
       tableName: ['НПС Уса'],
       tableData: [],
       handlers: [
-        {
-          id: '2',
-          type: 'source',
-        },
-        {
-          id: '2',
-          type: 'target',
-        },
+        { id: '2', type: 'source' },
+        { id: '2', type: 'target' },
       ],
     },
     type: 'OPS',
@@ -93,9 +81,17 @@ const nodeTypes = {
 };
 
 const MMMain = () => {
+  const reactFlowWrapper = useRef(null);
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>(initialEdges);
   const { screenToFlowPosition } = useReactFlow();
+  const [nodeName, setNodeName] = useState('Введите имя узла'); // Стейт для хранения имени узла
+
+  // Обработчик изменения имени узла из сайдбара
+  const onNodeNameChange = (name: string) => {
+    setNodeName(name);
+  };
+
   const onConnect = useCallback(
     (params: Connection | Edge) => {
       setEdges((eds) => {
@@ -116,26 +112,25 @@ const MMMain = () => {
     },
     [setEdges],
   );
-  const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
-  const { type } = useDnD();
+
+  // Обработчик для перетаскивания узлов
   const onDrop = useCallback(
     (event: React.DragEvent) => {
       event.preventDefault();
-      console.log(type);
-      // if (!type) return;
 
       const position = screenToFlowPosition({
         x: event.clientX,
         y: event.clientY,
       });
 
+      // Используем состояние для имени узла
       const newNode: Node = {
         id: `${+new Date()}`,
         type: 'OPS',
         position,
         data: {
           label: `${nodes.length + 1}`,
-          tableName: ['НПС Новая'],
+          tableName: [nodeName], // Применяем имя узла из состояния
           tableData: [],
           handlers: [
             {
@@ -149,35 +144,37 @@ const MMMain = () => {
           ],
         },
       };
+
       setNodes((nds) => nds.concat(newNode));
-      console.log(nodes);
-      console.log(newNode);
+      console.log('Добавлен узел:', newNode);
     },
-    [reactFlowInstance, nodes.length, setNodes],
+    [screenToFlowPosition, nodes.length, setNodes, nodeName],
   );
 
+  // Обработчик события перетаскивания
   const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
   }, []);
 
   return (
-    <div className={styles['main-content']}>
-      <h1>Карта уставок защиты</h1>
+    <div className={styles['main-content']} ref={reactFlowWrapper}>
       <ReactFlow
         nodes={nodes}
         edges={edges}
         nodeTypes={nodeTypes}
         onConnect={onConnect}
-        onInit={setReactFlowInstance}
         onDrop={onDrop}
         onDragOver={onDragOver}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        nodesDraggable
         fitView
       >
+        <h1>Карта уставок защиты</h1>
         <Controls />
-        <DnDSidebar />
+        <DnDSidebar onNodeNameChange={onNodeNameChange} /> {/* Передаем обработчик из Main */}
       </ReactFlow>
-      
     </div>
   );
 };

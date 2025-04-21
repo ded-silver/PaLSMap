@@ -193,8 +193,8 @@ export const OPSNode = ({ data }: NodeProps<CustomNode>) => {
   ];
 
   return (
-    <>
-      <Typography sx={{ transform: 'translate(10%, 0)' }}>{data.tableName[0]}</Typography>
+    <div className={styles['nodeName']}>
+      <Typography>{data.tableName[0]}</Typography>
       <div className={styles['circle-container']} onClick={handleClickOpen}>
         <div className={styles['circle']} />
         {data.handlers.map((h) => (
@@ -242,7 +242,7 @@ export const OPSNode = ({ data }: NodeProps<CustomNode>) => {
                   className="react-flow-subflows-example"
                   fitView
                   style={{ backgroundColor: '#F7F9FB', width: '100%', height: '400px' }} // Устанавливаем размер диаграммы
-                  nodesDraggable={false}
+                  nodesDraggable
                 >
                   <Controls />
                   <Background color="#E6E6E6" />
@@ -283,6 +283,6 @@ export const OPSNode = ({ data }: NodeProps<CustomNode>) => {
           </div>
         </DialogContent>
       </Dialog>
-    </>
+    </div>
   );
 };
