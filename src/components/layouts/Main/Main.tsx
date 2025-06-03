@@ -1,188 +1,239 @@
-import React, { useCallback, useRef, useState } from 'react';
+import { Typography } from '@mui/material'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import {
-  ReactFlow,
-  Controls,
-  useNodesState,
-  useEdgesState,
-  Node,
-  Connection,
-  Edge,
-  addEdge,
-  ReactFlowProvider,
-  ReactFlowInstance,
-  useReactFlow,
-} from '@xyflow/react';
-import '@xyflow/react/dist/style.css';
-import { DnDSidebar } from '../DnDSidebar';
-import {
-  OPSNode,
-  SquareNode,
-  StickNode,
-  TableNode,
-  TripleCirclesNode,
-  VerticalCirclesNode,
-  VoltageNode,
-} from '../../Nodes';
-import { DnDProvider, useDnD } from '../../../hooks/DnDContext';
-import styles from './Main.module.css';
+	Connection,
+	Controls,
+	Edge,
+	Node,
+	NodeChange,
+	ReactFlow,
+	ReactFlowProvider,
+	useEdgesState,
+	useNodesState,
+	useReactFlow
+} from '@xyflow/react'
+import '@xyflow/react/dist/style.css'
+import debounce from 'lodash/debounce'
+import { nanoid } from 'nanoid'
+import React, { useCallback, useEffect, useRef } from 'react'
+import { SubmitHandler } from 'react-hook-form'
+import { toast } from 'react-toastify'
 
-const initialNodes: Node[] = [
-  {
-    id: '1',
-    position: { x: 100, y: 100 },
-    data: {
-      label: '1',
-      tableName: ['НПС Ухта'],
-      tableData: [],
-      handlers: [
-        { id: '1', type: 'source' },
-        { id: '1', type: 'target' },
-      ],
-    },
-    type: 'OPS',
-  },
-  {
-    id: '2',
-    position: { x: 400, y: -150 },
-    data: {
-      label: '2',
-      tableName: ['НПС Уса'],
-      tableData: [],
-      handlers: [
-        { id: '2', type: 'source' },
-        { id: '2', type: 'target' },
-      ],
-    },
-    type: 'OPS',
-  },
-];
+import { DnDProvider, useDnD } from '../../../hooks/DnDContext'
+import { useCreateEdge } from '../../../hooks/edges/useEdges'
+import { useEdges } from '../../../hooks/nodes/useEdges'
+import { useNodes } from '../../../hooks/nodes/useNodes'
+import { NodeDto, NodeService } from '../../../services/node.service'
+import { OPSNode, TankParkNode } from '../../Nodes'
+import { DnDSidebar } from '../DnDSidebar'
 
-const initialEdges = [
-  {
-    type: 'straight',
-    source: '1',
-    target: '2',
-    id: '1',
-    style: {
-      strokeWidth: 2,
-      stroke: 'black',
-    },
-  },
-];
+import styles from './Main.module.css'
 
 const nodeTypes = {
-  Table: TableNode,
-  Square: SquareNode,
-  Stick: StickNode,
-  OPS: OPSNode,
-  VerticalCircles: VerticalCirclesNode,
-  TripleCircles: TripleCirclesNode,
-  Voltage: VoltageNode,
-};
+	OPS: OPSNode,
+	TankPark: TankParkNode
+}
 
 const MMMain = () => {
-  const reactFlowWrapper = useRef(null);
-  const [nodes, setNodes, onNodesChange] = useNodesState<Node>(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>(initialEdges);
-  const { screenToFlowPosition } = useReactFlow();
-  const [nodeName, setNodeName] = useState('Введите имя узла'); // Стейт для хранения имени узла
+	const reactFlowWrapper = useRef(null)
+	const { items } = useNodes()
+	const { items: allEgdes } = useEdges()
+	const [nodes, setNodes, onNodesChange] = useNodesState<Node>([])
+	const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([])
+	const { screenToFlowPosition, getNodes } = useReactFlow()
+	const queryClient = useQueryClient()
 
-  // Обработчик изменения имени узла из сайдбара
-  const onNodeNameChange = (name: string) => {
-    setNodeName(name);
-  };
+	//Добавление нод
+	const { mutate: node } = useMutation({
+		mutationKey: ['node'],
+		mutationFn: (data: NodeDto) => NodeService.create(data),
+		onSuccess: data => {
+			queryClient.invalidateQueries({ queryKey: ['nodes'] })
+			toast.success('Successfully logged in!')
+		},
+		onError: error => {
+			toast.error('Login or registration failed.')
+		}
+	})
 
-  const onConnect = useCallback(
-    (params: Connection | Edge) => {
-      setEdges((eds) => {
-        if (params.targetHandle) {
-          const customEdge = {
-            ...params,
-            type: 'straight',
-            style: {
-              strokeWidth: 2,
-              stroke: 'black',
-            },
-          };
-          console.log(customEdge);
-          return addEdge(customEdge, eds);
-        }
-        return addEdge(params, eds);
-      });
-    },
-    [setEdges],
-  );
+	const { mutate: deleteNode } = useMutation({
+		mutationKey: ['deleteNode'],
+		mutationFn: (id: string) => NodeService.delete(id),
+		onSuccess: data => {
+			queryClient.invalidateQueries({ queryKey: ['nodes'] })
+		},
+		onError(error: unknown) {
+			toast.error('Ошибка при удалении')
+		}
+	})
 
-  // Обработчик для перетаскивания узлов
-  const onDrop = useCallback(
-    (event: React.DragEvent) => {
-      event.preventDefault();
+	const { mutate: nodeUpdate } = useMutation({
+		mutationKey: ['nodeUpdate'],
+		mutationFn: (data: NodeDto) => NodeService.update(data.id, data),
+		onSuccess: data => {
+			queryClient.invalidateQueries({ queryKey: ['nodes'] })
+		},
+		onError: error => {
+			toast.error('Login or registration failed.')
+		}
+	})
 
-      const position = screenToFlowPosition({
-        x: event.clientX,
-        y: event.clientY,
-      });
+	const { type } = useDnD() as {
+		type: string | null
+		setType: React.Dispatch<React.SetStateAction<string | null>>
+	}
 
-      // Используем состояние для имени узла
-      const newNode: Node = {
-        id: `${+new Date()}`,
-        type: 'OPS',
-        position,
-        data: {
-          label: `${nodes.length + 1}`,
-          tableName: [nodeName], // Применяем имя узла из состояния
-          tableData: [],
-          handlers: [
-            {
-              id: `${+new Date()}-source`,
-              type: 'source',
-            },
-            {
-              id: `${+new Date()}-target`,
-              type: 'target',
-            },
-          ],
-        },
-      };
+	const handleCreate: SubmitHandler<NodeDto> = data => {
+		node(data)
+	}
 
-      setNodes((nds) => nds.concat(newNode));
-      console.log('Добавлен узел:', newNode);
-    },
-    [screenToFlowPosition, nodes.length, setNodes, nodeName],
-  );
+	//Добавление эджей
+	const { mutate: createEdge } = useCreateEdge()
 
-  // Обработчик события перетаскивания
-  const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    event.dataTransfer.dropEffect = 'move';
-  }, []);
+	const onConnect = useCallback(
+		(params: Connection | Edge) => {
+			if (params.targetHandle) {
+				const edge = {
+					...params,
+					type: 'straight',
+					id: nanoid(),
+					style: {
+						strokeWidth: 1,
+						stroke: 'black'
+					}
+				}
+				setEdges(eds => [...eds, edge])
 
-  return (
-    <div className={styles['main-content']} ref={reactFlowWrapper}>
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        nodeTypes={nodeTypes}
-        onConnect={onConnect}
-        onDrop={onDrop}
-        onDragOver={onDragOver}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        nodesDraggable
-        fitView
-      >
-        <h1>Карта уставок защиты</h1>
-        <Controls />
-        <DnDSidebar onNodeNameChange={onNodeNameChange} /> {/* Передаем обработчик из Main */}
-      </ReactFlow>
-    </div>
-  );
-};
+				createEdge(edge)
+			}
+		},
+		[setEdges, createEdge]
+	)
+
+	// Обработчик для перетаскивания узлов
+	const onDrop = useCallback(
+		(event: React.DragEvent) => {
+			event.preventDefault()
+
+			const position = screenToFlowPosition({
+				x: event.clientX,
+				y: event.clientY
+			})
+			if (!type) return
+
+			// Используем состояние для имени узла
+			const newNode = {
+				id: nanoid(),
+				type,
+				position,
+				data: {
+					label: '',
+					tableName: [], // Применяем имя узла из состояния
+					tableData: [],
+					handlers: [
+						{
+							id: nanoid(),
+							type: 'source'
+						},
+						{
+							id: nanoid(),
+							type: 'target'
+						}
+					]
+				}
+			}
+
+			handleCreate(newNode as unknown as NodeDto)
+		},
+		[screenToFlowPosition, type]
+	)
+
+	// Обработчик события перетаскивания
+	const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
+		event.preventDefault()
+		event.dataTransfer.dropEffect = 'move'
+	}, [])
+
+	const handleNodesDelete = useCallback((deletedNodes: Node[]) => {
+		deletedNodes.forEach(node => {
+			deleteNode(node.id)
+		})
+	}, [])
+
+	useEffect(() => {
+		if (items) {
+			setNodes(items)
+		}
+	}, [items])
+
+	useEffect(() => {
+		if (allEgdes) {
+			setEdges(allEgdes)
+		}
+	}, [allEgdes])
+
+	const handleNodeUpdate = useCallback(
+		debounce((changes: NodeChange[], allNodes: Node[]) => {
+			const updatedNodes = changes
+				.filter(change => change.type === 'position')
+				.map(change => allNodes.find(node => node.id === change.id))
+				.filter(Boolean) as Node[]
+
+			updatedNodes.forEach(node => {
+				nodeUpdate(node as unknown as NodeDto)
+			})
+		}, 500),
+		[]
+	)
+
+	const onNodesChangeWithDebounce = useCallback(
+		(changes: NodeChange[]) => {
+			onNodesChange(changes)
+			const currentNodes = getNodes()
+			handleNodeUpdate(changes, currentNodes)
+		},
+		[onNodesChange, getNodes]
+	)
+
+	return (
+		<>
+			<div
+				className={styles['main-content']}
+				ref={reactFlowWrapper}
+			>
+				<ReactFlow
+					nodes={nodes}
+					edges={edges}
+					nodeTypes={nodeTypes}
+					onConnect={onConnect}
+					onDrop={onDrop}
+					onDragOver={onDragOver}
+					onNodesChange={onNodesChangeWithDebounce}
+					onEdgesChange={onEdgesChange}
+					onNodesDelete={handleNodesDelete}
+					snapToGrid
+					snapGrid={[1, 1]}
+					nodesDraggable
+					fitView
+				>
+					<Typography
+						variant='h4'
+						className={styles.pageTitle}
+					>
+						КАРТА УСТАВОК ЗАЩИТЫ
+					</Typography>
+					<Controls />
+				</ReactFlow>
+			</div>
+			<DnDSidebar />
+		</>
+	)
+}
 
 export default () => (
-  <ReactFlowProvider>
-    <DnDProvider>
-      <MMMain />
-    </DnDProvider>
-  </ReactFlowProvider>
-);
+	<ReactFlowProvider>
+		<DnDProvider>
+			<MMMain />
+		</DnDProvider>
+	</ReactFlowProvider>
+)

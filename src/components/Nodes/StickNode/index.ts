@@ -1,1 +1,0 @@
-export { StickNode } from './StickNode';

@@ -24,3 +24,19 @@ body {
   flex: 1;
   overflow: hidden;
 }
+
+.react-flow__node-ChildObject {
+  z-index: 1002 !important;
+}
+
+.react-flow__node-ParentObject {
+  z-index: 1001 !important;
+}
+
+.react-flow__node-Object {
+  z-index: 1001 !important;
+}
+
+.react-flow__node-Factory {
+  z-index: 1000 !important;
+}

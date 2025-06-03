@@ -1,0 +1,55 @@
+.main-content {
+	padding: 1rem;
+}
+
+.pageTitle {
+	text-align: center;
+	margin-bottom: 24px;
+}
+
+.abbreviationList {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	max-width: 700px;
+	margin: 0 auto;
+}
+
+.abbreviationItem {
+	display: grid;
+	grid-template-columns: 120px 1fr;
+	align-items: center;
+	gap: 20px;
+	padding: 16px 20px;
+	border-radius: 12px;
+	background-color: #f9f9f9;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+	transition:
+		transform 0.2s ease,
+		background-color 0.2s ease;
+}
+
+.abbreviationItem:hover {
+	transform: scale(1.01);
+	background-color: #eef2f7;
+}
+
+.short {
+	font-weight: bold;
+	font-size: 1.2rem;
+	text-align: center;
+	position: relative;
+}
+
+.full {
+	font-size: 1rem;
+	color: #555;
+	line-height: 1.5;
+}
+
+.searchBarWrapper {
+  margin: 0 auto 24px auto;
+  max-width: 400px;
+  display: flex;
+  justify-content: center;
+}

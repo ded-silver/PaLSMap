@@ -1,5 +1,5 @@
 .main-content {
-  height: calc(100vh - 78px); /* 1rem сверху и снизу */
+  height: calc(100vh - 78px);
   overflow: hidden;
   flex-grow: 1;
   padding: 1rem;
@@ -10,4 +10,9 @@
 
 .main-content.shifted {
   margin-left: 250px;
+}
+
+.pageTitle {
+  margin-bottom: 16px;
+  text-align: center;
 }

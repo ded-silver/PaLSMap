@@ -1,41 +1,75 @@
-// DnDSidebar.tsx
-import React, { useState } from 'react';
-import { useDnD } from '../../../hooks/DnDContext';
-import styles from './DnDSidebar.module.css';
+import React from 'react'
 
-export const DnDSidebar = ({ onNodeNameChange }: { onNodeNameChange: (name: string) => void }) => {
-  const { setType } = useDnD();
-  const [nodeName, setNodeName] = useState('');
+import { useDnD } from '../../../hooks/DnDContext'
 
-  const onDragStart = (event: React.DragEvent, nodeType: string) => {
-    setType(nodeType);
-    const { dataTransfer } = event;
-    dataTransfer.effectAllowed = 'move';
-    console.log(nodeType);
-  };
+import styles from './DnDSidebar.module.css'
 
-  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNodeName(event.target.value);
-    onNodeNameChange(event.target.value); // передаем новое имя в родительский компонент
-  };
+interface Props {
+	danet?: boolean
+}
 
-  return (
-    <aside className={styles.sidebar}>
-      <div>
-        <label>Имя узла:</label>
-        <input
-          type="text"
-          value={nodeName}
-          onChange={handleNameChange}
-          placeholder="Введите имя узла"
-        />
-      </div>
-      <div>
-        <span className={styles.title}>Добавить узел:</span>
-        <div className={styles.dndnode} onDragStart={(e) => onDragStart(e, 'OPS')} draggable>
-          OPS
-        </div>
-      </div>
-    </aside>
-  );
-};
+export const DnDSidebar = ({ danet }: Props) => {
+	const { setType } = useDnD()
+
+	const onDragStart = (event: React.DragEvent, nodeType: string) => {
+		setType(nodeType)
+		const { dataTransfer } = event
+		dataTransfer.effectAllowed = 'move'
+	}
+
+	return (
+		<aside className={styles.sidebar}>
+			<div>
+				{danet ? (
+					<>
+						<div
+							className={styles.dndnode}
+							onDragStart={e => onDragStart(e, 'Factory')}
+							draggable
+						>
+							Factory
+						</div>
+						<div
+							className={styles.dndnode}
+							onDragStart={e => onDragStart(e, 'Object')}
+							draggable
+						>
+							Object
+						</div>
+						<div
+							className={styles.dndnode}
+							onDragStart={e => onDragStart(e, 'ParentObject')}
+							draggable
+						>
+							ParentObject
+						</div>
+						<div
+							className={styles.dndnode}
+							onDragStart={e => onDragStart(e, 'ChildObject')}
+							draggable
+						>
+							ChildObject
+						</div>
+					</>
+				) : (
+					<>
+						<div
+							className={styles.dndnode}
+							onDragStart={e => onDragStart(e, 'OPS')}
+							draggable
+						>
+							OPS
+						</div>
+						<div
+							className={styles.dndnode}
+							onDragStart={e => onDragStart(e, 'TankPark')}
+							draggable
+						>
+							TankPark
+						</div>
+					</>
+				)}
+			</div>
+		</aside>
+	)
+}

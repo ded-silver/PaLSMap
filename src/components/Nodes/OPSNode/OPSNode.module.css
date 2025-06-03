@@ -1,3 +1,17 @@
+.nodeName {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.deleteButtonWrapper {
+  position: absolute;
+  bottom: -20px;
+  right: 50px;
+  transform: translateX(50%);
+}
+
 .circle-container {
   position: relative;
   width: 100px;
@@ -12,27 +26,5 @@
   height: 100px;
   border-radius: 50%;
   background-color: transparent;
-  border: 2px solid black;
-}
-
-.container {
-  display: flex;
-  flex-direction: row;
-  height: 100%;
-}
-
-.diagram {
-  flex: 1; /* Диаграмма займет 50% ширины */
-  padding-right: 20px;
-}
-
-.table {
-  flex: 1; /* Таблица займет оставшиеся 50% */
-  padding-left: 20px;
-}
-
-.nodeName {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  border: 1px solid black;
 }

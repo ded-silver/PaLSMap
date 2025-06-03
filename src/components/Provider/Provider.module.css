@@ -1,0 +1,9 @@
+.provider-content {
+  height: 100%; /* 1rem сверху и снизу */
+  overflow: hidden;
+  flex-grow: 1;
+  padding: 1rem;
+  background-color: #fff;
+  transition: margin-left 0.3s ease;
+  margin-left: 0;
+}
