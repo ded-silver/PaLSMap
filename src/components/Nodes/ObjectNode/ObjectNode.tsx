@@ -76,9 +76,12 @@ export const ObjectNode = ({ data, id, parentId }: NodeProps<CustomNode>) => {
 			<input
 				value={nodeName}
 				placeholder='Введите имя узла'
+				readOnly={isAdmin !== 'true'}
 				onChange={e => {
-					setNodeName(e.target.value)
-					handleChangeNodeName(e.target.value)
+					if (isAdmin === 'true') {
+						setNodeName(e.target.value)
+						handleChangeNodeName()
+					}
 				}}
 				style={{
 					position: 'absolute',

@@ -1,11 +1,12 @@
 .main-content {
-  height: calc(100vh - 78px);
+  height: 100%;
   overflow: hidden;
   flex-grow: 1;
-  padding: 1rem;
+  /* padding: 1rem; */
   background-color: #fff;
   transition: margin-left 0.3s ease;
   margin-left: 0;
+  position: relative;
 }
 
 .main-content.shifted {
@@ -13,6 +14,96 @@
 }
 
 .pageTitle {
-  margin-bottom: 16px;
-  text-align: center;
+  /* margin-bottom: 16px; */
+  position: absolute;
+  background-color: rgb(230, 240, 255);
+  top: 0;
+  left: 0;
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid lightgray;
+  border-right: 1px solid lightgray;
+  border-bottom-right-radius: 8px;
+	transition: left 0.3s ease;
 }
+
+.open {
+	left: 250px
+}
+
+.compass {
+	position: absolute;
+	bottom: 8px;
+	right: 8px;
+	width: 90px;
+	height: 90px;
+	border: 2px solid #cbd5e1;
+	border-radius: 50%;
+	background: radial-gradient(circle at center, #f9fafb 60%, #e2e8f0 100%);
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 15;
+	transition: transform 0.3s ease;
+}
+
+.needle {
+	position: absolute;
+	width: 0;
+	height: 0;
+	border-left: 6px solid transparent;
+	border-right: 6px solid transparent;
+	border-bottom: 20px solid #ef4444;
+	top: 25px;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 2;
+}
+
+.labelNorth,
+.labelSouth,
+.labelEast,
+.labelWest {
+	position: absolute;
+	font-size: 12px;
+	font-weight: 600;
+	color: #1e293b;
+	user-select: none;
+	transition: color 0.2s;
+}
+
+.labelNorth {
+	top: 6px;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.labelSouth {
+	bottom: 6px;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.labelWest {
+	left: 6px;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.labelEast {
+	right: 6px;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+/* .compass:hover {
+	transform: scale(1.05);
+}
+
+.labelNorth:hover,
+.labelSouth:hover,
+.labelEast:hover,
+.labelWest:hover {
+	color: #ef4444;
+} */

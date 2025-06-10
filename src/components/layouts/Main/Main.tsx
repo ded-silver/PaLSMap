@@ -8,11 +8,13 @@ import {
 	NodeChange,
 	ReactFlow,
 	ReactFlowProvider,
+	SelectionMode,
 	useEdgesState,
 	useNodesState,
 	useReactFlow
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
+import clsx from 'clsx'
 import debounce from 'lodash/debounce'
 import { nanoid } from 'nanoid'
 import React, { useCallback, useEffect, useRef } from 'react'
@@ -23,18 +25,27 @@ import { DnDProvider, useDnD } from '../../../hooks/DnDContext'
 import { useCreateEdge } from '../../../hooks/edges/useEdges'
 import { useEdges } from '../../../hooks/nodes/useEdges'
 import { useNodes } from '../../../hooks/nodes/useNodes'
-import { NodeDto, NodeService } from '../../../services/node.service'
+import { NodeService } from '../../../services/node.service'
+import { NodeDto } from '../../../types/nodeTypes'
 import { OPSNode, TankParkNode } from '../../Nodes'
+import { CheckpointNode } from '../../Nodes/CheckpointNode'
+import { River } from '../../Nodes/River/River'
 import { DnDSidebar } from '../DnDSidebar'
 
 import styles from './Main.module.css'
 
 const nodeTypes = {
 	OPS: OPSNode,
-	TankPark: TankParkNode
+	TankPark: TankParkNode,
+	Checkpoint: CheckpointNode,
+	River: River
 }
 
-const MMMain = () => {
+interface Props {
+	isSidebarOpen: boolean
+}
+
+const MMMain = ({ isSidebarOpen }: Props) => {
 	const reactFlowWrapper = useRef(null)
 	const { items } = useNodes()
 	const { items: allEgdes } = useEdges()
@@ -42,6 +53,7 @@ const MMMain = () => {
 	const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([])
 	const { screenToFlowPosition, getNodes } = useReactFlow()
 	const queryClient = useQueryClient()
+	const isAdmin = localStorage.getItem('isAdmin')
 
 	//Добавление нод
 	const { mutate: node } = useMutation({
@@ -49,10 +61,10 @@ const MMMain = () => {
 		mutationFn: (data: NodeDto) => NodeService.create(data),
 		onSuccess: data => {
 			queryClient.invalidateQueries({ queryKey: ['nodes'] })
-			toast.success('Successfully logged in!')
+			toast.success('Объект успешло добавлен.')
 		},
 		onError: error => {
-			toast.error('Login or registration failed.')
+			toast.error('Ошибка добавления узла.')
 		}
 	})
 
@@ -74,7 +86,7 @@ const MMMain = () => {
 			queryClient.invalidateQueries({ queryKey: ['nodes'] })
 		},
 		onError: error => {
-			toast.error('Login or registration failed.')
+			toast.error('Объект успешло обновлен.')
 		}
 	})
 
@@ -200,7 +212,18 @@ const MMMain = () => {
 			<div
 				className={styles['main-content']}
 				ref={reactFlowWrapper}
+				style={{
+					backgroundColor: '#e6f0ff'
+				}}
 			>
+				<Typography
+					variant='h4'
+					className={clsx(styles.pageTitle, { [styles.open]: isSidebarOpen })}
+					zIndex={10}
+					// sx={{borderBottom: '1px solid grey'}}
+				>
+					ГЕОГРАФИЧЕСКАЯ СХЕМА ТЕХНОЛОГИЧЕСКИХ ОБЪЕКТОВ
+				</Typography>
 				<ReactFlow
 					nodes={nodes}
 					edges={edges}
@@ -212,28 +235,35 @@ const MMMain = () => {
 					onEdgesChange={onEdgesChange}
 					onNodesDelete={handleNodesDelete}
 					snapToGrid
-					snapGrid={[1, 1]}
-					nodesDraggable
+					deleteKeyCode={['Delete']}
+					snapGrid={[25, 25]}
+					selectionMode={SelectionMode.Partial}
 					fitView
+					nodesDraggable={isAdmin === 'true' ? true : false}
+					nodesConnectable={isAdmin === 'true' ? true : false}
+					// elementsSelectable={isAdmin === 'true' ? true : false}
+					edgesFocusable={isAdmin === 'true' ? true : false}
+					nodesFocusable={isAdmin === 'true' ? true : false}
 				>
-					<Typography
-						variant='h4'
-						className={styles.pageTitle}
-					>
-						КАРТА УСТАВОК ЗАЩИТЫ
-					</Typography>
 					<Controls />
 				</ReactFlow>
+				<div className={styles.compass}>
+					<div className={styles.needle}></div>
+					<div className={styles.labelNorth}>С</div>
+					<div className={styles.labelSouth}>Ю</div>
+					<div className={styles.labelWest}>З</div>
+					<div className={styles.labelEast}>В</div>
+				</div>
 			</div>
 			<DnDSidebar />
 		</>
 	)
 }
 
-export default () => (
+export default ({ isSidebarOpen }: Props) => (
 	<ReactFlowProvider>
 		<DnDProvider>
-			<MMMain />
+			<MMMain isSidebarOpen={isSidebarOpen} />
 		</DnDProvider>
 	</ReactFlowProvider>
 )

@@ -1,26 +1,63 @@
-import { ChangeEvent, useState } from 'react';
-import { useDebouncedCallback } from '../../../hooks/useDebouncedCallback';
-import { SearchBar } from '../../ui/SeachBar/SearchBar';
-import styles from './Header.module.css';
-import DensityMediumIcon from '@mui/icons-material/DensityMedium';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle'
+import DensityMediumIcon from '@mui/icons-material/DensityMedium'
+import { useEffect, useState } from 'react'
+
+import { userService } from '../../../services/user.service'
+import { UserInfoModal } from '../../UserInfoModal/UserInfoModal'
+
+import styles from './Header.module.css'
 
 interface Props {
-  toggleSidebar: () => void;
+	toggleSidebar: () => void
 }
 
 export const Header = ({ toggleSidebar }: Props) => {
-  const [search, setSearch] = useState<string>('');
+	const [isProfileOpen, setIsProfileOpen] = useState(false)
+	const [userName, setUserName] = useState<string | null>(null)
 
-  const handleSearchChange = useDebouncedCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value);
-  }, 500);
+	useEffect(() => {
+		const fetchUserName = async () => {
+			try {
+				const user = await userService.getProfile()
+				setUserName(user.name ?? null)
+				localStorage.setItem('isAdmin', user.isAdmin.toString())
+			} catch (error) {
+				console.error('Ошибка при загрузке профиля', error)
+				setUserName(null)
+			}
+		}
 
-  return (
-    <header>
-      <button className={styles['toggle-sidebar']} onClick={toggleSidebar}>
-        <DensityMediumIcon />
-      </button>
-      <SearchBar inputMode="search" onChange={handleSearchChange} />
-    </header>
-  );
-};
+		fetchUserName()
+	}, [])
+
+	const handleLogout = () => {
+		localStorage.removeItem('accessToken')
+		window.location.href = '/auth'
+	}
+
+	return (
+		<header className={styles.header}>
+			<button
+				className={styles['toggle-sidebar']}
+				onClick={toggleSidebar}
+			>
+				<DensityMediumIcon />
+			</button>
+
+			<button
+				className={styles['profile-button']}
+				onClick={() => setIsProfileOpen(true)}
+			>
+				<AccountCircleIcon style={{ marginRight: '8px' }} />
+				{userName ? userName : 'Профиль'}
+			</button>
+
+			{isProfileOpen && (
+				<UserInfoModal
+					onClose={() => setIsProfileOpen(false)}
+					onLogout={handleLogout}
+				/>
+			)}
+		</header>
+	)
+}

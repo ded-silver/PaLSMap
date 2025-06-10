@@ -8,11 +8,8 @@ import styles from './Dictionary.module.css'
 const abbreviations = [
 	{ short: 'НПС', full: 'Насосная Перекачивающая Станция' },
 	{ short: 'ДУ', full: 'Диаметр Условный' },
-	{
-		short: 'ПИД',
-		full: 'Пропорционально-Интегрально-Дифференциальный регулятор'
-	},
-	{ short: 'ПЛК', full: 'Программируемый Логический Контроллер' }
+	{ short: 'ПЛК', full: 'Программируемый Логический Контроллер' },
+	{ short: 'РП', full: 'Резервуарный парк' }
 ]
 
 export const DictionaryPage = () => {
@@ -27,7 +24,7 @@ export const DictionaryPage = () => {
 	return (
 		<div className={styles['main-content']}>
 			<Typography
-				variant='h4'
+				sx={{ fontSize: '2.125rem' }}
 				className={styles.pageTitle}
 				gutterBottom
 			>

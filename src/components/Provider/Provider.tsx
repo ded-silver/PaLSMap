@@ -8,6 +8,7 @@ import {
 	NodeChange,
 	ReactFlow,
 	ReactFlowProvider,
+	SelectionMode,
 	useEdgesState,
 	useNodesState,
 	useReactFlow
@@ -23,29 +24,46 @@ import { DnDProvider, useDnD } from '../../hooks/DnDContext'
 import { useCreateEdge } from '../../hooks/edges/useEdges'
 import { useEdges } from '../../hooks/nodes/useEdges'
 import { useChildNodes } from '../../hooks/nodes/useNodes'
-import { NodeDto, NodeService } from '../../services/node.service'
-import {
-	ChildObjectNode,
-	FactoryNode,
-	ObjectNode
-} from '../Nodes'
+import { NodeService } from '../../services/node.service'
+import { NodeDto } from '../../types/nodeTypes'
+import { ChildObjectNode, FactoryNode, ObjectNode } from '../Nodes'
+import { AccountingSystemNode } from '../Nodes/AccountingSystemNode'
+import { CapacityNode } from '../Nodes/CapacityNode'
+import { ChildTankParkNode } from '../Nodes/ChildTankParkNode'
+import { FGUNode } from '../Nodes/FGUNode/FGUNode'
+import { KPPSODNode } from '../Nodes/KPPSODNode/KPPSODNode'
+import { MNSNode } from '../Nodes/MNSNode'
+import { PNSNode } from '../Nodes/PNSNode'
+import { PumpNode } from '../Nodes/PumpNode'
+import { SARNode } from '../Nodes/SARNode'
+import { ValveNode } from '../Nodes/ValveNode'
 import { DnDSidebar } from '../layouts/DnDSidebar'
 
 import styles from './Provider.module.css'
-import { ParentObjectNode } from '../Nodes/ParentObjectNode'
 
 const nodeTypes = {
 	Factory: FactoryNode,
 	Object: ObjectNode,
-	ParentObject: ParentObjectNode, 
-	ChildObject: ChildObjectNode
+	MNSNode: MNSNode,
+	ChildObject: ChildObjectNode,
+	Valve: ValveNode,
+	Pump: PumpNode,
+	AccountingSystem: AccountingSystemNode,
+	ChildTankPark: ChildTankParkNode,
+	PNS: PNSNode,
+	MNS: MNSNode,
+	SAR: SARNode,
+	FGU: FGUNode,
+	KPPSOD: KPPSODNode,
+	Capacity: CapacityNode
 }
 
 interface Props {
 	id: string
+	currentNodeType?: 'OPS' | 'TankPark' | 'Checkpoint'
 }
 
-export const Provider = ({ id }: Props) => {
+export const Provider = ({ id, currentNodeType }: Props) => {
 	const reactFlowWrapper = useRef(null)
 	const { items } = useChildNodes(id)
 	const { items: allEgdes } = useEdges()
@@ -53,6 +71,8 @@ export const Provider = ({ id }: Props) => {
 	const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([])
 	const { screenToFlowPosition, getNodes } = useReactFlow()
 	const queryClient = useQueryClient()
+
+	const isAdmin = localStorage.getItem('isAdmin')
 
 	const { type } = useDnD() as {
 		type: string | null
@@ -64,10 +84,10 @@ export const Provider = ({ id }: Props) => {
 		mutationFn: (data: NodeDto) => NodeService.create(data),
 		onSuccess: data => {
 			queryClient.invalidateQueries({ queryKey: ['childNodes'] })
-			toast.success('Successfully logged in!')
+			toast.success('Объект успешно добавлен')
 		},
 		onError: error => {
-			toast.error('Login or registration failed.')
+			toast.error('Ошибка при добавлении.')
 		}
 	})
 
@@ -89,7 +109,7 @@ export const Provider = ({ id }: Props) => {
 			queryClient.invalidateQueries({ queryKey: ['childNodes'] })
 		},
 		onError: error => {
-			toast.error('Login or registration failed.')
+			toast.error('Ошибка при обновлении.')
 		}
 	})
 
@@ -146,7 +166,7 @@ export const Provider = ({ id }: Props) => {
 			if (params.targetHandle) {
 				const edge = {
 					...params,
-					type: 'bezier',
+					type: 'straight',
 					id: nanoid(),
 					style: {
 						strokeWidth: 1,
@@ -180,7 +200,7 @@ export const Provider = ({ id }: Props) => {
 				position,
 				data: {
 					label: '',
-					tableName: [], // Применяем имя узла из состояния
+					tableName: [], // Имя узла из состояния
 					tableData: [],
 					handlers: [
 						{
@@ -213,13 +233,13 @@ export const Provider = ({ id }: Props) => {
 				ref={reactFlowWrapper}
 				onDrop={e => {
 					e.preventDefault()
-					e.stopPropagation() // критически важно
+					e.stopPropagation()
 				}}
 				onDragOver={e => {
 					e.preventDefault()
-					e.stopPropagation() // тоже критически важно
+					e.stopPropagation()
 				}}
-				style={{ zIndex: 9999 }}
+				style={{ zIndex: 9999, backgroundColor: '#e6f0ff' }}
 			>
 				<ReactFlow
 					nodes={nodes}
@@ -232,29 +252,38 @@ export const Provider = ({ id }: Props) => {
 					onEdgesChange={onEdgesChange}
 					onNodesDelete={handleNodesDelete}
 					snapToGrid
-					snapGrid={[1, 1]}
+					snapGrid={[25, 25]}
 					className='react-flow-subflows-example'
 					fitView
+					deleteKeyCode={null}
+					selectionMode={SelectionMode.Partial}
 					style={{
 						backgroundColor: '#F7F9FB',
 						width: '100%',
 						height: '400px'
-					}} // Устанавливаем размер диаграммы
-					nodesDraggable
+					}}
+					nodesDraggable={isAdmin === 'true' ? true : false}
+					nodesConnectable={isAdmin === 'true' ? true : false}
+					// elementsSelectable={isAdmin === 'true' ? true : false}
+					edgesFocusable={isAdmin === 'true' ? true : false}
+					nodesFocusable={isAdmin === 'true' ? true : false}
 				>
 					<Controls />
 					<Background color='#E6E6E6' />
 				</ReactFlow>
 			</div>
-			<DnDSidebar danet />
+			<DnDSidebar currentNodeType={currentNodeType} />
 		</>
 	)
 }
 
-export default ({ id }: Props) => (
+export default ({ id, currentNodeType }: Props) => (
 	<ReactFlowProvider>
 		<DnDProvider>
-			<Provider id={id} />
+			<Provider
+				id={id}
+				currentNodeType={currentNodeType}
+			/>
 		</DnDProvider>
 	</ReactFlowProvider>
 )

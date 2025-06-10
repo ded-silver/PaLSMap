@@ -1,18 +1,30 @@
 .main-content {
-	padding: 1rem;
+	padding: 2rem 1rem;
+	min-height: 100vh;
+	background-color: #e6f0ff;
 }
 
 .pageTitle {
 	text-align: center;
-	margin-bottom: 24px;
+	margin-bottom: 32px;
+	color: #1e293b;
+	font-weight: 600;
+}
+
+.searchBarWrapper {
+	margin: 0 auto 28px auto;
+	max-width: 400px;
+	display: flex;
+	justify-content: center;
 }
 
 .abbreviationList {
 	display: flex;
 	flex-direction: column;
-	gap: 16px;
+	gap: 18px;
 	max-width: 700px;
 	margin: 0 auto;
+	padding: 0 12px;
 }
 
 .abbreviationItem {
@@ -22,34 +34,32 @@
 	gap: 20px;
 	padding: 16px 20px;
 	border-radius: 12px;
-	background-color: #f9f9f9;
-	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-	transition:
-		transform 0.2s ease,
-		background-color 0.2s ease;
+	background-color: #ffffff;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .abbreviationItem:hover {
-	transform: scale(1.01);
-	background-color: #eef2f7;
+	transform: translateY(-2px);
+	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
 }
 
 .short {
-	font-weight: bold;
-	font-size: 1.2rem;
+	font-weight: 700;
+	font-size: 1.25rem;
 	text-align: center;
-	position: relative;
+	color: #0f172a;
 }
 
 .full {
 	font-size: 1rem;
-	color: #555;
+	color: #475569;
 	line-height: 1.5;
 }
 
-.searchBarWrapper {
-  margin: 0 auto 24px auto;
-  max-width: 400px;
-  display: flex;
-  justify-content: center;
+.noResults {
+	text-align: center;
+	margin-top: 32px;
+	color: #64748b;
+	font-size: 1.1rem;
 }

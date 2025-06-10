@@ -1,42 +1,83 @@
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 }
 
 body {
-  width: 100%;
-  height: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
-    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	width: 100%;
+	height: 100%;
+	font-family:
+		-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+		'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 .app-layout {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+}
+
+.react-flow__attribution {
+	display: none;
 }
 
 .content-layout {
-  display: flex;
-  flex: 1;
-  overflow: hidden;
+	display: flex;
+	flex: 1;
+	overflow: hidden;
 }
 
 .react-flow__node-ChildObject {
-  z-index: 1002 !important;
+	z-index: 1002 !important;
 }
 
-.react-flow__node-ParentObject {
-  z-index: 1001 !important;
+.react-flow__node-MNS {
+	z-index: 1001 !important;
 }
 
 .react-flow__node-Object {
-  z-index: 1001 !important;
+	z-index: 1001 !important;
+}
+
+.react-flow__node-SAR {
+	z-index: 1001 !important;
+}
+
+.react-flow__node-FGU {
+	z-index: 1001 !important;
+}
+
+.react-flow__node-KPPSOD {
+	z-index: 1001 !important;
 }
 
 .react-flow__node-Factory {
-  z-index: 1000 !important;
+	z-index: 1000 !important;
+}
+
+.react-flow__node-Valve {
+	z-index: 1002 !important;
+}
+
+.react-flow__node-Pump {
+	z-index: 1002 !important;
+}
+
+.react-flow__node-AccountingSystem {
+	z-index: 1002 !important;
+}
+
+.react-flow__node-ChildTankPark {
+	z-index: 1002 !important;
+}
+
+.react-flow__node-Capacity {
+	z-index: 1002 !important;
+}
+
+.react-flow__node-PNS {
+	z-index: 1001 !important;
 }

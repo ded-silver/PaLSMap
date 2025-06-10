@@ -1,0 +1,49 @@
+.nodeName {
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.deleteButtonWrapper {
+	position: absolute;
+	bottom: -30px;
+	right: -25px;
+	z-index: 10;
+}
+
+.container {
+	position: relative;
+	width: 50px;
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: transparent;
+	border: none;
+	border-radius: 8px;
+}
+
+/* Левый треугольник ">" */
+.triangle-left {
+	width: 0;
+	height: 0;
+	border-top: 20px solid transparent;
+	border-bottom: 20px solid transparent;
+	border-left: 25px solid #fde68a;
+	position: absolute;
+	left: 0px;
+	top: calc(50% - 20px);
+}
+
+/* Правый треугольник "<" */
+.triangle-right {
+	width: 0;
+	height: 0;
+	border-top: 20px solid transparent;
+	border-bottom: 20px solid transparent;
+	border-right: 25px solid #fde68a;
+	position: absolute;
+	right: 0px;
+	top: calc(50% - 20px);
+}

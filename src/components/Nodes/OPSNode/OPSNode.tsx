@@ -7,10 +7,10 @@ import { useState } from 'react'
 import { toast } from 'react-toastify'
 
 import { useDebouncedCallback } from '../../../hooks/useDebouncedCallback'
-import { NodeDto, NodeService } from '../../../services/node.service'
-import { CustomNode } from '../../../types/nodeTypes'
-import { DialogData } from './DialogData'
+import { NodeService } from '../../../services/node.service'
+import { CustomNode, NodeDto } from '../../../types/nodeTypes'
 
+import { DialogData } from './DialogData'
 import styles from './OPSNode.module.css'
 
 export const OPSNode = ({ data, id }: NodeProps<CustomNode>) => {
@@ -20,11 +20,14 @@ export const OPSNode = ({ data, id }: NodeProps<CustomNode>) => {
 	const queryClient = useQueryClient()
 	const node = getNode(id)
 
+	const isAdmin = localStorage.getItem('isAdmin')
+
 	const handleClickOpen = () => {
 		setOpen(true)
 	}
 
 	const handleClose = () => {
+		queryClient.invalidateQueries({ queryKey: ['currentNodeData'] })
 		setOpen(false)
 	}
 
@@ -72,31 +75,39 @@ export const OPSNode = ({ data, id }: NodeProps<CustomNode>) => {
 			<input
 				value={nodeName}
 				placeholder='Введите имя узла'
+				readOnly={isAdmin !== 'true'}
 				onChange={e => {
-					setNodeName(e.target.value)
-					handleChangeNodeName()
+					if (isAdmin === 'true') {
+						setNodeName(e.target.value)
+						handleChangeNodeName()
+					}
 				}}
 				style={{
 					backgroundColor: 'transparent',
 					border: 'none',
 					outline: 'none',
 					color: 'inherit',
-					textAlign: 'center'
+					textAlign: 'center',
+					fontSize: '30px'
 				}}
 			/>
 			<div
 				className={styles['deleteButtonWrapper']}
 				onClick={e => e.stopPropagation()}
 			>
-				<IconButton onClick={handleDelete}>
-					<DeleteOutlineIcon fontSize='small' />
-				</IconButton>
+				{isAdmin === 'true' ? (
+					<IconButton onClick={handleDelete}>
+						<DeleteOutlineIcon fontSize='small' />
+					</IconButton>
+				) : null}
 			</div>
 			<div
 				className={styles['circle-container']}
 				onClick={handleClickOpen}
 			>
-				<div className={styles['circle']} />
+				<div className={styles['circle']}>
+					<div className={styles['cross']} />
+				</div>
 				{data.handlers.map(h => (
 					<div key={nanoid()}>
 						<Handle
@@ -107,8 +118,10 @@ export const OPSNode = ({ data, id }: NodeProps<CustomNode>) => {
 					</div>
 				))}
 			</div>
+
 			{open ? (
 				<DialogData
+					currentNodeType='OPS'
 					dialogName={data.label}
 					open={open}
 					handleClose={handleClose}

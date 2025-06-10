@@ -7,10 +7,11 @@ import { useState } from 'react'
 import { toast } from 'react-toastify'
 
 import { useDebouncedCallback } from '../../../hooks/useDebouncedCallback'
-import { NodeDto, NodeService } from '../../../services/node.service'
-import { CustomNode } from '../../../types/nodeTypes'
-import styles from './TankParkNode.module.css'
+import { NodeService } from '../../../services/node.service'
+import { CustomNode, NodeDto } from '../../../types/nodeTypes'
+
 import { DialogData } from './DialogData'
+import styles from './TankParkNode.module.css'
 
 export const TankParkNode = ({ data, id }: NodeProps<CustomNode>) => {
 	const [open, setOpen] = useState(false)
@@ -19,11 +20,14 @@ export const TankParkNode = ({ data, id }: NodeProps<CustomNode>) => {
 	const queryClient = useQueryClient()
 	const node = getNode(id)
 
+	const isAdmin = localStorage.getItem('isAdmin')
+
 	const handleClickOpen = () => {
 		setOpen(true)
 	}
 
 	const handleClose = () => {
+		queryClient.invalidateQueries({ queryKey: ['currentNodeData'] })
 		setOpen(false)
 	}
 
@@ -85,16 +89,19 @@ export const TankParkNode = ({ data, id }: NodeProps<CustomNode>) => {
 					border: 'none',
 					outline: 'none',
 					color: 'inherit',
-					textAlign: 'center'
+					textAlign: 'center',
+					fontSize: '30px'
 				}}
 			/>
 			<div
 				className={styles['deleteButtonWrapper']}
 				onClick={e => e.stopPropagation()}
 			>
-				<IconButton onClick={handleDelete}>
-					<DeleteOutlineIcon fontSize='small' />
-				</IconButton>
+				{isAdmin === 'true' ? (
+					<IconButton onClick={handleDelete}>
+						<DeleteOutlineIcon fontSize='small' />
+					</IconButton>
+				) : null}
 			</div>
 			<div
 				className={styles['circle-container']}
@@ -114,6 +121,7 @@ export const TankParkNode = ({ data, id }: NodeProps<CustomNode>) => {
 
 			{open ? (
 				<DialogData
+					currentNodeType='TankPark'
 					dialogName={data.label}
 					open={open}
 					handleClose={handleClose}

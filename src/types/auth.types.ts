@@ -1,16 +1,17 @@
 export interface IAuthForm {
-  email: string;
-  password: string;
-  isAdmin: boolean;
+	email: string
+	password: string
+	name?: string
+	isAdmin?: boolean
 }
 
 export interface IUser {
-  id: number;
-  name?: string;
-  email: string;
+	id: number
+	name?: string
+	email: string
 }
 
 export interface IAuthResponse {
-  accessToken: string;
-  user: IUser;
+	accessToken: string
+	user: IUser
 }

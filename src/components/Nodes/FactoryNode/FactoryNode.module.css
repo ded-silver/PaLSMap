@@ -1,22 +1,44 @@
 .nodeName {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  position: relative;
-  width: 1200px;
-  height: 1200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: transparent;
-  border: 1px solid black;
-  border-radius: 8px;
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	position: relative;
+	width: 1200px;
+	height: 1200px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: transparent;
+	border: 1px solid black;
+	border-radius: 8px;
 }
 
 .deleteButtonWrapper {
-  position: absolute;
-  bottom: -5px;
-  right: 0px;
-  z-index: 10;
+	position: absolute;
+	bottom: -5px;
+	right: 0px;
+	z-index: 10;
+}
+
+.factory-square-container {
+	position: relative;
+	width: 1200px;
+	height: 1200px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.factory-square {
+	position: relative;
+	width: 1200px;
+	height: 1200px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #f3f4f6;
+	border: 1px solid #d1d5db;
+	mix-blend-mode: multiply;
+	border-radius: 6px;
 }

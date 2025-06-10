@@ -1,0 +1,46 @@
+.nodeName {
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.deleteButtonWrapper {
+	position: absolute;
+	bottom: -25px;
+	right: -25px;
+	z-index: 10;
+}
+
+.circle-container {
+	position: relative;
+	width: 50px;
+	height: 100px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	z-index: 1;
+}
+
+.chart-cylinder {
+	width: 50px;
+	height: 100px;
+	border-radius: 50% / 23px;
+	border: 1px solid #64748b;
+	background-color: #bfdbfe;
+	position: relative;
+	overflow: hidden;
+}
+
+.chart-cylinder::before {
+	content: '';
+	position: absolute;
+	top: -2px;
+	left: 0;
+	right: 0;
+	height: 40px;
+	border-radius: 50%;
+	border: 1px solid #64748b;
+	background-color: #93c5fd;
+}

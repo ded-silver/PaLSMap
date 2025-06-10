@@ -1,14 +1,13 @@
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
 import { IconButton } from '@mui/material'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Handle, NodeProps, Position, useReactFlow } from '@xyflow/react'
-import { nanoid } from 'nanoid'
+import { NodeProps, useReactFlow } from '@xyflow/react'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 
 import { useDebouncedCallback } from '../../../hooks/useDebouncedCallback'
-import { NodeDto, NodeService } from '../../../services/node.service'
-import { CustomNode } from '../../../types/nodeTypes'
+import { NodeService } from '../../../services/node.service'
+import { CustomNode, NodeDto } from '../../../types/nodeTypes'
 import { DialogData } from '../DialogData'
 
 import styles from './ChildObjectNode.module.css'
@@ -24,11 +23,27 @@ export const ChildObjectNode = ({
 	const [nodeName, setNodeName] = useState<string>(data.label)
 	const node = getNode(id)
 
+	const isAdmin = localStorage.getItem('isAdmin')
+
 	const handleClickOpen = () => {
 		setOpen(true)
 	}
 
+	const { mutate: invalidateParentData } = useMutation({
+		mutationKey: ['invalidateParentData'],
+		mutationFn: (parentId: string) => NodeService.getNodeData(parentId),
+		onSuccess: data => {
+			queryClient.invalidateQueries({ queryKey: ['currentNodeData'] })
+		},
+		onError(error: unknown) {
+			toast.error('Ошибка при удалении')
+		}
+	})
+
 	const handleClose = () => {
+		if (parentId) {
+			invalidateParentData(parentId)
+		}
 		setOpen(false)
 	}
 
@@ -84,10 +99,13 @@ export const ChildObjectNode = ({
 		>
 			<input
 				value={nodeName}
-				placeholder='Введите имя узла'
+				placeholder='Название'
+				readOnly={isAdmin !== 'true'}
 				onChange={e => {
-					setNodeName(e.target.value)
-					handleChangeNodeName(e.target.value)
+					if (isAdmin === 'true') {
+						setNodeName(e.target.value)
+						handleChangeNodeName()
+					}
 				}}
 				style={{
 					position: 'absolute',
@@ -99,7 +117,7 @@ export const ChildObjectNode = ({
 					outline: 'none',
 					color: 'inherit',
 					textAlign: 'center',
-					fontSize: '15px',
+					fontSize: '22px',
 					pointerEvents: 'auto',
 					zIndex: '1003'
 				}}
@@ -108,24 +126,17 @@ export const ChildObjectNode = ({
 				className={styles['deleteButtonWrapper']}
 				onClick={e => e.stopPropagation()}
 			>
-				<IconButton onClick={handleDelete}>
-					<DeleteOutlineIcon fontSize='small' />
-				</IconButton>
+				{isAdmin === 'true' ? (
+					<IconButton onClick={handleDelete}>
+						<DeleteOutlineIcon fontSize='small' />
+					</IconButton>
+				) : null}
 			</div>
 			<div
 				className={styles['container']}
 				onClick={handleClickOpen}
 			>
 				<div className={styles['cube']} />
-				{data.handlers.map(h => (
-					<div key={nanoid()}>
-						<Handle
-							type={h.type}
-							id={h.id}
-							position={h.type === 'source' ? Position.Top : Position.Bottom}
-						/>
-					</div>
-				))}
 			</div>
 			{open ? (
 				<DialogData

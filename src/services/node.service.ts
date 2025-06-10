@@ -1,27 +1,7 @@
-import { axiosWithAuth } from '../api/interceptiors'
-import { CustomNode } from '../types/nodeTypes'
+import { axiosWithAuth } from '../api/interceptiors';
+import { CustomNode, NodeData, NodeDataPayload, NodeDto } from '../types/nodeTypes';
 
-export interface NodeDto {
-	id: string
-	type:
-		| 'OPS'
-		| 'TankPark'
-		| 'Factory'
-		| 'Object'
-		| 'ParentObject'
-		| 'ChildObject'
-	position: { x: number; y: number }
-	data: {
-		tableName: string[]
-		label: string
-		tableData: { [key: string]: string }[]
-		handlers: {
-			id: string
-			type: 'target' | 'source'
-		}[]
-	}
-	parentId?: string
-}
+
 
 export const NodeService = {
 	async getAll(): Promise<CustomNode[]> {
@@ -32,6 +12,24 @@ export const NodeService = {
 	async getById(id: string): Promise<CustomNode> {
 		const response = await axiosWithAuth.get(`/nodes/${id}`)
 		return response.data
+	},
+
+	async getNodeData(id: string): Promise<NodeData[]> {
+		const response = await axiosWithAuth.get(`/nodes/data/${id}`)
+		return response.data
+	},
+
+	async createNodeData(payload: NodeDataPayload): Promise<NodeData> {
+		const response = await axiosWithAuth.post(`/nodes/data/${payload.id}`, payload.data)
+		return response.data
+	},
+
+	async updateNodeData(payload: NodeData): Promise<void> {
+		await axiosWithAuth.patch(`/nodes/data/${payload.id}`, payload)
+	},
+
+	async deleteNodeData(id: string): Promise<void> {
+		await axiosWithAuth.delete(`/nodes/data/${id}`)
 	},
 
 	async getChildren(parentId: string): Promise<CustomNode[]> {

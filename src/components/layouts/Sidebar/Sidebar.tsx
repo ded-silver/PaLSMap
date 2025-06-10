@@ -9,6 +9,7 @@ import styles from './Sidebar.module.css'
 
 interface Props {
 	isOpen: boolean
+	// onClose: () => void
 }
 
 export const Sidebar = ({ isOpen }: Props) => {
@@ -20,6 +21,7 @@ export const Sidebar = ({ isOpen }: Props) => {
 					className={({ isActive }: { isActive: boolean }) =>
 						clsx(styles.link, { [styles.active]: isActive })
 					}
+					// onClick={onclose}
 				>
 					<li>
 						<HomeIcon fontSize='small' />
@@ -42,6 +44,11 @@ export const Sidebar = ({ isOpen }: Props) => {
 					className={({ isActive }: { isActive: boolean }) =>
 						clsx(styles.link, { [styles.active]: isActive })
 					}
+					// Поменять когда придется
+					onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+						e.preventDefault()
+						alert('Тебе туда не надо')
+					}}
 				>
 					<li>
 						<StarIcon fontSize='small' />
@@ -53,6 +60,11 @@ export const Sidebar = ({ isOpen }: Props) => {
 					className={({ isActive }: { isActive: boolean }) =>
 						clsx(styles.link, { [styles.active]: isActive })
 					}
+					// Поменять когда придется
+					onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+						e.preventDefault()
+						alert('Тебе туда не надо')
+					}}
 				>
 					<li>
 						<SettingsIcon fontSize='small' />

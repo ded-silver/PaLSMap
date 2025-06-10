@@ -1,13 +1,21 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ReactFlowProvider } from '@xyflow/react'
-import { useState } from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactFlowProvider } from '@xyflow/react';
+import { useState } from 'react';
+import { Route, Routes } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
-import './App.css'
-import { Auth } from './app/auth'
-import { Header, Sidebar } from './components/layouts'
-import Main from './components/layouts/Main/Main'
-import { DictionaryPage } from './components/pages'
+
+
+import './App.css';
+import { Auth } from './app/auth';
+import { Header, Sidebar } from './components/layouts';
+import Main from './components/layouts/Main/Main';
+import { DictionaryPage } from './components/pages';
+
+
+
+
 
 function App() {
 	const [isSidebarOpen, setSidebarOpen] = useState<boolean>(false)
@@ -38,7 +46,7 @@ function App() {
 								<div className='content-layout'>
 									<Sidebar isOpen={isSidebarOpen} />
 									<div style={{ flexGrow: 1 }}>
-										<Main />
+										<Main isSidebarOpen={isSidebarOpen} />
 									</div>
 								</div>
 							</div>
@@ -64,6 +72,7 @@ function App() {
 					}
 				/>
 			</Routes>
+			<ToastContainer aria-label='asd' />
 		</QueryClientProvider>
 	)
 }

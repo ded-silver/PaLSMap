@@ -1,29 +1,24 @@
 import AddIcon from '@mui/icons-material/Add'
 import CloseIcon from '@mui/icons-material/Close'
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
-import SaveIcon from '@mui/icons-material/Save'
 import {
+	Box,
 	Button,
 	Dialog,
 	DialogContent,
 	DialogTitle,
 	Grid,
 	IconButton,
-	Paper,
-	Table,
-	TableBody,
-	TableCell,
-	TableContainer,
-	TableHead,
-	TableRow,
-	TextField
+	Typography
 } from '@mui/material'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
+import { DataGrid, GridColDef } from '@mui/x-data-grid'
+import { ruRU } from '@mui/x-data-grid/locales'
+import { useMemo, useState } from 'react'
 
-import { useNodeById } from '../../../hooks/nodes/useNodes'
-import { NodeDto, NodeService } from '../../../services/node.service'
+import { useGetNodeData } from '../../../hooks/nodes/useNodes'
+import { useDialog } from '../../../hooks/useDialog'
+import { NodeData } from '../../../types/nodeTypes'
+import { Cell } from '../CheckpointNode/Cell'
+import TableDialog from '../CheckpointNode/TableDialog'
 
 interface Props {
 	open: boolean
@@ -33,237 +28,197 @@ interface Props {
 	isParent?: boolean
 }
 
-export const DialogData = ({
-	id,
-	open,
-	handleClose,
-	dialogName,
-}: Props) => {
-	const { item } = useNodeById(id)
-	const [columns, setColumns] = useState<string[]>([])
-	const [rows, setRows] = useState<Array<{ [key: string]: string }>>([])
-	const queryClient = useQueryClient()
+export const DialogData = ({ id, open, handleClose, dialogName }: Props) => {
+	const { items, isLoading } = useGetNodeData(id)
+	const [pageSize, setPageSize] = useState<number>(10)
+	const [page, setPage] = useState<number>(0)
 
-	const { mutate: updateCurrentNode } = useMutation({
-		mutationKey: ['updateCurrentNode'],
-		mutationFn: (data: NodeDto) =>
-			NodeService.update(data.id, {
-				...data,
-				data: {
-					...data.data,
-					tableName: columns,
-					tableData: rows
-				}
-			}),
-		onSuccess: data => {
-			queryClient.invalidateQueries({ queryKey: ['node'] })
-		},
-		onError: error => {
-			toast.error('Login or registration failed.')
-		}
-	})
+	const { isOpen, handleDialogOpen, handleDialogClose } = useDialog()
 
-	const handleChangeColumn = (index: number, newValue: string) => {
-		setColumns(prev => {
-			const updated = [...prev]
-			const oldKey = prev[index]
-			const newKey = newValue.trim()
+	const isAdmin = localStorage.getItem('isAdmin')
 
-			// Переименовать ключи в каждой строке
-			setRows(rows =>
-				rows.map(row => {
-					const newRow = { ...row }
-					newRow[newKey] = newRow[oldKey]
-					delete newRow[oldKey]
-					return newRow
-				})
-			)
+	const columns: GridColDef[] = useMemo(
+		() => [
+			{
+				field: 'excerpt',
+				headerName: 'Название защиты',
+				flex: 0,
+				minWidth: 150,
+				maxWidth: 350
+			},
+			{
+				field: 'protectionName',
+				headerName: 'Выдержка',
+				flex: 1,
+				minWidth: 100,
+				maxWidth: 100
+			},
+			{
+				field: 'source',
+				headerName: 'Источник',
+				flex: 0,
+				minWidth: 250,
+				maxWidth: 550
+			},
+			{
+				field: 'triggeringAlgorithm',
+				headerName: 'Условие срабатывания',
+				flex: 0,
+				minWidth: 350,
+				maxWidth: 550
+			},
+			{
+				field: 'triggeringConditions',
+				headerName: 'Алгоритм срабатывания',
+				flex: 1,
+				minWidth: 150,
+				renderCell: ({ value }) => (
+					<div style={{ whiteSpace: 'pre-line', overflowWrap: 'break-word' }}>
+						{value}
+					</div>
+				)
+			}
+		],
+		[id, handleDialogClose]
+	)
 
-			updated[index] = newKey
-			return updated
-		})
+	const handlePaginationModelChange = (paginationModel: {
+		page: number
+		pageSize: number
+	}) => {
+		setPage(paginationModel.page)
+		setPageSize(paginationModel.pageSize)
 	}
-
-	const handleChangeCell = (
-		rowIdx: number,
-		columnKey: string,
-		newValue: string
-	) => {
-		setRows(prev => {
-			const updated = [...prev]
-			updated[rowIdx] = { ...updated[rowIdx], [columnKey]: newValue }
-			return updated
-		})
-	}
-
-	const handleAddRow = () => {
-		const newRow: { [key: string]: string } = {}
-		columns.forEach(col => {
-			newRow[col] = ''
-		})
-		setRows(prev => [...prev, newRow])
-	}
-
-	const handleDeleteRow = (index: number) => {
-		setRows(prev => prev.filter((_, i) => i !== index))
-	}
-
-	const handleAddColumn = () => {
-		const newColumnName = `Новая колонка ${columns.length + 1}`
-		setColumns(prev => [...prev, newColumnName])
-
-		setRows(prevRows =>
-			prevRows.map(row => ({
-				...row,
-				[newColumnName]: ''
-			}))
-		)
-	}
-
-	const handleSave = () => {
-		updateCurrentNode(item as unknown as NodeDto)
-	}
-
-	useEffect(() => {
-		if (item) {
-			setColumns(item.data.tableName)
-			setRows(item.data.tableData)
-		}
-	}, [item])
 
 	return (
-		<Dialog
-			open={open}
-			onClose={handleClose}
-			aria-labelledby='alert-dialog-title'
-			aria-describedby='alert-dialog-description'
-			fullScreen
-		>
-			<DialogTitle>
-				{dialogName}
-				<IconButton
-					aria-label='close'
-					onClick={handleClose}
+		<>
+			<Dialog
+				open={open}
+				onClose={handleClose}
+				aria-labelledby='alert-dialog-title'
+				aria-describedby='alert-dialog-description'
+				fullScreen
+				PaperProps={{
+					sx: {
+						backgroundColor: '#e6f0ff'
+					}
+				}}
+			>
+				<DialogTitle
+					style={{ textAlign: 'center', width: '100%' }}
 					sx={{
-						position: 'absolute',
-						right: 8,
-						top: 8
+						backgroundColor: '#0073e6',
+						color: '#fff'
 					}}
 				>
-					<CloseIcon />
-				</IconButton>
-			</DialogTitle>
-
-			<DialogContent>
-				<Grid
-					container
-					spacing={2}
-					height='100%'
-				>
-					<Grid
-						item
-						xs={12}
-						sx={{ display: 'flex', flexDirection: 'column' }}
+					<Typography sx={{ fontSize: '2.125rem' }}>{dialogName}</Typography>
+					<IconButton
+						aria-label='close'
+						onClick={handleClose}
+						sx={{
+							position: 'absolute',
+							right: 8,
+							top: 8
+						}}
 					>
-						<div
-							style={{
-								display: 'flex',
-								justifyContent: 'flex-end',
-								marginBottom: '8px'
-							}}
+						<CloseIcon />
+					</IconButton>
+				</DialogTitle>
+
+				<DialogContent>
+					<Grid
+						container
+						spacing={2}
+						height='100%'
+					>
+						<Grid
+							item
+							xs={12}
+							sx={{ display: 'flex', flexDirection: 'column' }}
 						>
-							<Button
-								variant='contained'
-								onClick={handleSave}
+							<div
+								style={{
+									display: 'flex',
+									justifyContent: 'flex-end',
+									marginBottom: '8px'
+								}}
+							></div>
+							<Box
+								sx={{
+									position: 'relative',
+									textAlign: 'center',
+									mb: 2
+								}}
 							>
-								<SaveIcon />
-							</Button>
-						</div>
+								<Typography sx={{ fontSize: '2.125rem' }}>
+									Таблица уставок защит технологического объекта
+								</Typography>
 
-						<TableContainer component={Paper}>
-							<Table>
-								<TableHead>
-									<TableRow>
-										{columns.map((col, colIdx) => (
-											<TableCell
-												sx={{ minWidth: 200 }}
-												key={colIdx}
-											>
-												<TextField
-													value={col}
-													onChange={e =>
-														handleChangeColumn(colIdx, e.target.value)
-													}
-													variant='standard'
-													fullWidth
-													multiline
-													maxRows={4}
-													InputProps={{
-														sx: {
-															whiteSpace: 'nowrap',
-															overflow: 'hidden',
-															textOverflow: 'ellipsis'
-														}
-													}}
-													inputProps={{ title: col }}
-												/>
-											</TableCell>
-										))}
-										<TableCell sx={{ mnWidth: 200 }}>
-											<IconButton onClick={handleAddColumn}>
-												<AddIcon />
-											</IconButton>
-										</TableCell>
-									</TableRow>
-								</TableHead>
-
-								<TableBody>
-									{rows.map((row, rowIdx) => (
-										<TableRow key={rowIdx}>
-											{columns.map((col, colIdx) => (
-												<TableCell
-													sx={{ minWidth: 200 }}
-													key={colIdx}
-												>
-													<TextField
-														value={row[col] ?? ''}
-														onChange={e =>
-															handleChangeCell(rowIdx, col, e.target.value)
-														}
-														variant='standard'
-														fullWidth
-														multiline
-														maxRows={4}
-														InputProps={{
-															sx: {
-																whiteSpace: 'nowrap',
-																overflow: 'hidden',
-																textOverflow: 'ellipsis'
-															}
-														}}
-														inputProps={{ title: row[col] }}
-													/>
-												</TableCell>
-											))}
-											<TableCell sx={{ minWidth: 200 }}>
-												<IconButton onClick={() => handleDeleteRow(rowIdx)}>
-													<DeleteOutlineIcon />
-												</IconButton>
-											</TableCell>
-										</TableRow>
-									))}
-
-									<TableRow>
-										<TableCell colSpan={columns.length + 1}>
-											<Button onClick={handleAddRow}>Добавить строку</Button>
-										</TableCell>
-									</TableRow>
-								</TableBody>
-							</Table>
-						</TableContainer>
+								{isAdmin === 'true' ? (
+									<Box
+										sx={{
+											position: 'absolute',
+											right: 0,
+											top: '50%',
+											transform: 'translateY(-50%)'
+										}}
+									>
+										<Button
+											onClick={handleDialogOpen}
+											variant='contained'
+											startIcon={<AddIcon />}
+										>
+											Добавить
+										</Button>
+									</Box>
+								) : null}
+							</Box>
+							<DataGrid
+								disableRowSelectionOnClick
+								loading={isLoading}
+								autoHeight
+								rows={items}
+								columns={
+									isAdmin === 'true'
+										? [
+												{
+													field: 'deleteEdit',
+													headerName: '',
+													minWidth: 100,
+													maxWidth: 100,
+													renderCell: ({ row }: { row: NodeData }) => (
+														<Cell
+															items={items}
+															nodeId={id}
+															row={row}
+														/>
+													)
+												},
+												...columns
+											]
+										: columns
+								}
+								paginationModel={{ page, pageSize }}
+								onPaginationModelChange={handlePaginationModelChange}
+								pageSizeOptions={[5, 10, 15, 20]}
+								localeText={ruRU.components.MuiDataGrid.defaultProps.localeText}
+								getRowHeight={() => 'auto'}
+								sx={{
+									'& .MuiDataGrid-row:nth-of-type(odd)': {
+										backgroundColor: '#e6f0ff' // светло-зелёный
+									}
+								}}
+							/>
+						</Grid>
 					</Grid>
-				</Grid>
-			</DialogContent>
-		</Dialog>
+				</DialogContent>
+			</Dialog>
+			<TableDialog
+				items={items}
+				nodeId={id}
+				open={isOpen}
+				handleClose={handleDialogClose}
+			/>
+		</>
 	)
 }

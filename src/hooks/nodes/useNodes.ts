@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 
 import { NodeService } from '../../services/node.service'
-import { CustomNode } from '../../types/nodeTypes'
+import { CustomNode, NodeData } from '../../types/nodeTypes'
 
 export function useNodes() {
 	const { data } = useQuery({
@@ -33,7 +33,7 @@ export function useChildNodes(id: string) {
 }
 
 export function useNodeById(id: string) {
-	const { data } = useQuery({
+	const { data, isLoading } = useQuery({
 		queryKey: ['currentNode'],
 		queryFn: () => NodeService.getById(id)
 	})
@@ -42,5 +42,21 @@ export function useNodeById(id: string) {
 	useEffect(() => {
 		setItem(data)
 	}, [data])
-	return { item, setItem }
+	return { item, setItem, isLoading }
 }
+
+export function useGetNodeData(id: string) {
+	const { data, isLoading } = useQuery({
+		queryKey: ['currentNodeData'],
+		queryFn: () => NodeService.getNodeData(id)
+	})
+	const [items, setItems] = useState<NodeData[]>([])
+
+	useEffect(() => {
+		if (data) {
+			setItems(data)
+		}
+	}, [data])
+	return { items, setItems, isLoading }
+}
+

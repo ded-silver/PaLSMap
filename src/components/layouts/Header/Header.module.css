@@ -1,29 +1,56 @@
 header {
-  background-color: #0073e6;
-  color: white;
-  padding: 1rem;
-  text-align: center;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 78px; 
+	background-color: #0073e6;
+	color: white;
+	padding: 1rem;
+	text-align: center;
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	min-height: 60px;
 }
 
 .toggle-sidebar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: none;
-  font-size: 1.8rem;
-  cursor: pointer;
-  color: white;
-  padding: 0.25rem;
-  transition: background-color 0.2s ease;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: transparent;
+	border: none;
+	font-size: 1.8rem;
+	cursor: pointer;
+	color: white;
+	padding: 0.25rem;
+	transition: background-color 0.2s ease;
 }
 
 .toggle-sidebar:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
+	background-color: rgba(255, 255, 255, 0.1);
+	border-radius: 8px;
+}
+
+.profile-button {
+	display: flex;
+	align-items: center;
+	background-color: rgb(0, 115, 230);
+	color: white;
+	border: none;
+	padding: 8px 18px;
+	border-radius: 6px;
+	cursor: pointer;
+	font-weight: 600;
+	font-size: 16px;
+	box-shadow: 0 3px 6px rgba(25, 118, 210, 0.4);
+	transition:
+		background-color 0.3s ease,
+		box-shadow 0.3s ease;
+}
+
+.profile-button:hover {
+	background-color: #1565c0; /* чуть темнее */
+	box-shadow: 0 5px 12px rgba(21, 101, 192, 0.6);
+}
+
+.profile-button:active {
+	outline: none;
+	box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.5);
 }

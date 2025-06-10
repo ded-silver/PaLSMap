@@ -12,6 +12,8 @@ import styles from './FactoryNode.module.css'
 export const FactoryNode = ({ data, id }: NodeProps<CustomNode>) => {
 	const queryClient = useQueryClient()
 
+	const isAdmin = localStorage.getItem('isAdmin')
+
 	const { mutate: deleteNode } = useMutation({
 		mutationKey: ['deleteNode'],
 		mutationFn: (nodeId: string) => NodeService.delete(nodeId),
@@ -29,13 +31,18 @@ export const FactoryNode = ({ data, id }: NodeProps<CustomNode>) => {
 
 	return (
 		<div className={styles['nodeName']}>
+			<div className={styles['factory-square-container']}>
+				<div className={styles['factory-square']}></div>
+			</div>
 			<div
 				className={styles['deleteButtonWrapper']}
 				onClick={e => e.stopPropagation()}
 			>
-				<IconButton onClick={handleDelete}>
-					<DeleteOutlineIcon fontSize='small' />
-				</IconButton>
+				{isAdmin === 'true' ? (
+					<IconButton onClick={handleDelete}>
+						<DeleteOutlineIcon fontSize='small' />
+					</IconButton>
+				) : null}
 			</div>
 		</div>
 	)

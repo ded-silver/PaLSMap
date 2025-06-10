@@ -1,44 +1,418 @@
 .sidebar {
-  width: fit-content;
-  gap: 16px;
-  padding: 10px 20px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #f8f8f8;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  z-index: 10;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	padding: 12px 24px;
+
+	position: absolute;
+	bottom: 20px;
+	left: 50%;
+	transform: translateX(-50%);
+
+	background: linear-gradient(135deg, #e6f0ff, #ffffff);
+	border: 1px solid #bfd6f6;
+	border-radius: 12px;
+	box-shadow: 0 4px 12px rgba(147, 197, 253, 0.3);
+	backdrop-filter: blur(3px);
+
+	transition:
+		box-shadow 0.3s ease,
+		transform 0.3s ease;
+	z-index: 10;
 }
 
 .sidebar > div {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+	display: flex;
+	align-items: center;
+	gap: 12px;
 }
 
 .dndnode {
-  border: 1px solid #888;
-  border-radius: 4px;
-  padding: 6px 12px;
-  cursor: grab;
-  background: white;
-  transition: background 0.2s;
-  text-align: center;
+	border: 1px solid #888;
+	border-radius: 4px;
+	padding: 6px 12px;
+	cursor: grab;
+	background: white;
+	transition: background 0.2s;
+	text-align: center;
 }
 
 .dndnode:hover {
-  background: #e6e6e6;
+	background: #e6e6e6;
 }
 
 input {
-  padding: 5px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+	padding: 5px;
+	border-radius: 5px;
+	border: 1px solid #ccc;
+}
+
+/* OPS */
+.circle-container {
+	position: relative;
+	width: 50px;
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.circle {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	background-color: #fde68a;
+	border: 1px solid #eab308;
+	position: relative;
+}
+
+.cross {
+	position: absolute;
+	width: 30px;
+	height: 35px;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.cross::before,
+.cross::after {
+	content: '';
+	position: absolute;
+	left: 50%;
+	top: 0;
+	width: 1px;
+	height: 100%;
+	background-color: #1e293b;
+	transform-origin: center;
+}
+
+.cross::before {
+	transform: translateX(-50%) rotate(45deg);
+}
+
+.cross::after {
+	transform: translateX(-50%) rotate(-45deg);
+}
+
+/* TankPark */
+.chart-cylinder {
+	width: 68.5px;
+	height: 50px;
+	border-radius: 50% / 11.5px;
+	border: 1px solid #94a3b8;
+	background-color: #bae6fd;
+	position: relative;
+	overflow: hidden;
+}
+
+.chart-cylinder::before {
+	content: '';
+	position: absolute;
+	top: -2px;
+	left: 0;
+	right: 0;
+	height: 20px;
+	border-radius: 50%;
+	border: 1px solid #94a3b8;
+	background-color: #fef3c7;
+}
+
+/* Checkpoint */
+.lime-square-container {
+	position: relative;
+	width: 50px;
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.lime-square {
+	width: 25px;
+	height: 25px;
+	border-radius: 0;
+	background-color: #bbf7d0;
+	border: 1px solid #4ade80;
+}
+
+/* Factory */
+.container_childobject {
+	position: relative;
+	width: 50px;
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #f3f4f6;
+	border: 1px solid #d1d5db;
+	mix-blend-mode: multiply;
+	border-radius: 6px;
+}
+
+.factory-square-container {
+	position: relative;
+	width: 50px;
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.factory-square {
+	position: relative;
+	width: 50px;
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #f3f4f6;
+	border: 1px solid #d1d5db;
+	mix-blend-mode: multiply;
+	border-radius: 6px;
+}
+
+/* SAR */
+.container_sar {
+	position: relative;
+	width: 50px;
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #fef9c3;
+	border: 1px solid #eab308;
+	border-radius: 6px;
+}
+
+/* KPPSOD */
+.container_kppsod {
+	position: relative;
+	width: 50px;
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #fed7aa;
+	border: 1px solid #f97316;
+	border-radius: 6px;
+}
+
+/* Capacity */
+.capacity-circle-container {
+	position: relative;
+	width: 50px;
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	z-index: 1;
+}
+
+.capacity-chart-cylinder {
+	width: 30px;
+	height: 50px;
+	border-radius: 50% / 11.5px;
+	border: 1px solid #64748b;
+	background-color: #bfdbfe;
+	position: relative;
+	overflow: hidden;
+}
+
+.capacity-chart-cylinder::before {
+	content: '';
+	position: absolute;
+	top: -2px;
+	left: 0;
+	right: 0;
+	height: 20px;
+	border-radius: 50%;
+	border: 1px solid #64748b;
+	background-color: #93c5fd;
+}
+
+/* FGU */
+.container_fgu {
+	position: relative;
+	width: 50px;
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #bbf7d0;
+	border: 1px solid #22c55e;
+	border-radius: 6px;
+}
+
+/* PNS */
+.container_pns {
+	position: relative;
+	width: 90px;
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #c7d2fe;
+	border: 1px solid #6366f1;
+	border-radius: 6px;
+}
+
+/* MNS */
+.container_mns {
+	position: relative;
+	width: 90px;
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #fbcfe8;
+	border: 1px solid #ec4899;
+	border-radius: 6px;
+}
+
+/* ChildObject */
+.container_childobject {
+	position: relative;
+	width: 50px;
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #f3f4f6;
+	border: 1px solid #d1d5db;
+	mix-blend-mode: multiply;
+	border-radius: 6px;
+}
+
+.children-square-container {
+	position: relative;
+	width: 50px;
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.children-square {
+	position: relative;
+	width: 35px;
+	height: 35px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: #f3f4f6;
+	border: 1px solid #d1d5db;
+	mix-blend-mode: multiply;
+	border-radius: 6px;
+}
+
+/* Valve */
+.container_valve {
+	position: relative;
+	width: 50px;
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: transparent;
+	border: none;
+	border-radius: 8px;
+	cursor: grab;
+}
+
+.triangle-left {
+	width: 0;
+	height: 0;
+	border-top: 20px solid transparent;
+	border-bottom: 20px solid transparent;
+	border-left: 25px solid #fde68a;
+	position: absolute;
+	left: 0;
+	top: calc(50% - 20px);
+}
+
+.triangle-right {
+	width: 0;
+	height: 0;
+	border-top: 20px solid transparent;
+	border-bottom: 20px solid transparent;
+	border-right: 25px solid #fde68a;
+	position: absolute;
+	right: 0;
+	top: calc(50% - 20px);
+}
+
+/* Pump */
+.container_pump {
+	position: relative;
+	width: 50px;
+	height: 50px;
+	background-color: #fcd34d;
+	border: 2px solid #facc15;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	overflow: visible;
+}
+
+.triangle-wrapper {
+	width: 25px;
+	height: 27px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	right: -2px;
+}
+
+.triangle {
+	width: 0;
+	height: 0;
+	border-top: 13px solid transparent;
+	border-bottom: 13px solid transparent;
+	border-left: 25px solid #e0f2fe;
+	transition: border-left-color 0.3s ease;
+}
+
+/* AccountingSystem */
+.container_accountingsystem {
+	position: relative;
+	width: 50px;
+	height: 50px;
+	background-color: #a5f3fc;
+	border: 1px solid #06b6d4;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.container_accountingsystem .innerCircle {
+	width: 30px;
+	height: 30px;
+	background-color: #67e8f9;
+	border: 1px solid #0ea5e9;
+	border-radius: 50%;
+}
+
+/* River */
+.river-line-container {
+	width: 50px;
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.river-line {
+	width: 40px;
+	height: 4px;
+	background-color: #93c5fd;
+	transform: rotate(60deg);
+	border-radius: 2px;
 }
