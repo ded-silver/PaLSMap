@@ -22,14 +22,13 @@ export interface NodeDto {
 		| 'ParentObject'
 		| 'ChildObject'
 	position: { x: number; y: number }
-	data: {
-		label: string
-		tableData: NodeData[]
-		handlers: {
-			id: string
-			type: 'target' | 'source'
-		}[]
-	}
+	data: CustomData
+	measured?:
+		| {
+				width?: number | undefined
+				height?: number | undefined
+		  }
+		| undefined
 	parentId?: string
 }
 
@@ -43,7 +42,7 @@ export interface NodeData {
 	order: number
 }
 
-export interface NodeHeandlers {
+export interface NodeHandlers {
 	id: string
 	type: 'target' | 'source'
 }
@@ -53,11 +52,14 @@ export interface NodeDataPayload {
 	id: string
 }
 
+export interface CustomData {
+	measured: { width: number; height: number }
+	label: string
+	tableData: NodeData[]
+	handlers: NodeHandlers[]
+	[key: string]: unknown
+}
+
 export interface CustomNode extends Node {
-	data: {
-		label: string
-		tableName: string[]
-		tableData: NodeData[]
-		handlers: NodeHeandlers[]
-	}
+	data: CustomData
 }

@@ -220,7 +220,6 @@ const MMMain = ({ isSidebarOpen }: Props) => {
 					variant='h4'
 					className={clsx(styles.pageTitle, { [styles.open]: isSidebarOpen })}
 					zIndex={10}
-					// sx={{borderBottom: '1px solid grey'}}
 				>
 					ГЕОГРАФИЧЕСКАЯ СХЕМА ТЕХНОЛОГИЧЕСКИХ ОБЪЕКТОВ
 				</Typography>
@@ -241,7 +240,6 @@ const MMMain = ({ isSidebarOpen }: Props) => {
 					fitView
 					nodesDraggable={isAdmin === 'true' ? true : false}
 					nodesConnectable={isAdmin === 'true' ? true : false}
-					// elementsSelectable={isAdmin === 'true' ? true : false}
 					edgesFocusable={isAdmin === 'true' ? true : false}
 					nodesFocusable={isAdmin === 'true' ? true : false}
 				>

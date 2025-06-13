@@ -1,5 +1,6 @@
 import AddIcon from '@mui/icons-material/Add'
 import CloseIcon from '@mui/icons-material/Close'
+import FileDownloadIcon from '@mui/icons-material/FileDownload'
 import {
 	Box,
 	Button,
@@ -12,15 +13,17 @@ import {
 } from '@mui/material'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
 import { ruRU } from '@mui/x-data-grid/locales'
+import ExcelJS from 'exceljs'
+import { saveAs } from 'file-saver'
 import { useMemo, useState } from 'react'
 
 import { useGetNodeData } from '../../../hooks/nodes/useNodes'
 import { useDialog } from '../../../hooks/useDialog'
 import { NodeData } from '../../../types/nodeTypes'
 import Provider from '../../Provider/Provider'
+import TableDialog from '../DialogData/TableDialog'
 
 import { Cell } from './Cell'
-import TableDialog from './TableDialog'
 
 interface Props {
 	open: boolean
@@ -45,45 +48,198 @@ export const DialogData = ({
 
 	const isAdmin = localStorage.getItem('isAdmin')
 
+	const exportJsonToExcel = async (jsonData: any[], filename = 'data.xlsx') => {
+		const workbook = new ExcelJS.Workbook()
+		const worksheet = workbook.addWorksheet('Sheet1')
+
+		// Определяем колонки
+		worksheet.columns = [
+			{ header: 'Наименование защиты', key: 'protectionName', width: 40 },
+			{ header: 'Выдержка времени', key: 'excerpt', width: 40 },
+			{ header: 'Источник', key: 'source', width: 40 },
+			{
+				header: 'Условия срабатывания',
+				key: 'triggeringConditions',
+				width: 60
+			},
+			{ header: 'Алгоритм срабатывания', key: 'triggeringAlgorithm', width: 70 }
+		]
+
+		// Добавляем данные
+		jsonData.forEach(item => {
+			worksheet.addRow({
+				protectionName: item.protectionName,
+				excerpt: item.excerpt,
+				source: item.source,
+				triggeringConditions: item.triggeringConditions,
+				triggeringAlgorithm: item.triggeringAlgorithm
+			})
+		})
+
+		// Стилизация шапки (первая строка)
+		const headerRow = worksheet.getRow(1)
+		headerRow.eachCell(cell => {
+			cell.font = { bold: true, color: { argb: 'FFFFFFFF' } } // белый цвет текста
+			cell.fill = {
+				type: 'pattern',
+				pattern: 'solid',
+				fgColor: { argb: 'FF4472C4' } // синий фон
+			}
+			cell.alignment = {
+				horizontal: 'center',
+				vertical: 'middle',
+				wrapText: true
+			}
+			cell.border = {
+				top: { style: 'thin' },
+				left: { style: 'thin' },
+				bottom: { style: 'thin' },
+				right: { style: 'thin' }
+			}
+		})
+
+		// Для всех остальных ячеек - перенос строк и выравнивание по левому краю
+		worksheet.eachRow((row, rowNumber) => {
+			if (rowNumber !== 1) {
+				row.eachCell(cell => {
+					cell.alignment = {
+						horizontal: 'left', // по левому краю
+						vertical: 'top',
+						wrapText: true
+					}
+					cell.border = {
+						top: { style: 'thin' },
+						left: { style: 'thin' },
+						bottom: { style: 'thin' },
+						right: { style: 'thin' }
+					}
+				})
+			}
+		})
+
+		// Записываем в буфер и сохраняем
+		const buffer = await workbook.xlsx.writeBuffer()
+		const blob = new Blob([buffer], {
+			type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+		})
+
+		saveAs(blob, filename)
+	}
+
 	const columns: GridColDef[] = useMemo(
 		() => [
 			{
-				field: 'excerpt',
+				field: 'protectionName',
 				headerName: 'Название защиты',
-				flex: 1,
-				minWidth: 150,
-				maxWidth: 150
+				flex: 0,
+				minWidth: 200,
+				maxWidth: 350,
+				renderCell: params => (
+					<Box
+						width='100%'
+						height='100%'
+						display='flex'
+						justifyContent='left'
+						alignItems='center'
+						sx={{
+							whiteSpace: 'pre-line',
+							wordBreak: 'break-word',
+							hyphens: 'auto'
+						}}
+					>
+						{params.value}
+					</Box>
+				)
 			},
 			{
-				field: 'protectionName',
+				field: 'excerpt',
 				headerName: 'Выдержка',
-				flex: 1,
-				minWidth: 100,
-				maxWidth: 100
+				flex: 0,
+				minWidth: 150,
+				maxWidth: 200,
+				renderCell: params => (
+					<Box
+						width='100%'
+						height='100%'
+						display='flex'
+						justifyContent='left'
+						alignItems='center'
+						sx={{
+							whiteSpace: 'pre-line',
+							wordBreak: 'break-word',
+							hyphens: 'auto'
+						}}
+					>
+						{params.value}
+					</Box>
+				)
 			},
 			{
 				field: 'source',
 				headerName: 'Источник',
-				flex: 1,
+				flex: 0,
 				minWidth: 150,
-				maxWidth: 150
-			},
-			{
-				field: 'triggeringAlgorithm',
-				headerName: 'Условие срабатывания',
-				flex: 1,
-				minWidth: 150,
-				maxWidth: 250
+				maxWidth: 350,
+				renderCell: params => (
+					<Box
+						width='100%'
+						height='100%'
+						display='flex'
+						justifyContent='left'
+						alignItems='center'
+						sx={{
+							whiteSpace: 'pre-line',
+							wordBreak: 'break-word',
+							hyphens: 'auto'
+						}}
+					>
+						{params.value}
+					</Box>
+				)
 			},
 			{
 				field: 'triggeringConditions',
+				headerName: 'Условие срабатывания',
+				flex: 0,
+				minWidth: 250,
+				maxWidth: 450,
+				renderCell: params => (
+					<Box
+						width='100%'
+						height='100%'
+						display='flex'
+						justifyContent='left'
+						alignItems='center'
+						sx={{
+							whiteSpace: 'pre-line',
+							wordBreak: 'break-word',
+							hyphens: 'auto'
+						}}
+					>
+						{params.value}
+					</Box>
+				)
+			},
+			{
+				field: 'triggeringAlgorithm',
 				headerName: 'Алгоритм срабатывания',
 				flex: 1,
 				minWidth: 150,
-				renderCell: ({ value }) => (
-					<div style={{ whiteSpace: 'pre-line', overflowWrap: 'break-word' }}>
-						{value}
-					</div>
+				renderCell: params => (
+					<Box
+						width='100%'
+						height='100%'
+						display='flex'
+						justifyContent='left'
+						alignItems='center'
+						sx={{
+							whiteSpace: 'pre-line',
+							wordBreak: 'break-word',
+							hyphens: 'auto'
+						}}
+					>
+						{params.value}
+					</Box>
 				)
 			}
 		],
@@ -162,7 +318,6 @@ export const DialogData = ({
 							></div>
 							<Box
 								sx={{
-									position: 'relative',
 									textAlign: 'center',
 									mb: 2
 								}}
@@ -171,15 +326,16 @@ export const DialogData = ({
 									Таблица уставок защит технологического объекта
 								</Typography>
 
-								{isAdmin === 'true' ? (
-									<Box
-										sx={{
-											position: 'absolute',
-											right: 0,
-											top: '50%',
-											transform: 'translateY(-50%)'
-										}}
-									>
+								<Box
+									sx={{
+										mt: 2,
+										display: 'flex',
+										justifyContent: 'right',
+										gap: '1rem',
+										flexWrap: 'wrap'
+									}}
+								>
+									{isAdmin === 'true' && (
 										<Button
 											onClick={handleDialogOpen}
 											variant='contained'
@@ -187,8 +343,15 @@ export const DialogData = ({
 										>
 											Добавить
 										</Button>
-									</Box>
-								) : null}
+									)}
+									<Button
+										onClick={() => exportJsonToExcel(items, 'Уставки ТО.xlsx')}
+										variant='contained'
+										startIcon={<FileDownloadIcon />}
+									>
+										Сохранить в Excel
+									</Button>
+								</Box>
 							</Box>
 
 							<DataGrid

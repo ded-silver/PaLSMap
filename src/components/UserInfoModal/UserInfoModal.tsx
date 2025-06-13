@@ -1,8 +1,9 @@
 import CloseIcon from '@mui/icons-material/Close'
 import LogoutIcon from '@mui/icons-material/Logout'
 import { Button, IconButton, TextField } from '@mui/material'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
 
 import { userService } from '../../services/user.service'
 import { IUser } from '../../types/auth.types'
@@ -20,6 +21,8 @@ export const UserInfoModal = ({ onClose, onLogout }: Props) => {
 	const { register, handleSubmit, reset, watch } = useForm<UserFormData>()
 	const nameValue = watch('name')
 	const emailValue = watch('email')
+
+	const [requestSent, setRequestSent] = useState(false)
 
 	// Загрузка текущего профиля при открытии формы
 	useEffect(() => {
@@ -44,14 +47,10 @@ export const UserInfoModal = ({ onClose, onLogout }: Props) => {
 	}
 
 	// Запрос на повышение прав
-	const handleRequestRights = async () => {
-		try {
-			await userService.requestRightsUpgrade()
-			alert('Запрос на повышение прав отправлен')
-			onClose()
-		} catch (error) {
-			alert('Ошибка при запросе прав')
-		}
+	const handleRequestRights = () => {
+		// Просто сообщение и блокирование кнопки, без реального запроса
+		toast.success('Ваш запрос на повышение прав отправлен')
+		setRequestSent(true)
 	}
 
 	return (
@@ -84,6 +83,7 @@ export const UserInfoModal = ({ onClose, onLogout }: Props) => {
 						fullWidth
 						{...register('email')}
 						placeholder='example@mail.com'
+						disabled
 					/>
 					<TextField
 						label='Пароль'
@@ -98,6 +98,7 @@ export const UserInfoModal = ({ onClose, onLogout }: Props) => {
 							variant='outlined'
 							type='button'
 							onClick={handleRequestRights}
+							disabled={requestSent}
 						>
 							Запросить права
 						</Button>

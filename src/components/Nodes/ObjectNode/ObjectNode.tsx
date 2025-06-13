@@ -7,7 +7,7 @@ import { useState } from 'react'
 import { toast } from 'react-toastify'
 
 import { useDebouncedCallback } from '../../../hooks/useDebouncedCallback'
-import { NodeDto, NodeService } from '../../../services/node.service'
+import { NodeService } from '../../../services/node.service'
 import { CustomNode } from '../../../types/nodeTypes'
 import { DialogData } from '../DialogData'
 
@@ -64,7 +64,13 @@ export const ObjectNode = ({ data, id, parentId }: NodeProps<CustomNode>) => {
 
 	const handleChangeNodeName = useDebouncedCallback((text: string) => {
 		if (node?.position) {
-			updateCurrentNode({ id, type: 'Object', position: node?.position, data })
+			updateCurrentNode({
+				...node,
+				id,
+				type: 'Object',
+				position: node?.position,
+				data
+			})
 		}
 	}, 500)
 

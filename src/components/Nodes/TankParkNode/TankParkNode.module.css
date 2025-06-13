@@ -28,8 +28,8 @@
 	width: 137px;
 	height: 100px;
 	border-radius: 50% / 23px;
-	border: 1px solid #94a3b8;
-	background-color: #bae6fd;
+	border: 1px solid #464748;
+	background-color: #f1f5f9;
 	position: relative;
 	overflow: hidden;
 }
@@ -38,11 +38,11 @@
 .chart-cylinder::before {
 	content: '';
 	position: absolute;
-	top: -2px; /* поднимем немного вверх, чтобы выглядело как крышка */
+	top: -2px;
 	left: 0;
 	right: 0;
 	height: 40px;
 	border-radius: 50%;
-	border: 1px solid #94a3b8;
-	background-color: #fef3c7;
+	border: 1px solid #464748;
+	background-color: #e2e8f0;
 }

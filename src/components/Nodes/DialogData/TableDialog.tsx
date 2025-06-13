@@ -102,7 +102,6 @@ export default function TableDialog({
 	return (
 		<Dialog open={open}>
 			<DialogTitle>
-				<Typography sx={{fontSize: '2.125rem'}}>Добавление</Typography>
 				<IconButton
 					aria-label='close'
 					onClick={handleClose}
@@ -127,7 +126,7 @@ export default function TableDialog({
 					>
 						<Controller
 							control={control}
-							name='excerpt'
+							name='protectionName'
 							rules={{
 								required: 'Поле "Название защиты" обязательно для заполнения'
 							}}
@@ -140,8 +139,8 @@ export default function TableDialog({
 									onChange={field.onChange}
 									inputRef={field.ref}
 									value={field.value || ''}
-									error={!!errors.excerpt?.message}
-									helperText={errors.excerpt?.message}
+									error={!!errors.protectionName?.message}
+									helperText={errors.protectionName?.message}
 									sx={{ mt: 2 }}
 								/>
 							)}
@@ -154,7 +153,7 @@ export default function TableDialog({
 					>
 						<Controller
 							control={control}
-							name='protectionName'
+							name='excerpt'
 							rules={{
 								required: 'Поле "Выдержка" обязательно для заполнения'
 							}}
@@ -166,8 +165,8 @@ export default function TableDialog({
 									onChange={field.onChange}
 									inputRef={field.ref}
 									value={field.value || ''}
-									error={!!errors.protectionName?.message}
-									helperText={errors.protectionName?.message}
+									error={!!errors.excerpt?.message}
+									helperText={errors.excerpt?.message}
 									sx={{ mt: 2 }}
 								/>
 							)}
@@ -205,7 +204,7 @@ export default function TableDialog({
 					>
 						<Controller
 							control={control}
-							name='triggeringAlgorithm'
+							name='triggeringConditions'
 							rules={{
 								required:
 									'Поле "Условие срабатывания" обязательно для заполнения'
@@ -218,8 +217,8 @@ export default function TableDialog({
 									onChange={field.onChange}
 									inputRef={field.ref}
 									value={field.value || ''}
-									error={!!errors.triggeringAlgorithm?.message}
-									helperText={errors.triggeringAlgorithm?.message}
+									error={!!errors.triggeringConditions?.message}
+									helperText={errors.triggeringConditions?.message}
 								/>
 							)}
 						/>
@@ -231,7 +230,7 @@ export default function TableDialog({
 					>
 						<Controller
 							control={control}
-							name='triggeringConditions'
+							name='triggeringAlgorithm'
 							rules={{
 								required:
 									'Поле "Алгоритм срабатывания" обязательно для заполнения'
@@ -246,8 +245,8 @@ export default function TableDialog({
 									onChange={field.onChange}
 									inputRef={field.ref}
 									value={field.value || ''}
-									error={!!errors.triggeringConditions?.message}
-									helperText={errors.triggeringConditions?.message}
+									error={!!errors.triggeringAlgorithm?.message}
+									helperText={errors.triggeringAlgorithm?.message}
 									sx={{ width: '552px' }}
 								/>
 							)}

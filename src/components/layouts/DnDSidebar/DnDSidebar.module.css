@@ -63,12 +63,18 @@ input {
 	width: 50px;
 	height: 50px;
 	border-radius: 50%;
-	background-color: #fde68a;
-	border: 1px solid #eab308;
+	background: conic-gradient(
+		#1d502f 0deg 90deg,
+		#9cf8bc 90deg 180deg,
+		#1d502f 180deg 270deg,
+		#9cf8bc 270deg 360deg
+	);
+	border: 1px solid #15803d;
 	position: relative;
+	transform: rotate(135deg);
 }
 
-.cross {
+/* .cross {
 	position: absolute;
 	width: 30px;
 	height: 35px;
@@ -95,15 +101,15 @@ input {
 
 .cross::after {
 	transform: translateX(-50%) rotate(-45deg);
-}
+} */
 
 /* TankPark */
 .chart-cylinder {
 	width: 68.5px;
 	height: 50px;
 	border-radius: 50% / 11.5px;
-	border: 1px solid #94a3b8;
-	background-color: #bae6fd;
+	border: 1px solid #464748;
+	background-color: #f1f5f9;
 	position: relative;
 	overflow: hidden;
 }
@@ -116,8 +122,8 @@ input {
 	right: 0;
 	height: 20px;
 	border-radius: 50%;
-	border: 1px solid #94a3b8;
-	background-color: #fef3c7;
+	border: 1px solid #464748;
+	background-color: #e2e8f0;
 }
 
 /* Checkpoint */
@@ -146,7 +152,7 @@ input {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background-color: #f3f4f6;
+	background-color: #ebecec;
 	border: 1px solid #d1d5db;
 	mix-blend-mode: multiply;
 	border-radius: 6px;

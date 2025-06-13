@@ -125,7 +125,15 @@ export const Provider = ({ id, currentNodeType }: Props) => {
 
 	useEffect(() => {
 		if (items) {
-			setNodes(items)
+			const updatedNodes = items.map(item => ({
+				...item,
+				style: {
+					width: item.measured?.width,
+					height: item.measured?.height
+				}
+			}))
+
+			setNodes(updatedNodes)
 		}
 	}, [items])
 

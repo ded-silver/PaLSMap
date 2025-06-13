@@ -1,5 +1,13 @@
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
-import { IconButton } from '@mui/material'
+import {
+	Button,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogContentText,
+	DialogTitle,
+	IconButton
+} from '@mui/material'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Handle, NodeProps, Position, useReactFlow } from '@xyflow/react'
 import { nanoid } from 'nanoid'
@@ -9,9 +17,9 @@ import { toast } from 'react-toastify'
 import { useDebouncedCallback } from '../../../hooks/useDebouncedCallback'
 import { NodeService } from '../../../services/node.service'
 import { CustomNode, NodeDto } from '../../../types/nodeTypes'
+import { DialogData } from '../TankParkNode/DialogData'
 
 import styles from './CheckpointNode.module.css'
-import { DialogData } from './DialogData'
 
 export const CheckpointNode = ({ data, id }: NodeProps<CustomNode>) => {
 	const [open, setOpen] = useState(false)
@@ -21,6 +29,8 @@ export const CheckpointNode = ({ data, id }: NodeProps<CustomNode>) => {
 	const node = getNode(id)
 
 	const isAdmin = localStorage.getItem('isAdmin')
+
+	const [confirmOpen, setConfirmOpen] = useState(false)
 
 	const handleClickOpen = () => {
 		setOpen(true)
@@ -67,6 +77,7 @@ export const CheckpointNode = ({ data, id }: NodeProps<CustomNode>) => {
 	const handleChangeNodeName = useDebouncedCallback(() => {
 		if (node?.position) {
 			updateCurrentNode({
+				...node,
 				id,
 				type: 'Checkpoint',
 				position: node?.position,
@@ -98,7 +109,11 @@ export const CheckpointNode = ({ data, id }: NodeProps<CustomNode>) => {
 				onClick={e => e.stopPropagation()}
 			>
 				{isAdmin === 'true' ? (
-					<IconButton onClick={handleDelete}>
+					<IconButton
+						onClick={() => {
+							setConfirmOpen(true)
+						}}
+					>
 						<DeleteOutlineIcon fontSize='small' />
 					</IconButton>
 				) : null}
@@ -127,6 +142,37 @@ export const CheckpointNode = ({ data, id }: NodeProps<CustomNode>) => {
 					id={id}
 				/>
 			) : null}
+
+			<Dialog
+				open={confirmOpen}
+				onClose={() => setConfirmOpen(false)}
+			>
+				<DialogTitle>Подтверждение удаления</DialogTitle>
+				<DialogContent>
+					<DialogContentText>
+						Вы уверены, что хотите удалить объект{' '}
+						<b>{nodeName || 'без имени'}</b>?
+					</DialogContentText>
+				</DialogContent>
+				<DialogActions>
+					<Button
+						onClick={() => setConfirmOpen(false)}
+						variant='contained'
+					>
+						Отмена
+					</Button>
+					<Button
+						onClick={() => {
+							handleDelete()
+							setConfirmOpen(false)
+						}}
+						color='error'
+						variant='contained'
+					>
+						Удалить
+					</Button>
+				</DialogActions>
+			</Dialog>
 		</div>
 	)
 }

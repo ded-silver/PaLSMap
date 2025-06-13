@@ -1,5 +1,13 @@
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
-import { IconButton } from '@mui/material'
+import {
+	Button,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogContentText,
+	DialogTitle,
+	IconButton
+} from '@mui/material'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Handle, NodeProps, Position, useReactFlow } from '@xyflow/react'
 import { nanoid } from 'nanoid'
@@ -21,6 +29,8 @@ export const TankParkNode = ({ data, id }: NodeProps<CustomNode>) => {
 	const node = getNode(id)
 
 	const isAdmin = localStorage.getItem('isAdmin')
+
+	const [confirmOpen, setConfirmOpen] = useState(false)
 
 	const handleClickOpen = () => {
 		setOpen(true)
@@ -67,6 +77,7 @@ export const TankParkNode = ({ data, id }: NodeProps<CustomNode>) => {
 	const handleChangeNodeName = useDebouncedCallback(() => {
 		if (node?.position) {
 			updateCurrentNode({
+				...node,
 				id,
 				type: 'TankPark',
 				position: node?.position,
@@ -98,7 +109,11 @@ export const TankParkNode = ({ data, id }: NodeProps<CustomNode>) => {
 				onClick={e => e.stopPropagation()}
 			>
 				{isAdmin === 'true' ? (
-					<IconButton onClick={handleDelete}>
+					<IconButton
+						onClick={() => {
+							setConfirmOpen(true)
+						}}
+					>
 						<DeleteOutlineIcon fontSize='small' />
 					</IconButton>
 				) : null}
@@ -128,6 +143,37 @@ export const TankParkNode = ({ data, id }: NodeProps<CustomNode>) => {
 					id={id}
 				/>
 			) : null}
+
+			<Dialog
+				open={confirmOpen}
+				onClose={() => setConfirmOpen(false)}
+			>
+				<DialogTitle>Подтверждение удаления</DialogTitle>
+				<DialogContent>
+					<DialogContentText>
+						Вы уверены, что хотите удалить объект{' '}
+						<b>{nodeName || 'без имени'}</b>?
+					</DialogContentText>
+				</DialogContent>
+				<DialogActions>
+					<Button
+						onClick={() => setConfirmOpen(false)}
+						variant='contained'
+					>
+						Отмена
+					</Button>
+					<Button
+						onClick={() => {
+							handleDelete()
+							setConfirmOpen(false)
+						}}
+						color='error'
+						variant='contained'
+					>
+						Удалить
+					</Button>
+				</DialogActions>
+			</Dialog>
 		</div>
 	)
 }

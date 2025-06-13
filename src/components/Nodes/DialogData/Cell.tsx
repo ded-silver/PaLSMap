@@ -1,17 +1,22 @@
 import { Delete } from '@mui/icons-material'
 import EditIcon from '@mui/icons-material/Edit'
 import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogTitle from '@mui/material/DialogTitle'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import { toast } from 'react-toastify'
 
 import { useDialog } from '../../../hooks/useDialog'
 import { NodeService } from '../../../services/node.service'
 import { NodeData } from '../../../types/nodeTypes'
-
-import TableDialog from './TableDialog'
+import TableDialog from '../DialogData/TableDialog'
 
 interface Props {
 	row: NodeData
@@ -22,23 +27,30 @@ interface Props {
 export const Cell: FC<Props> = ({ row, nodeId, items }) => {
 	const queryClient = useQueryClient()
 	const { isOpen, handleDialogOpen, handleDialogClose } = useDialog()
-	
+
 	const isAdmin = localStorage.getItem('isAdmin')
+	const [confirmOpen, setConfirmOpen] = useState(false) // новое состояние
 
 	const { mutate: deleteNodeData } = useMutation({
 		mutationKey: ['updateNodeData'],
 		mutationFn: (id: string) => NodeService.deleteNodeData(id),
-		onSuccess: data => {
+		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['currentNodeData'] })
+			toast.success('Строка успешно удалена.')
 		},
-		onError: error => {
-			toast.error('Ошибка при удалении.')
+		onError: () => {
+			toast.error('Ошибка при удалении строки.')
 		}
 	})
 
+	const handleDeleteConfirmed = () => {
+		deleteNodeData(row.id)
+		setConfirmOpen(false)
+	}
+
 	return (
 		<>
-			{isAdmin === 'true' ? (
+			{isAdmin === 'true' && (
 				<Box
 					width='100%'
 					display='flex'
@@ -48,9 +60,7 @@ export const Cell: FC<Props> = ({ row, nodeId, items }) => {
 					<Tooltip title='Редактировать'>
 						<IconButton
 							size='large'
-							onClick={() => {
-								handleDialogOpen()
-							}}
+							onClick={handleDialogOpen}
 						>
 							<EditIcon
 								fontSize='small'
@@ -58,12 +68,11 @@ export const Cell: FC<Props> = ({ row, nodeId, items }) => {
 							/>
 						</IconButton>
 					</Tooltip>
+					{/* оно */}
 					<Tooltip title='Удалить'>
 						<IconButton
 							size='large'
-							onClick={() => {
-								deleteNodeData(row.id)
-							}}
+							onClick={() => setConfirmOpen(true)}
 						>
 							<Delete
 								fontSize='small'
@@ -71,18 +80,44 @@ export const Cell: FC<Props> = ({ row, nodeId, items }) => {
 							/>
 						</IconButton>
 					</Tooltip>
-					{isOpen && row ? (
-						<TableDialog
-							items={items}
-							nodeId={nodeId}
-							isDetails
-							row={row}
-							open={isOpen}
-							handleClose={handleDialogClose}
-						/>
-					) : null}
+
+					<TableDialog
+						items={items}
+						nodeId={nodeId}
+						isDetails
+						row={row}
+						open={isOpen}
+						handleClose={handleDialogClose}
+					/>
+
+					<Dialog
+						open={confirmOpen}
+						onClose={() => setConfirmOpen(false)}
+					>
+						<DialogTitle>Подтвердите удаление</DialogTitle>
+						<DialogContent>
+							<DialogContentText>
+								Вы уверены, что хотите удалить эту строку?
+							</DialogContentText>
+						</DialogContent>
+						<DialogActions>
+							<Button
+								onClick={() => setConfirmOpen(false)}
+								variant='contained'
+							>
+								Отмена
+							</Button>
+							<Button
+								onClick={handleDeleteConfirmed}
+								color='error'
+								variant='contained'
+							>
+								Удалить
+							</Button>
+						</DialogActions>
+					</Dialog>
 				</Box>
-			) : null}
+			)}
 		</>
 	)
 }

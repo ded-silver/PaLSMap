@@ -1,7 +1,10 @@
-import { axiosWithAuth } from '../api/interceptiors';
-import { CustomNode, NodeData, NodeDataPayload, NodeDto } from '../types/nodeTypes';
-
-
+import { axiosWithAuth } from '../api/interceptiors'
+import {
+	CustomNode,
+	NodeData,
+	NodeDataPayload,
+	NodeDto
+} from '../types/nodeTypes'
 
 export const NodeService = {
 	async getAll(): Promise<CustomNode[]> {
@@ -20,7 +23,10 @@ export const NodeService = {
 	},
 
 	async createNodeData(payload: NodeDataPayload): Promise<NodeData> {
-		const response = await axiosWithAuth.post(`/nodes/data/${payload.id}`, payload.data)
+		const response = await axiosWithAuth.post(
+			`/nodes/data/${payload.id}`,
+			payload.data
+		)
 		return response.data
 	},
 

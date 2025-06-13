@@ -1,16 +1,24 @@
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
-import { IconButton } from '@mui/material'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { NodeProps, useReactFlow } from '@xyflow/react'
-import { useState } from 'react'
-import { toast } from 'react-toastify'
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import { IconButton } from '@mui/material';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { NodeProps, useReactFlow } from '@xyflow/react';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
 
-import { useDebouncedCallback } from '../../../hooks/useDebouncedCallback'
-import { NodeService } from '../../../services/node.service'
-import { CustomNode, NodeDto } from '../../../types/nodeTypes'
-import { DialogData } from '../DialogData'
 
-import styles from './ChildObjectNode.module.css'
+
+import { useDebouncedCallback } from '../../../hooks/useDebouncedCallback';
+import { NodeService } from '../../../services/node.service';
+import { CustomNode, NodeDto } from '../../../types/nodeTypes';
+import { DialogData } from '../DialogData';
+
+
+
+import styles from './ChildObjectNode.module.css';
+
+
+
+
 
 export const ChildObjectNode = ({
 	data,
@@ -84,6 +92,7 @@ export const ChildObjectNode = ({
 	const handleChangeNodeName = useDebouncedCallback((text: string) => {
 		if (node?.position) {
 			updateCurrentNode({
+				...node,
 				id,
 				type: 'ChildObject',
 				position: node?.position,

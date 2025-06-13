@@ -152,7 +152,7 @@ export const DnDSidebar = ({ currentNodeType }: Props) => {
 								</div>
 
 								{/* ChildObject */}
-								<div
+								{/* <div
 									className={styles.dndnode}
 									onDragStart={e => onDragStart(e, 'ChildObject')}
 									draggable
@@ -161,7 +161,7 @@ export const DnDSidebar = ({ currentNodeType }: Props) => {
 									<div className={styles['children-square-container']}>
 										<div className={styles['children-square']}></div>
 									</div>
-								</div>
+								</div> */}
 
 								{/* Capacity */}
 								<div

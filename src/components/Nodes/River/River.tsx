@@ -1,5 +1,13 @@
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
-import { IconButton } from '@mui/material'
+import {
+	Button,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogContentText,
+	DialogTitle,
+	IconButton
+} from '@mui/material'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { NodeProps, useReactFlow } from '@xyflow/react'
 import { useState } from 'react'
@@ -19,6 +27,8 @@ export const River = ({ data, id }: NodeProps<CustomNode>) => {
 	const node = getNode(id)
 
 	const isAdmin = localStorage.getItem('isAdmin')
+
+	const [confirmOpen, setConfirmOpen] = useState(false)
 
 	const handleClickOpen = () => {
 		setOpen(true)
@@ -64,7 +74,13 @@ export const River = ({ data, id }: NodeProps<CustomNode>) => {
 
 	const handleChangeNodeName = useDebouncedCallback(() => {
 		if (node?.position) {
-			updateCurrentNode({ id, type: 'River', position: node?.position, data })
+			updateCurrentNode({
+				...node,
+				id,
+				type: 'River',
+				position: node?.position,
+				data
+			})
 		}
 	}, 500)
 
@@ -98,7 +114,11 @@ export const River = ({ data, id }: NodeProps<CustomNode>) => {
 				onClick={e => e.stopPropagation()}
 			>
 				{isAdmin === 'true' ? (
-					<IconButton onClick={handleDelete}>
+					<IconButton
+						onClick={() => {
+							setConfirmOpen(true)
+						}}
+					>
 						<DeleteOutlineIcon fontSize='small' />
 					</IconButton>
 				) : null}
@@ -129,6 +149,36 @@ export const River = ({ data, id }: NodeProps<CustomNode>) => {
 					/>
 				</svg>
 			</div>
+			<Dialog
+				open={confirmOpen}
+				onClose={() => setConfirmOpen(false)}
+			>
+				<DialogTitle>Подтверждение удаления</DialogTitle>
+				<DialogContent>
+					<DialogContentText>
+						Вы уверены, что хотите удалить объект{' '}
+						<b>{nodeName || 'без имени'}</b>?
+					</DialogContentText>
+				</DialogContent>
+				<DialogActions>
+					<Button
+						onClick={() => setConfirmOpen(false)}
+						variant='contained'
+					>
+						Отмена
+					</Button>
+					<Button
+						onClick={() => {
+							handleDelete()
+							setConfirmOpen(false)
+						}}
+						color='error'
+						variant='contained'
+					>
+						Удалить
+					</Button>
+				</DialogActions>
+			</Dialog>
 		</div>
 	)
 }

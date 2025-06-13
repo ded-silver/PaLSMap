@@ -1,49 +1,19 @@
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
-import { IconButton } from '@mui/material'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { NodeProps } from '@xyflow/react'
-import { toast } from 'react-toastify'
 
-import { NodeService } from '../../../services/node.service'
 import { CustomNode } from '../../../types/nodeTypes'
+import { SkeletonNode } from '../components'
 
-import styles from './FactoryNode.module.css'
-
-export const FactoryNode = ({ data, id }: NodeProps<CustomNode>) => {
-	const queryClient = useQueryClient()
-
-	const isAdmin = localStorage.getItem('isAdmin')
-
-	const { mutate: deleteNode } = useMutation({
-		mutationKey: ['deleteNode'],
-		mutationFn: (nodeId: string) => NodeService.delete(nodeId),
-		onSuccess: data => {
-			queryClient.invalidateQueries({ queryKey: ['childNodes'] })
-		},
-		onError(error: unknown) {
-			toast.error('Ошибка при удалении')
-		}
-	})
-
-	const handleDelete = () => {
-		deleteNode(id)
-	}
-
+export const FactoryNode = ({ data, id, parentId }: NodeProps<CustomNode>) => {
 	return (
-		<div className={styles['nodeName']}>
-			<div className={styles['factory-square-container']}>
-				<div className={styles['factory-square']}></div>
-			</div>
-			<div
-				className={styles['deleteButtonWrapper']}
-				onClick={e => e.stopPropagation()}
-			>
-				{isAdmin === 'true' ? (
-					<IconButton onClick={handleDelete}>
-						<DeleteOutlineIcon fontSize='small' />
-					</IconButton>
-				) : null}
-			</div>
-		</div>
+		<SkeletonNode
+			id={id}
+			width={1200}
+			height={1200}
+			variant='Factory'
+			name={data.label}
+			parentId={parentId}
+			// isName
+			// isData 
+		/>
 	)
 }
