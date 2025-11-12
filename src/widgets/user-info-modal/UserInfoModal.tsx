@@ -12,11 +12,16 @@ import { type IUser, userService } from '@/entities/user'
 interface Props {
 	onClose: () => void
 	onLogout: () => void
+	onProfileUpdate?: () => void
 }
 
 type UserFormData = Partial<IUser> & { password?: string }
 
-export const UserInfoModal = ({ onClose, onLogout }: Props) => {
+export const UserInfoModal = ({
+	onClose,
+	onLogout,
+	onProfileUpdate
+}: Props) => {
 	const { t } = useTranslation('common')
 	const { register, handleSubmit, reset, watch } = useForm<UserFormData>()
 	const nameValue = watch('name')
@@ -41,6 +46,7 @@ export const UserInfoModal = ({ onClose, onLogout }: Props) => {
 		try {
 			await userService.updateProfile(data)
 			toast.success(t('profile.saveSuccess'))
+			onProfileUpdate?.()
 			onClose()
 		} catch (error) {
 			toast.error(t('errors.profileUpdateError'))

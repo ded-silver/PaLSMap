@@ -17,20 +17,24 @@ export const Header = ({ toggleSidebar }: Props) => {
 	const [userName, setUserName] = useState<string | null>(null)
 	const { t } = useTranslation('common')
 
-	useEffect(() => {
-		const fetchUserName = async () => {
-			try {
-				const user = await userService.getProfile()
-				setUserName(user.name ?? null)
-				localStorage.setItem('isAdmin', user.isAdmin.toString())
-			} catch (error) {
-				console.error('Ошибка при загрузке профиля', error)
-				setUserName(null)
-			}
+	const fetchUserName = async () => {
+		try {
+			const user = await userService.getProfile()
+			setUserName(user.name ?? null)
+			localStorage.setItem('isAdmin', user.isAdmin.toString())
+		} catch (error) {
+			console.error('Ошибка при загрузке профиля', error)
+			setUserName(null)
 		}
+	}
 
+	useEffect(() => {
 		fetchUserName()
 	}, [])
+
+	const handleProfileUpdate = () => {
+		fetchUserName()
+	}
 
 	const handleLogout = () => {
 		localStorage.removeItem('accessToken')
@@ -62,6 +66,7 @@ export const Header = ({ toggleSidebar }: Props) => {
 				<UserInfoModal
 					onClose={() => setIsProfileOpen(false)}
 					onLogout={handleLogout}
+					onProfileUpdate={handleProfileUpdate}
 				/>
 			)}
 		</header>
