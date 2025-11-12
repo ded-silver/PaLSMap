@@ -11,11 +11,29 @@
 	font-weight: 600;
 }
 
+.header {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 28px;
+}
+
+.searchAndActions {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
 .searchBarWrapper {
-	margin: 0 auto 28px auto;
 	max-width: 400px;
 	display: flex;
 	justify-content: center;
+}
+
+.addButton {
+	white-space: nowrap;
 }
 
 .abbreviationList {
@@ -36,7 +54,9 @@
 	border-radius: 12px;
 	background-color: #ffffff;
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-	transition: transform 0.2s ease, box-shadow 0.2s ease;
+	transition:
+		transform 0.2s ease,
+		box-shadow 0.2s ease;
 }
 
 .abbreviationItem:hover {
@@ -62,4 +82,11 @@
 	margin-top: 32px;
 	color: #64748b;
 	font-size: 1.1rem;
+}
+
+.loading {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 64px;
 }

@@ -1,0 +1,57 @@
+.item {
+	display: grid;
+	grid-template-columns: 120px 1fr;
+	align-items: center;
+	gap: 20px;
+	padding: 16px 20px;
+	border-radius: 12px;
+	background-color: #ffffff;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+	transition:
+		transform 0.2s ease,
+		box-shadow 0.2s ease;
+}
+
+.item.hasActions {
+	grid-template-columns: 120px 1fr auto;
+}
+
+.item:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.short {
+	font-weight: 700;
+	font-size: 1.25rem;
+	text-align: center;
+	color: #0f172a;
+}
+
+.full {
+	font-size: 1rem;
+	color: #475569;
+	line-height: 1.5;
+}
+
+.actions {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+}
+
+.editButton {
+	color: #0073e6;
+}
+
+.editButton:hover {
+	background-color: rgba(0, 115, 230, 0.1);
+}
+
+.deleteButton {
+	color: #dc2626;
+}
+
+.deleteButton:hover {
+	background-color: rgba(220, 38, 38, 0.1);
+}
