@@ -215,7 +215,6 @@ const MMMain = ({ isSidebarOpen }: Props) => {
 				<Typography
 					variant='h4'
 					className={clsx(styles.pageTitle, { [styles.open]: isSidebarOpen })}
-					zIndex={10}
 				>
 					{t('titles.main')}
 				</Typography>

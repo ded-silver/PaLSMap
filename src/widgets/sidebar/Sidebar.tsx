@@ -10,11 +10,17 @@ import styles from './Sidebar.module.css'
 
 interface Props {
 	isOpen: boolean
-	// onClose: () => void
+	onClose?: () => void
 }
 
-export const Sidebar = ({ isOpen }: Props) => {
+export const Sidebar = ({ isOpen, onClose }: Props) => {
 	const { t } = useTranslation('common')
+
+	const handleLinkClick = () => {
+		if (onClose) {
+			onClose()
+		}
+	}
 
 	return (
 		<div className={clsx(styles.sidebar, { [styles.open]: isOpen })}>
@@ -24,7 +30,7 @@ export const Sidebar = ({ isOpen }: Props) => {
 					className={({ isActive }: { isActive: boolean }) =>
 						clsx(styles.link, { [styles.active]: isActive })
 					}
-					// onClick={onclose}
+					onClick={handleLinkClick}
 				>
 					<li>
 						<HomeIcon fontSize='small' />
@@ -36,6 +42,7 @@ export const Sidebar = ({ isOpen }: Props) => {
 					className={({ isActive }: { isActive: boolean }) =>
 						clsx(styles.link, { [styles.active]: isActive })
 					}
+					onClick={handleLinkClick}
 				>
 					<li>
 						<BookIcon fontSize='small' />

@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Route, Routes, useLocation } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -12,10 +12,19 @@ import { Sidebar } from '@/widgets/sidebar'
 
 export const Router = () => {
 	const [isSidebarOpen, setSidebarOpen] = useState<boolean>(false)
+	const location = useLocation()
 
 	const toggleSidebar = () => {
 		setSidebarOpen(!isSidebarOpen)
 	}
+
+	const closeSidebar = () => {
+		setSidebarOpen(false)
+	}
+
+	useEffect(() => {
+		setSidebarOpen(false)
+	}, [location.pathname])
 
 	return (
 		<>
@@ -26,7 +35,10 @@ export const Router = () => {
 						<div className='app-layout'>
 							<Header toggleSidebar={toggleSidebar} />
 							<div className='content-layout'>
-								<Sidebar isOpen={isSidebarOpen} />
+								<Sidebar
+									isOpen={isSidebarOpen}
+									onClose={closeSidebar}
+								/>
 								<div style={{ flexGrow: 1 }}>
 									<Main isSidebarOpen={isSidebarOpen} />
 								</div>
@@ -44,7 +56,10 @@ export const Router = () => {
 						<div className='app-layout'>
 							<Header toggleSidebar={toggleSidebar} />
 							<div className='content-layout'>
-								<Sidebar isOpen={isSidebarOpen} />
+								<Sidebar
+									isOpen={isSidebarOpen}
+									onClose={closeSidebar}
+								/>
 								<div style={{ flexGrow: 1 }}>
 									<DictionaryPage />
 								</div>

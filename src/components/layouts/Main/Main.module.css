@@ -1,34 +1,35 @@
 .main-content {
-  height: 100%;
-  overflow: hidden;
-  flex-grow: 1;
-  /* padding: 1rem; */
-  background-color: #fff;
-  transition: margin-left 0.3s ease;
-  margin-left: 0;
-  position: relative;
+	height: 100%;
+	overflow: hidden;
+	flex-grow: 1;
+	/* padding: 1rem; */
+	background-color: #fff;
+	transition: margin-left 0.3s ease;
+	margin-left: 0;
+	position: relative;
 }
 
 .main-content.shifted {
-  margin-left: 250px;
+	margin-left: 250px;
 }
 
 .pageTitle {
-  /* margin-bottom: 16px; */
-  position: absolute;
-  background-color: rgb(230, 240, 255);
-  top: 0;
-  left: 0;
-  padding: 8px;
-  text-align: left;
-  border-bottom: 1px solid lightgray;
-  border-right: 1px solid lightgray;
-  border-bottom-right-radius: 8px;
+	/* margin-bottom: 16px; */
+	position: absolute;
+	background-color: rgb(230, 240, 255);
+	top: 0;
+	left: 0;
+	padding: 8px;
+	text-align: left;
+	border-bottom: 1px solid lightgray;
+	border-right: 1px solid lightgray;
+	border-bottom-right-radius: 8px;
 	transition: left 0.3s ease;
+	z-index: 5;
 }
 
 .open {
-	left: 250px
+	left: 250px;
 }
 
 .compass {
