@@ -245,10 +245,10 @@ const MMMain = ({ isSidebarOpen }: Props) => {
 				</ReactFlow>
 				<div className={styles.compass}>
 					<div className={styles.needle}></div>
-					<div className={styles.labelNorth}>С</div>
-					<div className={styles.labelSouth}>Ю</div>
-					<div className={styles.labelWest}>З</div>
-					<div className={styles.labelEast}>В</div>
+					<div className={styles.labelNorth}>{t('compass.north')}</div>
+					<div className={styles.labelSouth}>{t('compass.south')}</div>
+					<div className={styles.labelWest}>{t('compass.west')}</div>
+					<div className={styles.labelEast}>{t('compass.east')}</div>
 				</div>
 			</div>
 			<DnDSidebar />

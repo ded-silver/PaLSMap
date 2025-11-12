@@ -60,5 +60,11 @@ export default {
 		requestRights: 'Request rights',
 		requestRightsSuccess: 'Your request for rights upgrade has been sent',
 		saveSuccess: 'Changes saved'
+	},
+	compass: {
+		north: 'N',
+		south: 'S',
+		west: 'W',
+		east: 'E'
 	}
 } as const

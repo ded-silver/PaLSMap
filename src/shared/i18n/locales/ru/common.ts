@@ -60,5 +60,11 @@ export default {
 		requestRights: 'Запросить права',
 		requestRightsSuccess: 'Ваш запрос на повышение прав отправлен',
 		saveSuccess: 'Изменения сохранены'
+	},
+	compass: {
+		north: 'С',
+		south: 'Ю',
+		west: 'З',
+		east: 'В'
 	}
 } as const
