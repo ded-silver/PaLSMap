@@ -18,6 +18,7 @@ import debounce from 'lodash/debounce'
 import { nanoid } from 'nanoid'
 import React, { useCallback, useEffect, useRef } from 'react'
 import { SubmitHandler } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 
 import styles from './Main.module.css'
 import { useCreateEdge, useDeleteEdge, useEdges } from '@/entities/edge'
@@ -45,6 +46,7 @@ interface Props {
 }
 
 const MMMain = ({ isSidebarOpen }: Props) => {
+	const { t } = useTranslation(['common', 'nodes'])
 	const reactFlowWrapper = useRef(null)
 	const edgeReconnectSuccessful = useRef(true)
 	const { items } = useNodes()
@@ -215,7 +217,7 @@ const MMMain = ({ isSidebarOpen }: Props) => {
 					className={clsx(styles.pageTitle, { [styles.open]: isSidebarOpen })}
 					zIndex={10}
 				>
-					ГЕОГРАФИЧЕСКАЯ СХЕМА ТЕХНОЛОГИЧЕСКИХ ОБЪЕКТОВ
+					{t('titles.main')}
 				</Typography>
 				<ReactFlow
 					nodes={nodes}

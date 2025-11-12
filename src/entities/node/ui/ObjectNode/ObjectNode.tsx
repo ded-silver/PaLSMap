@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Handle, NodeProps, Position, useReactFlow } from '@xyflow/react'
 import { nanoid } from 'nanoid'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 
 import styles from './ObjectNode.module.css'
@@ -17,6 +18,7 @@ import { DialogData } from '@/entities/node-data'
 import { useDebouncedCallback } from '@/shared/hooks'
 
 export const ObjectNode = ({ data, id, parentId }: NodeProps<CustomNode>) => {
+	const { t } = useTranslation(['common', 'nodes'])
 	const [open, setOpen] = useState(false)
 	const { getNode } = useReactFlow()
 	const queryClient = useQueryClient()
@@ -40,7 +42,7 @@ export const ObjectNode = ({ data, id, parentId }: NodeProps<CustomNode>) => {
 			queryClient.invalidateQueries({ queryKey: ['childNodes'] })
 		},
 		onError(error: unknown) {
-			toast.error('Ошибка при удалении')
+			toast.error(t('messages.deleteError', { ns: 'nodes' }))
 		}
 	})
 
@@ -59,7 +61,7 @@ export const ObjectNode = ({ data, id, parentId }: NodeProps<CustomNode>) => {
 			queryClient.invalidateQueries({ queryKey: ['childNodes'] })
 		},
 		onError: error => {
-			toast.error('Не удалось обновить данные')
+			toast.error(t('messages.updateDataError', { ns: 'nodes' }))
 		}
 	})
 
@@ -86,7 +88,7 @@ export const ObjectNode = ({ data, id, parentId }: NodeProps<CustomNode>) => {
 		>
 			<input
 				value={nodeName}
-				placeholder='Введите имя узла'
+				placeholder={t('placeholders.nodeName', { ns: 'nodes' })}
 				readOnly={isAdmin !== 'true'}
 				onChange={e => {
 					if (isAdmin === 'true') {

@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import i18n from 'i18next'
 import { toast } from 'react-toastify'
 
 import { dictionaryApi } from './api'
@@ -31,19 +32,21 @@ export const useCreateDictionary = () => {
 		mutationFn: (dto: ICreateDictionaryDto) => dictionaryApi.create(dto),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['dictionaries'] })
-			toast.success('Запись успешно создана')
+			toast.success(i18n.t('messages.createSuccess', { ns: 'dictionary' }))
 		},
 		onError: (error: any) => {
-			let errorMessage = 'Ошибка при создании записи'
+			let errorMessage = i18n.t('messages.createError', { ns: 'dictionary' })
 
 			if (error?.response?.data?.message) {
 				errorMessage = error.response.data.message
 			} else if (error?.response?.status === 409) {
-				errorMessage = 'Аббревиатура уже существует'
+				errorMessage = i18n.t('messages.duplicateError', { ns: 'dictionary' })
 			} else if (error?.response?.status === 403) {
-				errorMessage = 'Недостаточно прав для выполнения операции'
+				errorMessage = i18n.t('messages.forbiddenError', { ns: 'dictionary' })
 			} else if (error?.response?.status === 401) {
-				errorMessage = 'Необходима авторизация'
+				errorMessage = i18n.t('messages.unauthorizedError', {
+					ns: 'dictionary'
+				})
 			}
 
 			toast.error(errorMessage)
@@ -62,21 +65,23 @@ export const useUpdateDictionary = () => {
 			queryClient.invalidateQueries({
 				queryKey: ['dictionary', variables.id]
 			})
-			toast.success('Запись успешно обновлена')
+			toast.success(i18n.t('messages.updateSuccess', { ns: 'dictionary' }))
 		},
 		onError: (error: any) => {
-			let errorMessage = 'Ошибка при обновлении записи'
+			let errorMessage = i18n.t('messages.updateError', { ns: 'dictionary' })
 
 			if (error?.response?.data?.message) {
 				errorMessage = error.response.data.message
 			} else if (error?.response?.status === 409) {
-				errorMessage = 'Аббревиатура уже существует'
+				errorMessage = i18n.t('messages.duplicateError', { ns: 'dictionary' })
 			} else if (error?.response?.status === 403) {
-				errorMessage = 'Недостаточно прав для выполнения операции'
+				errorMessage = i18n.t('messages.forbiddenError', { ns: 'dictionary' })
 			} else if (error?.response?.status === 401) {
-				errorMessage = 'Необходима авторизация'
+				errorMessage = i18n.t('messages.unauthorizedError', {
+					ns: 'dictionary'
+				})
 			} else if (error?.response?.status === 404) {
-				errorMessage = 'Запись не найдена'
+				errorMessage = i18n.t('messages.notFoundError', { ns: 'dictionary' })
 			}
 
 			toast.error(errorMessage)
@@ -91,19 +96,21 @@ export const useDeleteDictionary = () => {
 		mutationFn: (id: string) => dictionaryApi.delete(id),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['dictionaries'] })
-			toast.success('Запись успешно удалена')
+			toast.success(i18n.t('messages.deleteSuccess', { ns: 'dictionary' }))
 		},
 		onError: (error: any) => {
-			let errorMessage = 'Ошибка при удалении записи'
+			let errorMessage = i18n.t('messages.deleteError', { ns: 'dictionary' })
 
 			if (error?.response?.data?.message) {
 				errorMessage = error.response.data.message
 			} else if (error?.response?.status === 403) {
-				errorMessage = 'Недостаточно прав для выполнения операции'
+				errorMessage = i18n.t('messages.forbiddenError', { ns: 'dictionary' })
 			} else if (error?.response?.status === 401) {
-				errorMessage = 'Необходима авторизация'
+				errorMessage = i18n.t('messages.unauthorizedError', {
+					ns: 'dictionary'
+				})
 			} else if (error?.response?.status === 404) {
-				errorMessage = 'Запись не найдена'
+				errorMessage = i18n.t('messages.notFoundError', { ns: 'dictionary' })
 			}
 
 			toast.error(errorMessage)

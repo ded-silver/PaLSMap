@@ -17,11 +17,13 @@ import {
 } from '@xyflow/react'
 import clsx from 'clsx'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 
-import styles from './SkeletonNode.module.css'
 import { NodeService } from '../../model/api'
 import type { CustomData, NodeDto } from '../../model/types'
+
+import styles from './SkeletonNode.module.css'
 import { DialogData } from '@/entities/node-data'
 import { NodeDataService } from '@/entities/node-data'
 import { useDebouncedCallback } from '@/shared/hooks'
@@ -65,6 +67,7 @@ export const SkeletonNode = ({
 	isName,
 	isData
 }: Props) => {
+	const { t } = useTranslation(['common', 'nodes'])
 	const { getNode } = useReactFlow()
 	const [open, setOpen] = useState(false)
 
@@ -84,7 +87,7 @@ export const SkeletonNode = ({
 			queryClient.invalidateQueries({ queryKey: ['childNodes'] })
 		},
 		onError(error: unknown) {
-			toast.error('Ошибка при удалении')
+			toast.error(t('messages.deleteError', { ns: 'nodes' }))
 		}
 	})
 
@@ -108,7 +111,7 @@ export const SkeletonNode = ({
 			queryClient.invalidateQueries({ queryKey: ['childNodes'] })
 		},
 		onError: error => {
-			toast.error('Не удалось обновить данные')
+			toast.error(t('messages.updateDataError', { ns: 'nodes' }))
 		}
 	})
 
@@ -135,7 +138,7 @@ export const SkeletonNode = ({
 			queryClient.invalidateQueries({ queryKey: ['currentNodeData'] })
 		},
 		onError(error: unknown) {
-			toast.error('Ошибка при удалении')
+			toast.error(t('messages.deleteError', { ns: 'nodes' }))
 		}
 	})
 
@@ -172,7 +175,7 @@ export const SkeletonNode = ({
 				<input
 					className='node-name'
 					value={nodeName}
-					placeholder='Название'
+					placeholder={t('placeholders.name', { ns: 'nodes' })}
 					readOnly={isAdmin !== 'true'}
 					onClick={e => e.stopPropagation()}
 					onChange={e => {
@@ -211,7 +214,7 @@ export const SkeletonNode = ({
 				<DialogData
 					open={open}
 					handleClose={handleClose}
-					dialogName={name ?? 'Имя не задано'}
+					dialogName={name ?? t('labels.nameNotSet', { ns: 'nodes' })}
 					id={id}
 				/>
 			) : null}
@@ -220,10 +223,11 @@ export const SkeletonNode = ({
 				open={confirmOpen}
 				onClose={() => setConfirmOpen(false)}
 			>
-				<DialogTitle>Подтверждение удаления</DialogTitle>
+				<DialogTitle>{t('dialogs.deleteTitle', { ns: 'nodes' })}</DialogTitle>
 				<DialogContent>
 					<DialogContentText>
-						Вы уверены, что хотите удалить объект <b>{name ?? 'без имени'}</b>?
+						{t('dialogs.deleteConfirm', { ns: 'nodes' })}{' '}
+						<b>{name ?? t('labels.withoutName', { ns: 'nodes' })}</b>?
 					</DialogContentText>
 				</DialogContent>
 				<DialogActions>
@@ -231,7 +235,7 @@ export const SkeletonNode = ({
 						onClick={() => setConfirmOpen(false)}
 						variant='contained'
 					>
-						Отмена
+						{t('buttons.cancel', { ns: 'common' })}
 					</Button>
 					<Button
 						onClick={e => {
@@ -241,7 +245,7 @@ export const SkeletonNode = ({
 						color='error'
 						variant='contained'
 					>
-						Удалить
+						{t('buttons.delete', { ns: 'common' })}
 					</Button>
 				</DialogActions>
 			</Dialog>

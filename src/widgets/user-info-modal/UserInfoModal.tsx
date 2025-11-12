@@ -3,6 +3,7 @@ import LogoutIcon from '@mui/icons-material/Logout'
 import { Button, IconButton, TextField } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 
 import styles from './UserInfoModal.module.css'
@@ -16,6 +17,7 @@ interface Props {
 type UserFormData = Partial<IUser> & { password?: string }
 
 export const UserInfoModal = ({ onClose, onLogout }: Props) => {
+	const { t } = useTranslation('common')
 	const { register, handleSubmit, reset, watch } = useForm<UserFormData>()
 	const nameValue = watch('name')
 	const emailValue = watch('email')
@@ -38,17 +40,17 @@ export const UserInfoModal = ({ onClose, onLogout }: Props) => {
 	const onSubmit = async (data: Partial<IUser>) => {
 		try {
 			await userService.updateProfile(data)
-			toast.success('Изменения сохранены')
+			toast.success(t('profile.saveSuccess'))
 			onClose()
 		} catch (error) {
-			alert('Ошибка при обновлении профиля')
+			toast.error(t('errors.profileUpdateError'))
 		}
 	}
 
 	// Запрос на повышение прав
 	const handleRequestRights = () => {
 		// Просто сообщение и блокирование кнопки, без реального запроса
-		toast.success('Ваш запрос на повышение прав отправлен')
+		toast.success(t('profile.requestRightsSuccess'))
 		setRequestSent(true)
 	}
 
@@ -59,7 +61,7 @@ export const UserInfoModal = ({ onClose, onLogout }: Props) => {
 					<IconButton
 						onClick={onClose}
 						className={styles.closeButton}
-						aria-label='Закрыть'
+						aria-label={t('buttons.close')}
 						size='small'
 					>
 						<CloseIcon />
@@ -71,25 +73,25 @@ export const UserInfoModal = ({ onClose, onLogout }: Props) => {
 					className={styles.form}
 				>
 					<TextField
-						label={nameValue ? '' : 'ФИО'}
+						label={nameValue ? '' : t('labels.name')}
 						fullWidth
 						{...register('name')}
-						placeholder='Фамилия Имя Отчество'
+						placeholder={t('placeholders.fullName')}
 					/>
 					<TextField
-						label={emailValue ? '' : 'Email'}
+						label={emailValue ? '' : t('labels.email')}
 						type='email'
 						fullWidth
 						{...register('email')}
-						placeholder='example@mail.com'
+						placeholder={t('placeholders.email')}
 						disabled
 					/>
 					<TextField
-						label='Пароль'
+						label={t('labels.password')}
 						type='password'
 						fullWidth
 						{...register('password')}
-						placeholder='••••••••'
+						placeholder={t('placeholders.password')}
 					/>
 
 					<div className={styles.actions}>
@@ -99,13 +101,13 @@ export const UserInfoModal = ({ onClose, onLogout }: Props) => {
 							onClick={handleRequestRights}
 							disabled={requestSent}
 						>
-							Запросить права
+							{t('profile.requestRights')}
 						</Button>
 						<Button
 							variant='contained'
 							type='submit'
 						>
-							Сохранить
+							{t('buttons.save')}
 						</Button>
 					</div>
 
@@ -116,7 +118,7 @@ export const UserInfoModal = ({ onClose, onLogout }: Props) => {
 						onClick={onLogout}
 						className={styles.logoutButton}
 					>
-						Выйти
+						{t('buttons.logout')}
 					</Button>
 				</form>
 			</div>

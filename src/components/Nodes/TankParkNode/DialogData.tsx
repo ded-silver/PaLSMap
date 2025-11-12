@@ -16,6 +16,7 @@ import { ruRU } from '@mui/x-data-grid/locales'
 import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
 import { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import Provider from '../../Provider/Provider'
 
@@ -40,6 +41,7 @@ export const DialogData = ({
 	dialogName,
 	currentNodeType
 }: Props) => {
+	const { t } = useTranslation('nodes')
 	const { items, isLoading } = useGetNodeData(id)
 	const [pageSize, setPageSize] = useState<number>(10)
 	const [page, setPage] = useState<number>(0)
@@ -54,15 +56,19 @@ export const DialogData = ({
 
 		// Определяем колонки
 		worksheet.columns = [
-			{ header: 'Наименование защиты', key: 'protectionName', width: 40 },
-			{ header: 'Выдержка времени', key: 'excerpt', width: 40 },
-			{ header: 'Источник', key: 'source', width: 40 },
+			{ header: t('excel.protectionName'), key: 'protectionName', width: 40 },
+			{ header: t('excel.excerpt'), key: 'excerpt', width: 40 },
+			{ header: t('excel.source'), key: 'source', width: 40 },
 			{
-				header: 'Условия срабатывания',
+				header: t('excel.triggeringConditions'),
 				key: 'triggeringConditions',
 				width: 60
 			},
-			{ header: 'Алгоритм срабатывания', key: 'triggeringAlgorithm', width: 70 }
+			{
+				header: t('excel.triggeringAlgorithm'),
+				key: 'triggeringAlgorithm',
+				width: 70
+			}
 		]
 
 		// Добавляем данные
@@ -130,7 +136,7 @@ export const DialogData = ({
 		() => [
 			{
 				field: 'protectionName',
-				headerName: 'Название защиты',
+				headerName: t('fields.protectionName'),
 				flex: 0,
 				minWidth: 200,
 				maxWidth: 350,
@@ -153,7 +159,7 @@ export const DialogData = ({
 			},
 			{
 				field: 'excerpt',
-				headerName: 'Выдержка',
+				headerName: t('fields.excerpt'),
 				flex: 0,
 				minWidth: 150,
 				maxWidth: 200,
@@ -177,7 +183,7 @@ export const DialogData = ({
 			},
 			{
 				field: 'source',
-				headerName: 'Источник',
+				headerName: t('fields.source'),
 				flex: 0,
 				minWidth: 150,
 				maxWidth: 350,
@@ -200,7 +206,7 @@ export const DialogData = ({
 			},
 			{
 				field: 'triggeringConditions',
-				headerName: 'Условие срабатывания',
+				headerName: t('fields.triggeringConditions'),
 				flex: 0,
 				minWidth: 250,
 				maxWidth: 450,
@@ -224,7 +230,7 @@ export const DialogData = ({
 			},
 			{
 				field: 'triggeringAlgorithm',
-				headerName: 'Алгоритм срабатывания',
+				headerName: t('fields.triggeringAlgorithm'),
 				flex: 1,
 				minWidth: 150,
 				renderCell: params => (
@@ -245,7 +251,7 @@ export const DialogData = ({
 				)
 			}
 		],
-		[id, handleDialogClose]
+		[id, handleDialogClose, t]
 	)
 
 	const handlePaginationModelChange = (paginationModel: {
@@ -325,7 +331,7 @@ export const DialogData = ({
 								}}
 							>
 								<Typography sx={{ fontSize: '2.125rem' }}>
-									Таблица уставок защит технологического объекта
+									{t('tableTitle')}
 								</Typography>
 
 								<Box
@@ -343,15 +349,17 @@ export const DialogData = ({
 											variant='contained'
 											startIcon={<AddIcon />}
 										>
-											Добавить
+											{t('actions.add')}
 										</Button>
 									)}
 									<Button
-										onClick={() => exportJsonToExcel(items, 'Уставки ТО.xlsx')}
+										onClick={() =>
+											exportJsonToExcel(items, t('excel.fileName'))
+										}
 										variant='contained'
 										startIcon={<FileDownloadIcon />}
 									>
-										Сохранить в Excel
+										{t('actions.saveToExcel')}
 									</Button>
 								</Box>
 							</Box>

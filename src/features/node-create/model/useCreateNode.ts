@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import i18n from 'i18next'
 import { toast } from 'react-toastify'
 
 import { NodeService } from '@/entities/node'
@@ -12,8 +13,8 @@ export const useCreateNode = () => {
 		mutationFn: (data: NodeDto) => NodeService.create(data),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['nodes'] })
-			toast.success('Объект успешно добавлен.')
+			toast.success(i18n.t('messages.addSuccess', { ns: 'nodes' }))
 		},
-		onError: () => toast.error('Ошибка добавления узла.')
+		onError: () => toast.error(i18n.t('messages.addError', { ns: 'nodes' }))
 	})
 }

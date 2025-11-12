@@ -1,5 +1,6 @@
 import { Button, CircularProgress, Typography } from '@mui/material'
 import { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import styles from './Dictionary.module.css'
 import {
@@ -19,6 +20,7 @@ import {
 import { SearchBar } from '@/shared/ui'
 
 export const DictionaryPage = () => {
+	const { t } = useTranslation(['common', 'dictionary'])
 	const [searchTerm, setSearchTerm] = useState('')
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
@@ -122,10 +124,10 @@ export const DictionaryPage = () => {
 					className={styles.pageTitle}
 					gutterBottom
 				>
-					СПРАВОЧНАЯ ИНФОРМАЦИЯ
+					{t('title', { ns: 'dictionary' })}
 				</Typography>
 				<div className={styles.noResults}>
-					Ошибка при загрузке данных. Пожалуйста, обновите страницу.
+					{t('errors.loadError', { ns: 'common' })}
 				</div>
 			</div>
 		)
@@ -138,14 +140,16 @@ export const DictionaryPage = () => {
 				className={styles.pageTitle}
 				gutterBottom
 			>
-				СПРАВОЧНАЯ ИНФОРМАЦИЯ
+				{t('title', { ns: 'dictionary' })}
 			</Typography>
 
 			<div className={styles.header}>
 				<div className={styles.searchAndActions}>
 					<div className={styles.searchBarWrapper}>
 						<SearchBar
-							placeholder='Поиск аббревиатур...'
+							placeholder={t('placeholders.searchAbbreviations', {
+								ns: 'common'
+							})}
 							onChange={e => setSearchTerm(e.target.value)}
 						/>
 					</div>
@@ -157,7 +161,7 @@ export const DictionaryPage = () => {
 							onClick={handleAdd}
 							className={styles.addButton}
 						>
-							Добавить запись
+							{t('buttons.add', { ns: 'dictionary' })}
 						</Button>
 					)}
 				</div>
@@ -180,9 +184,13 @@ export const DictionaryPage = () => {
 					))}
 				</div>
 			) : dictionaries.length === 0 ? (
-				<div className={styles.noResults}>Справочник пуст</div>
+				<div className={styles.noResults}>
+					{t('messages.empty', { ns: 'dictionary' })}
+				</div>
 			) : (
-				<div className={styles.noResults}>Ничего не найдено</div>
+				<div className={styles.noResults}>
+					{t('messages.noResults', { ns: 'dictionary' })}
+				</div>
 			)}
 
 			<DictionaryModal

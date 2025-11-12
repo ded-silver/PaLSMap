@@ -1,6 +1,7 @@
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import { IconButton } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 
 import type { IDictionary } from '../../model/types'
 
@@ -19,6 +20,8 @@ export const DictionaryItem = ({
 	onEdit,
 	onDelete
 }: DictionaryItemProps) => {
+	const { t } = useTranslation('common')
+
 	return (
 		<div className={`${styles.item} ${isAdmin ? styles.hasActions : ''}`}>
 			<div className={styles.short}>{item.short}</div>
@@ -28,7 +31,7 @@ export const DictionaryItem = ({
 					<IconButton
 						size='small'
 						onClick={() => onEdit(item)}
-						aria-label='Редактировать'
+						aria-label={t('buttons.edit')}
 						className={styles.editButton}
 					>
 						<EditIcon fontSize='small' />
@@ -36,7 +39,7 @@ export const DictionaryItem = ({
 					<IconButton
 						size='small'
 						onClick={() => onDelete(item.id)}
-						aria-label='Удалить'
+						aria-label={t('buttons.delete')}
 						className={styles.deleteButton}
 					>
 						<DeleteIcon fontSize='small' />

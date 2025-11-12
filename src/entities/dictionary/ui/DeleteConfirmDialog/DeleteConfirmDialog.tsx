@@ -8,6 +8,7 @@ import {
 	Typography
 } from '@mui/material'
 import { CircularProgress } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 
 import type { IDictionary } from '../../model/types'
 
@@ -28,6 +29,8 @@ export const DeleteConfirmDialog = ({
 	onConfirm,
 	isLoading
 }: DeleteConfirmDialogProps) => {
+	const { t } = useTranslation(['common', 'dictionary'])
+
 	return (
 		<Dialog
 			open={isOpen}
@@ -42,20 +45,20 @@ export const DeleteConfirmDialog = ({
 		>
 			<DialogTitle>
 				<Typography sx={{ fontSize: '1.25rem', fontWeight: 600 }}>
-					Подтверждение удаления
+					{t('messages.deleteTitle', { ns: 'dictionary' })}
 				</Typography>
 			</DialogTitle>
 
 			<DialogContent>
 				<DialogContentText>
-					Вы уверены, что хотите удалить запись?
+					{t('messages.deleteConfirm', { ns: 'dictionary' })}
 				</DialogContentText>
 				<div className={styles.itemInfo}>
 					<Typography
 						variant='body2'
 						sx={{ fontWeight: 600, marginBottom: '8px' }}
 					>
-						Аббревиатура:
+						{t('messages.abbreviation', { ns: 'dictionary' })}
 					</Typography>
 					<Typography
 						variant='body1'
@@ -67,7 +70,7 @@ export const DeleteConfirmDialog = ({
 						variant='body2'
 						sx={{ fontWeight: 600, marginBottom: '8px' }}
 					>
-						Полное название:
+						{t('messages.fullName', { ns: 'dictionary' })}
 					</Typography>
 					<Typography variant='body1'>{item.full}</Typography>
 				</div>
@@ -79,7 +82,7 @@ export const DeleteConfirmDialog = ({
 					disabled={isLoading}
 					variant='outlined'
 				>
-					Отмена
+					{t('buttons.cancel', { ns: 'common' })}
 				</Button>
 				<Button
 					onClick={onConfirm}
@@ -88,7 +91,9 @@ export const DeleteConfirmDialog = ({
 					color='error'
 					startIcon={isLoading ? <CircularProgress size={16} /> : null}
 				>
-					{isLoading ? 'Удаление...' : 'Удалить'}
+					{isLoading
+						? t('messages.deleting', { ns: 'common' })
+						: t('buttons.delete', { ns: 'common' })}
 				</Button>
 			</DialogActions>
 		</Dialog>

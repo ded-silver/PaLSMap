@@ -3,6 +3,7 @@ import { IconButton } from '@mui/material'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { NodeProps, useReactFlow } from '@xyflow/react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 
 import styles from './ChildObjectNode.module.css'
@@ -15,6 +16,7 @@ export const ChildObjectNode = ({
 	id,
 	parentId
 }: NodeProps<CustomNode>) => {
+	const { t } = useTranslation(['common', 'nodes'])
 	const [open, setOpen] = useState(false)
 	const { getNode } = useReactFlow()
 	const queryClient = useQueryClient()
@@ -34,7 +36,7 @@ export const ChildObjectNode = ({
 			queryClient.invalidateQueries({ queryKey: ['currentNodeData'] })
 		},
 		onError(error: unknown) {
-			toast.error('Ошибка при удалении')
+			toast.error(t('messages.deleteError', { ns: 'nodes' }))
 		}
 	})
 
@@ -52,7 +54,7 @@ export const ChildObjectNode = ({
 			queryClient.invalidateQueries({ queryKey: ['childNodes'] })
 		},
 		onError(error: unknown) {
-			toast.error('Ошибка при удалении')
+			toast.error(t('messages.deleteError', { ns: 'nodes' }))
 		}
 	})
 
@@ -71,7 +73,7 @@ export const ChildObjectNode = ({
 			queryClient.invalidateQueries({ queryKey: ['childNodes'] })
 		},
 		onError: error => {
-			toast.error('Не удалось обновить данные')
+			toast.error(t('messages.updateDataError', { ns: 'nodes' }))
 		}
 	})
 
@@ -98,7 +100,7 @@ export const ChildObjectNode = ({
 		>
 			<input
 				value={nodeName}
-				placeholder='Название'
+				placeholder={t('placeholders.name', { ns: 'nodes' })}
 				readOnly={isAdmin !== 'true'}
 				onChange={e => {
 					if (isAdmin === 'true') {

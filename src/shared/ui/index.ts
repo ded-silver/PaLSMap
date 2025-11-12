@@ -1,2 +1,2 @@
-export { SearchBar } from './SearchBar';
-
+export { SearchBar } from './SearchBar'
+export { LanguageSwitcher } from './LanguageSwitcher'

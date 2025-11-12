@@ -11,6 +11,7 @@ import {
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { NodeProps, useReactFlow } from '@xyflow/react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 
 import { NodeService } from '../../model/api'
@@ -20,6 +21,7 @@ import styles from './River.module.css'
 import { useDebouncedCallback } from '@/shared/hooks'
 
 export const River = ({ data, id }: NodeProps<CustomNode>) => {
+	const { t } = useTranslation(['common', 'nodes'])
 	const [open, setOpen] = useState(false)
 	const { getNode } = useReactFlow()
 	const [nodeName, setNodeName] = useState<string>(data.label)
@@ -46,7 +48,7 @@ export const River = ({ data, id }: NodeProps<CustomNode>) => {
 			queryClient.invalidateQueries({ queryKey: ['nodes'] })
 		},
 		onError(error: unknown) {
-			toast.error('Ошибка при удалении')
+			toast.error(t('messages.deleteError', { ns: 'nodes' }))
 		}
 	})
 
@@ -64,7 +66,7 @@ export const River = ({ data, id }: NodeProps<CustomNode>) => {
 			queryClient.invalidateQueries({ queryKey: ['nodes'] })
 		},
 		onError: error => {
-			toast.error('Не удалось обновить данные')
+			toast.error(t('messages.updateDataError', { ns: 'nodes' }))
 		}
 	})
 
@@ -88,7 +90,7 @@ export const River = ({ data, id }: NodeProps<CustomNode>) => {
 		<div className={styles['nodeName']}>
 			<input
 				value={nodeName}
-				placeholder='Введите название реки'
+				placeholder={t('placeholders.riverName', { ns: 'nodes' })}
 				readOnly={isAdmin !== 'true'}
 				onChange={e => {
 					if (isAdmin === 'true') {
@@ -153,11 +155,11 @@ export const River = ({ data, id }: NodeProps<CustomNode>) => {
 				open={confirmOpen}
 				onClose={() => setConfirmOpen(false)}
 			>
-				<DialogTitle>Подтверждение удаления</DialogTitle>
+				<DialogTitle>{t('dialogs.deleteTitle', { ns: 'nodes' })}</DialogTitle>
 				<DialogContent>
 					<DialogContentText>
-						Вы уверены, что хотите удалить объект{' '}
-						<b>{nodeName || 'без имени'}</b>?
+						{t('dialogs.deleteConfirm', { ns: 'nodes' })}{' '}
+						<b>{nodeName || t('labels.withoutName', { ns: 'nodes' })}</b>?
 					</DialogContentText>
 				</DialogContent>
 				<DialogActions>
@@ -165,7 +167,7 @@ export const River = ({ data, id }: NodeProps<CustomNode>) => {
 						onClick={() => setConfirmOpen(false)}
 						variant='contained'
 					>
-						Отмена
+						{t('buttons.cancel', { ns: 'common' })}
 					</Button>
 					<Button
 						onClick={() => {
@@ -175,7 +177,7 @@ export const River = ({ data, id }: NodeProps<CustomNode>) => {
 						color='error'
 						variant='contained'
 					>
-						Удалить
+						{t('buttons.delete', { ns: 'common' })}
 					</Button>
 				</DialogActions>
 			</Dialog>

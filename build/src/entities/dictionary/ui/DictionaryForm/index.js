@@ -1,0 +1,1 @@
+export { DictionaryForm } from './DictionaryForm';

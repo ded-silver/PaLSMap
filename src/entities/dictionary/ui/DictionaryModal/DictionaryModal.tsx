@@ -6,6 +6,7 @@ import {
 	IconButton,
 	Typography
 } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 
 import type {
 	ICreateDictionaryDto,
@@ -31,6 +32,8 @@ export const DictionaryModal = ({
 	onSubmit,
 	isLoading
 }: DictionaryModalProps) => {
+	const { t } = useTranslation('dictionary')
+
 	const handleSubmit = (data: ICreateDictionaryDto | IUpdateDictionaryDto) => {
 		onSubmit(data)
 	}
@@ -62,7 +65,7 @@ export const DictionaryModal = ({
 				}}
 			>
 				<Typography sx={{ fontSize: '1.5rem', fontWeight: 600 }}>
-					{mode === 'create' ? 'Добавить запись' : 'Редактировать запись'}
+					{mode === 'create' ? t('buttons.add') : t('buttons.edit')}
 				</Typography>
 				<IconButton
 					aria-label='close'

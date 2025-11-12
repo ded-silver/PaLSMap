@@ -1,9 +1,11 @@
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import DensityMediumIcon from '@mui/icons-material/DensityMedium'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import styles from './Header.module.css'
 import { userService } from '@/entities/user'
+import { LanguageSwitcher } from '@/shared/ui'
 import { UserInfoModal } from '@/widgets/user-info-modal'
 
 interface Props {
@@ -13,6 +15,7 @@ interface Props {
 export const Header = ({ toggleSidebar }: Props) => {
 	const [isProfileOpen, setIsProfileOpen] = useState(false)
 	const [userName, setUserName] = useState<string | null>(null)
+	const { t } = useTranslation('common')
 
 	useEffect(() => {
 		const fetchUserName = async () => {
@@ -43,13 +46,17 @@ export const Header = ({ toggleSidebar }: Props) => {
 				<DensityMediumIcon />
 			</button>
 
-			<button
-				className={styles['profile-button']}
-				onClick={() => setIsProfileOpen(true)}
-			>
-				<AccountCircleIcon style={{ marginRight: '8px' }} />
-				{userName ? userName : 'Профиль'}
-			</button>
+			<div className={styles['header-actions']}>
+				<LanguageSwitcher />
+
+				<button
+					className={styles['profile-button']}
+					onClick={() => setIsProfileOpen(true)}
+				>
+					<AccountCircleIcon style={{ marginRight: '8px' }} />
+					{userName ? userName : t('titles.profile')}
+				</button>
+			</div>
 
 			{isProfileOpen && (
 				<UserInfoModal

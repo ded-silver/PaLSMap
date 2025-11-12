@@ -11,6 +11,7 @@ import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { FC, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 
 import TableDialog from './TableDialog'
@@ -25,6 +26,8 @@ interface Props {
 }
 
 export const Cell: FC<Props> = ({ row, nodeId, items }) => {
+	const { t: tNodes } = useTranslation('nodes')
+	const { t: tCommon } = useTranslation('common')
 	const queryClient = useQueryClient()
 	const { isOpen, handleDialogOpen, handleDialogClose } = useDialog()
 
@@ -36,10 +39,10 @@ export const Cell: FC<Props> = ({ row, nodeId, items }) => {
 		mutationFn: (id: string) => NodeDataService.deleteNodeData(id),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['currentNodeData'] })
-			toast.success('Строка успешно удалена.')
+			toast.success(tNodes('messages.deleteRowSuccess'))
 		},
 		onError: () => {
-			toast.error('Ошибка при удалении строки.')
+			toast.error(tNodes('messages.deleteRowError'))
 		}
 	})
 
@@ -57,7 +60,7 @@ export const Cell: FC<Props> = ({ row, nodeId, items }) => {
 					justifyContent='space-around'
 					alignItems='center'
 				>
-					<Tooltip title='Редактировать'>
+					<Tooltip title={tNodes('actions.edit')}>
 						<IconButton
 							size='large'
 							onClick={handleDialogOpen}
@@ -69,7 +72,7 @@ export const Cell: FC<Props> = ({ row, nodeId, items }) => {
 						</IconButton>
 					</Tooltip>
 					{/* оно */}
-					<Tooltip title='Удалить'>
+					<Tooltip title={tNodes('actions.delete')}>
 						<IconButton
 							size='large'
 							onClick={() => setConfirmOpen(true)}
@@ -94,10 +97,10 @@ export const Cell: FC<Props> = ({ row, nodeId, items }) => {
 						open={confirmOpen}
 						onClose={() => setConfirmOpen(false)}
 					>
-						<DialogTitle>Подтвердите удаление</DialogTitle>
+						<DialogTitle>{tNodes('dialogs.deleteRowTitle')}</DialogTitle>
 						<DialogContent>
 							<DialogContentText>
-								Вы уверены, что хотите удалить эту строку?
+								{tNodes('confirmations.deleteRow')}
 							</DialogContentText>
 						</DialogContent>
 						<DialogActions>
@@ -105,14 +108,14 @@ export const Cell: FC<Props> = ({ row, nodeId, items }) => {
 								onClick={() => setConfirmOpen(false)}
 								variant='contained'
 							>
-								Отмена
+								{tCommon('buttons.cancel')}
 							</Button>
 							<Button
 								onClick={handleDeleteConfirmed}
 								color='error'
 								variant='contained'
 							>
-								Удалить
+								{tCommon('buttons.delete')}
 							</Button>
 						</DialogActions>
 					</Dialog>

@@ -1,5 +1,6 @@
 import { Button, TextField } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 
 import type {
 	ICreateDictionaryDto,
@@ -22,6 +23,7 @@ export const DictionaryForm = ({
 	onCancel,
 	isLoading
 }: DictionaryFormProps) => {
+	const { t } = useTranslation(['common', 'dictionary'])
 	const {
 		control,
 		handleSubmit,
@@ -47,16 +49,16 @@ export const DictionaryForm = ({
 				name='short'
 				control={control}
 				rules={{
-					required: 'Аббревиатура обязательна для заполнения',
+					required: t('validation.shortRequired', { ns: 'dictionary' }),
 					minLength: {
 						value: 1,
-						message: 'Аббревиатура должна содержать хотя бы 1 символ'
+						message: t('validation.shortMinLength', { ns: 'dictionary' })
 					}
 				}}
 				render={({ field }) => (
 					<TextField
 						{...field}
-						label='Аббревиатура'
+						label={t('fields.short', { ns: 'dictionary' })}
 						variant='outlined'
 						fullWidth
 						error={!!errors.short}
@@ -71,16 +73,16 @@ export const DictionaryForm = ({
 				name='full'
 				control={control}
 				rules={{
-					required: 'Полное название обязательно для заполнения',
+					required: t('validation.fullRequired', { ns: 'dictionary' }),
 					minLength: {
 						value: 1,
-						message: 'Полное название должно содержать хотя бы 1 символ'
+						message: t('validation.fullMinLength', { ns: 'dictionary' })
 					}
 				}}
 				render={({ field }) => (
 					<TextField
 						{...field}
-						label='Полное название'
+						label={t('fields.full', { ns: 'dictionary' })}
 						variant='outlined'
 						fullWidth
 						error={!!errors.full}
@@ -100,7 +102,7 @@ export const DictionaryForm = ({
 					onClick={onCancel}
 					disabled={isLoading}
 				>
-					Отмена
+					{t('buttons.cancel', { ns: 'common' })}
 				</Button>
 				<Button
 					type='submit'
@@ -108,7 +110,9 @@ export const DictionaryForm = ({
 					disabled={isLoading}
 					color='primary'
 				>
-					{isLoading ? 'Сохранение...' : 'Сохранить'}
+					{isLoading
+						? t('messages.saving', { ns: 'common' })
+						: t('buttons.save', { ns: 'common' })}
 				</Button>
 			</div>
 		</form>

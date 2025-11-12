@@ -3,6 +3,7 @@ import HomeIcon from '@mui/icons-material/Home'
 import SettingsIcon from '@mui/icons-material/Settings'
 import StarIcon from '@mui/icons-material/Star'
 import clsx from 'clsx'
+import { useTranslation } from 'react-i18next'
 import { NavLink } from 'react-router-dom'
 
 import styles from './Sidebar.module.css'
@@ -13,6 +14,8 @@ interface Props {
 }
 
 export const Sidebar = ({ isOpen }: Props) => {
+	const { t } = useTranslation('common')
+
 	return (
 		<div className={clsx(styles.sidebar, { [styles.open]: isOpen })}>
 			<ul className={styles.menu}>
@@ -25,7 +28,7 @@ export const Sidebar = ({ isOpen }: Props) => {
 				>
 					<li>
 						<HomeIcon fontSize='small' />
-						<span>Главная</span>
+						<span>{t('sidebar.home')}</span>
 					</li>
 				</NavLink>
 				<NavLink
@@ -36,7 +39,7 @@ export const Sidebar = ({ isOpen }: Props) => {
 				>
 					<li>
 						<BookIcon fontSize='small' />
-						<span>Справочная информация</span>
+						<span>{t('sidebar.dictionary')}</span>
 					</li>
 				</NavLink>
 				{/* <NavLink

@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import i18n from 'i18next'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 
@@ -25,11 +26,11 @@ export const useCreateEdge = () => {
 	return useMutation({
 		mutationFn: EdgeService.create,
 		onSuccess: () => {
-			toast.success('Связь успешно создана')
+			toast.success(i18n.t('messages.createEdgeSuccess', { ns: 'nodes' }))
 			queryClient.invalidateQueries({ queryKey: ['edges'] })
 		},
 		onError: () => {
-			toast.error('Ошибка при создании связи')
+			toast.error(i18n.t('messages.createEdgeError', { ns: 'nodes' }))
 		}
 	})
 }
@@ -40,11 +41,11 @@ export const useDeleteEdge = () => {
 	return useMutation({
 		mutationFn: (id: string) => EdgeService.delete(id),
 		onSuccess: () => {
-			toast.success('Связь удалена')
+			toast.success(i18n.t('messages.deleteEdgeSuccess', { ns: 'nodes' }))
 			queryClient.invalidateQueries({ queryKey: ['edges'] })
 		},
 		onError: () => {
-			toast.error('Ошибка при удалении связи')
+			toast.error(i18n.t('messages.deleteEdgeError', { ns: 'nodes' }))
 		}
 	})
 }

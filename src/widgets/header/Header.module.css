@@ -10,6 +10,12 @@ header {
 	min-height: 60px;
 }
 
+.header-actions {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+}
+
 .toggle-sidebar {
 	display: flex;
 	align-items: center;

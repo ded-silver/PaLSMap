@@ -11,6 +11,7 @@ import {
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { NodeProps, useReactFlow } from '@xyflow/react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 
 import styles from './ChildTankParkNode.module.css'
@@ -23,6 +24,7 @@ export const ChildTankParkNode = ({
 	id,
 	parentId
 }: NodeProps<CustomNode>) => {
+	const { t } = useTranslation(['common', 'nodes'])
 	const [open, setOpen] = useState(false)
 	const { getNode } = useReactFlow()
 	const queryClient = useQueryClient()
@@ -44,7 +46,7 @@ export const ChildTankParkNode = ({
 			queryClient.invalidateQueries({ queryKey: ['currentNodeData'] })
 		},
 		onError(error: unknown) {
-			toast.error('Ошибка при удалении')
+			toast.error(t('messages.deleteError', { ns: 'nodes' }))
 		}
 	})
 
@@ -62,7 +64,7 @@ export const ChildTankParkNode = ({
 			queryClient.invalidateQueries({ queryKey: ['childNodes'] })
 		},
 		onError(error: unknown) {
-			toast.error('Ошибка при удалении')
+			toast.error(t('messages.deleteError', { ns: 'nodes' }))
 		}
 	})
 
@@ -81,7 +83,7 @@ export const ChildTankParkNode = ({
 			queryClient.invalidateQueries({ queryKey: ['childNodes'] })
 		},
 		onError: error => {
-			toast.error('Не удалось обновить данные')
+			toast.error(t('messages.updateDataError', { ns: 'nodes' }))
 		}
 	})
 
@@ -108,7 +110,7 @@ export const ChildTankParkNode = ({
 		>
 			<input
 				value={nodeName}
-				placeholder='Введите имя узла'
+				placeholder={t('placeholders.nodeName', { ns: 'nodes' })}
 				readOnly={isAdmin !== 'true'}
 				onChange={e => {
 					if (isAdmin === 'true') {
@@ -164,11 +166,11 @@ export const ChildTankParkNode = ({
 				open={confirmOpen}
 				onClose={() => setConfirmOpen(false)}
 			>
-				<DialogTitle>Подтверждение удаления</DialogTitle>
+				<DialogTitle>{t('dialogs.deleteTitle', { ns: 'nodes' })}</DialogTitle>
 				<DialogContent>
 					<DialogContentText>
-						Вы уверены, что хотите удалить объект{' '}
-						<b>{nodeName || 'без имени'}</b>?
+						{t('dialogs.deleteConfirm', { ns: 'nodes' })}{' '}
+						<b>{nodeName || t('labels.withoutName', { ns: 'nodes' })}</b>?
 					</DialogContentText>
 				</DialogContent>
 				<DialogActions>
@@ -176,7 +178,7 @@ export const ChildTankParkNode = ({
 						onClick={() => setConfirmOpen(false)}
 						variant='contained'
 					>
-						Отмена
+						{t('buttons.cancel', { ns: 'common' })}
 					</Button>
 					<Button
 						onClick={() => {
@@ -186,7 +188,7 @@ export const ChildTankParkNode = ({
 						color='error'
 						variant='contained'
 					>
-						Удалить
+						{t('buttons.delete', { ns: 'common' })}
 					</Button>
 				</DialogActions>
 			</Dialog>

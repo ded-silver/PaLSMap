@@ -14,6 +14,7 @@ import {
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 
 import { NodeDataService } from '@/entities/node-data'
@@ -44,6 +45,8 @@ export default function TableDialog({
 	nodeId,
 	items
 }: Props) {
+	const { t: tNodes } = useTranslation('nodes')
+	const { t: tValidation } = useTranslation('validation')
 	const queryClient = useQueryClient()
 
 	const { mutate: createNodeData } = useMutation({
@@ -53,7 +56,7 @@ export default function TableDialog({
 			queryClient.invalidateQueries({ queryKey: ['currentNodeData'] })
 		},
 		onError: error => {
-			toast.error('Ошибка при добавлении данных.')
+			toast.error(tNodes('messages.addDataError'))
 		}
 	})
 
@@ -64,7 +67,7 @@ export default function TableDialog({
 			queryClient.invalidateQueries({ queryKey: ['currentNodeData'] })
 		},
 		onError: error => {
-			toast.error('Ошибка при удалении.')
+			toast.error(tNodes('messages.updateDataError'))
 		}
 	})
 
@@ -128,11 +131,11 @@ export default function TableDialog({
 							control={control}
 							name='protectionName'
 							rules={{
-								required: 'Поле "Название защиты" обязательно для заполнения'
+								required: tValidation('protectionNameRequired')
 							}}
 							render={({ field }) => (
 								<TextField
-									label='Название защиты'
+									label={tNodes('fields.protectionName')}
 									id='standard-multiline-static'
 									fullWidth
 									multiline
@@ -155,11 +158,11 @@ export default function TableDialog({
 							control={control}
 							name='excerpt'
 							rules={{
-								required: 'Поле "Выдержка" обязательно для заполнения'
+								required: tValidation('excerptRequired')
 							}}
 							render={({ field }) => (
 								<TextField
-									label='Выдержка'
+									label={tNodes('fields.excerpt')}
 									fullWidth
 									multiline
 									onChange={field.onChange}
@@ -181,11 +184,11 @@ export default function TableDialog({
 							control={control}
 							name='source'
 							rules={{
-								required: 'Поле "Источник" обязательно для заполнения'
+								required: tValidation('sourceRequired')
 							}}
 							render={({ field }) => (
 								<TextField
-									label='Источник'
+									label={tNodes('fields.source')}
 									fullWidth
 									multiline
 									onChange={field.onChange}
@@ -206,12 +209,11 @@ export default function TableDialog({
 							control={control}
 							name='triggeringConditions'
 							rules={{
-								required:
-									'Поле "Условие срабатывания" обязательно для заполнения'
+								required: tValidation('triggeringConditionsRequired')
 							}}
 							render={({ field }) => (
 								<TextField
-									label='Условие срабатывания'
+									label={tNodes('fields.triggeringConditions')}
 									fullWidth
 									multiline
 									onChange={field.onChange}
@@ -232,13 +234,12 @@ export default function TableDialog({
 							control={control}
 							name='triggeringAlgorithm'
 							rules={{
-								required:
-									'Поле "Алгоритм срабатывания" обязательно для заполнения'
+								required: tValidation('triggeringAlgorithmRequired')
 							}}
 							render={({ field }) => (
 								<TextField
 									id='standard-multiline-static'
-									label='Алгоритм срабатывания'
+									label={tNodes('fields.triggeringAlgorithm')}
 									rows={16}
 									fullWidth
 									multiline
@@ -260,7 +261,7 @@ export default function TableDialog({
 					onClick={handleSubmit(onSubmit)}
 				>
 					<SaveIcon />
-					Сохранить
+					{tNodes('actions.save')}
 				</Button>
 			</DialogActions>
 		</Dialog>
