@@ -1,5 +1,4 @@
 import { Typography } from '@mui/material'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import {
 	Connection,
 	Controls,
@@ -19,20 +18,20 @@ import debounce from 'lodash/debounce'
 import { nanoid } from 'nanoid'
 import React, { useCallback, useEffect, useRef } from 'react'
 import { SubmitHandler } from 'react-hook-form'
-import { toast } from 'react-toastify'
-
-import { DnDProvider, useDnD } from '../../../hooks/DnDContext'
-import { useCreateEdge } from '../../../hooks/edges/useEdges'
-import { useEdges } from '../../../hooks/nodes/useEdges'
-import { useNodes } from '../../../hooks/nodes/useNodes'
-import { NodeService } from '../../../services/node.service'
-import { NodeDto } from '../../../types/nodeTypes'
-import { OPSNode, TankParkNode } from '../../Nodes'
-import { CheckpointNode } from '../../Nodes/CheckpointNode'
-import { River } from '../../Nodes/River/River'
-import { DnDSidebar } from '../DnDSidebar'
 
 import styles from './Main.module.css'
+import { useCreateEdge, useDeleteEdge, useEdges } from '@/entities/edge'
+import type { NodeDto } from '@/entities/node'
+import { useNodes } from '@/entities/node'
+import { CheckpointNode } from '@/entities/node/ui/CheckpointNode'
+import { OPSNode } from '@/entities/node/ui/OPSNode'
+import { River } from '@/entities/node/ui/River'
+import { TankParkNode } from '@/entities/node/ui/TankParkNode'
+import { useCreateNode } from '@/features/node-create'
+import { useDeleteNode } from '@/features/node-delete'
+import { useUpdateNode } from '@/features/node-update'
+import { DnDProvider, useDnD } from '@/shared/hooks'
+import { DnDSidebar } from '@/widgets/dnd-sidebar'
 
 const nodeTypes = {
 	OPS: OPSNode,
@@ -47,48 +46,18 @@ interface Props {
 
 const MMMain = ({ isSidebarOpen }: Props) => {
 	const reactFlowWrapper = useRef(null)
+	const edgeReconnectSuccessful = useRef(true)
 	const { items } = useNodes()
 	const { items: allEgdes } = useEdges()
 	const [nodes, setNodes, onNodesChange] = useNodesState<Node>([])
 	const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([])
 	const { screenToFlowPosition, getNodes } = useReactFlow()
-	const queryClient = useQueryClient()
 	const isAdmin = localStorage.getItem('isAdmin')
 
-	//Добавление нод
-	const { mutate: node } = useMutation({
-		mutationKey: ['node'],
-		mutationFn: (data: NodeDto) => NodeService.create(data),
-		onSuccess: data => {
-			queryClient.invalidateQueries({ queryKey: ['nodes'] })
-			toast.success('Объект успешло добавлен.')
-		},
-		onError: error => {
-			toast.error('Ошибка добавления узла.')
-		}
-	})
-
-	const { mutate: deleteNode } = useMutation({
-		mutationKey: ['deleteNode'],
-		mutationFn: (id: string) => NodeService.delete(id),
-		onSuccess: data => {
-			queryClient.invalidateQueries({ queryKey: ['nodes'] })
-		},
-		onError(error: unknown) {
-			toast.error('Ошибка при удалении')
-		}
-	})
-
-	const { mutate: nodeUpdate } = useMutation({
-		mutationKey: ['nodeUpdate'],
-		mutationFn: (data: NodeDto) => NodeService.update(data.id, data),
-		onSuccess: data => {
-			queryClient.invalidateQueries({ queryKey: ['nodes'] })
-		},
-		onError: error => {
-			toast.error('Объект успешло обновлен.')
-		}
-	})
+	const { mutate: deleteEdge } = useDeleteEdge()
+	const { mutate: node } = useCreateNode()
+	const { mutate: deleteNode } = useDeleteNode()
+	const { mutate: nodeUpdate } = useUpdateNode()
 
 	const { type } = useDnD() as {
 		type: string | null
@@ -99,13 +68,13 @@ const MMMain = ({ isSidebarOpen }: Props) => {
 		node(data)
 	}
 
-	//Добавление эджей
 	const { mutate: createEdge } = useCreateEdge()
 
+	// Создание нового ребра
 	const onConnect = useCallback(
 		(params: Connection | Edge) => {
-			if (params.targetHandle) {
-				const edge = {
+			if (params.targetHandle && 'source' in params && 'target' in params) {
+				const edge: Edge = {
 					...params,
 					type: 'straight',
 					id: nanoid(),
@@ -115,52 +84,83 @@ const MMMain = ({ isSidebarOpen }: Props) => {
 					}
 				}
 				setEdges(eds => [...eds, edge])
-
-				createEdge(edge)
+				createEdge({
+					id: edge.id,
+					source: edge.source,
+					target: edge.target,
+					sourceHandle: edge.sourceHandle || null,
+					targetHandle: edge.targetHandle || null
+				})
 			}
 		},
 		[setEdges, createEdge]
 	)
 
-	// Обработчик для перетаскивания узлов
+	// Удаление ребра при сбросе на пустое место
+	const onReconnectStart = useCallback(() => {
+		edgeReconnectSuccessful.current = false
+	}, [])
+
+	const onReconnect = useCallback(
+		(oldEdge: Edge, newConnection: Connection) => {
+			edgeReconnectSuccessful.current = true
+			setEdges(eds =>
+				eds.map(edge =>
+					edge.id === oldEdge.id
+						? {
+								...edge,
+								source: newConnection.source,
+								target: newConnection.target,
+								sourceHandle: newConnection.sourceHandle,
+								targetHandle: newConnection.targetHandle
+							}
+						: edge
+				)
+			)
+		},
+		[setEdges]
+	)
+
+	const onReconnectEnd = useCallback(
+		(_: unknown, edge: Edge) => {
+			if (!edgeReconnectSuccessful.current) {
+				setEdges(eds => eds.filter(e => e.id !== edge.id))
+				deleteEdge(edge.id)
+			}
+			edgeReconnectSuccessful.current = true
+		},
+		[setEdges, deleteEdge]
+	)
+
+	// Drop нового узла
 	const onDrop = useCallback(
 		(event: React.DragEvent) => {
 			event.preventDefault()
-
 			const position = screenToFlowPosition({
 				x: event.clientX,
 				y: event.clientY
 			})
 			if (!type) return
 
-			// Используем состояние для имени узла
 			const newNode = {
 				id: nanoid(),
 				type,
 				position,
 				data: {
 					label: '',
-					tableName: [], // Применяем имя узла из состояния
+					tableName: [],
 					tableData: [],
 					handlers: [
-						{
-							id: nanoid(),
-							type: 'source'
-						},
-						{
-							id: nanoid(),
-							type: 'target'
-						}
+						{ id: nanoid(), type: 'source' },
+						{ id: nanoid(), type: 'target' }
 					]
 				}
 			}
-
 			handleCreate(newNode as unknown as NodeDto)
 		},
 		[screenToFlowPosition, type]
 	)
 
-	// Обработчик события перетаскивания
 	const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
 		event.preventDefault()
 		event.dataTransfer.dropEffect = 'move'
@@ -173,15 +173,11 @@ const MMMain = ({ isSidebarOpen }: Props) => {
 	}, [])
 
 	useEffect(() => {
-		if (items) {
-			setNodes(items)
-		}
+		if (items) setNodes(items)
 	}, [items])
 
 	useEffect(() => {
-		if (allEgdes) {
-			setEdges(allEgdes)
-		}
+		if (allEgdes) setEdges(allEgdes)
 	}, [allEgdes])
 
 	const handleNodeUpdate = useCallback(
@@ -212,9 +208,7 @@ const MMMain = ({ isSidebarOpen }: Props) => {
 			<div
 				className={styles['main-content']}
 				ref={reactFlowWrapper}
-				style={{
-					backgroundColor: '#e6f0ff'
-				}}
+				style={{ backgroundColor: '#e6f0ff' }}
 			>
 				<Typography
 					variant='h4'
@@ -233,15 +227,18 @@ const MMMain = ({ isSidebarOpen }: Props) => {
 					onNodesChange={onNodesChangeWithDebounce}
 					onEdgesChange={onEdgesChange}
 					onNodesDelete={handleNodesDelete}
+					onReconnectStart={onReconnectStart}
+					onReconnect={onReconnect}
+					onReconnectEnd={onReconnectEnd}
 					snapToGrid
 					deleteKeyCode={['Delete']}
 					snapGrid={[25, 25]}
 					selectionMode={SelectionMode.Partial}
 					fitView
-					nodesDraggable={isAdmin === 'true' ? true : false}
-					nodesConnectable={isAdmin === 'true' ? true : false}
-					edgesFocusable={isAdmin === 'true' ? true : false}
-					nodesFocusable={isAdmin === 'true' ? true : false}
+					nodesDraggable={isAdmin === 'true'}
+					nodesConnectable={isAdmin === 'true'}
+					edgesFocusable={isAdmin === 'true'}
+					nodesFocusable={isAdmin === 'true'}
 				>
 					<Controls />
 				</ReactFlow>

@@ -1,26 +1,50 @@
 {
-  "compilerOptions": {
-    "target": "es5",
-    "outDir": "build",
-    "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "module": "ESNext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": false,
-    "jsx": "react-jsx"
-  },
-  // Необходим для работы typescript в webpack.config.ts
-  "ts-node": {
-    "compilerOptions": {
-      "module": "CommonJS"
-    }
-  },
-  "exclude": ["node_modules", "build", "dist", "babel.config.js", "**/*.test.ts"]
+	"compilerOptions": {
+		"target": "es5",
+		"outDir": "build",
+		"allowJs": true,
+		"skipLibCheck": true,
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+		"strict": true,
+		"forceConsistentCasingInFileNames": true,
+		"noFallthroughCasesInSwitch": true,
+		"module": "ESNext",
+		"moduleResolution": "node",
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"noEmit": false,
+		"jsx": "react-jsx",
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["src/*"],
+			"@/app": ["src/app"],
+			"@/app/*": ["src/app/*"],
+			"@/pages": ["src/pages"],
+			"@/pages/*": ["src/pages/*"],
+			"@/widgets": ["src/widgets"],
+			"@/widgets/*": ["src/widgets/*"],
+			"@/features": ["src/features"],
+			"@/features/*": ["src/features/*"],
+			"@/entities": ["src/entities"],
+			"@/entities/*": ["src/entities/*"],
+			"@/shared": ["src/shared"],
+			"@/shared/*": ["src/shared/*"],
+			"@/components": ["src/components"],
+			"@/components/*": ["src/components/*"]
+		}
+	},
+	// Необходим для работы typescript в webpack.config.ts
+	"ts-node": {
+		"compilerOptions": {
+			"module": "CommonJS"
+		}
+	},
+	"exclude": [
+		"node_modules",
+		"build",
+		"dist",
+		"babel.config.js",
+		"**/*.test.ts"
+	]
 }

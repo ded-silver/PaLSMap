@@ -17,13 +17,13 @@ import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
 import { useMemo, useState } from 'react'
 
-import { useGetNodeData } from '../../../hooks/nodes/useNodes'
-import { useDialog } from '../../../hooks/useDialog'
-import { NodeData } from '../../../types/nodeTypes'
 import Provider from '../../Provider/Provider'
-import TableDialog from '../DialogData/TableDialog'
 
 import { Cell } from './Cell'
+import { TableDialog } from '@/entities/node-data'
+import { useGetNodeData } from '@/entities/node-data'
+import type { NodeData } from '@/entities/node-data'
+import { useDialog } from '@/shared/hooks'
 
 interface Props {
 	open: boolean
@@ -162,8 +162,9 @@ export const DialogData = ({
 						width='100%'
 						height='100%'
 						display='flex'
-						justifyContent='left'
+						justifyContent='center'
 						alignItems='center'
+						textAlign='center'
 						sx={{
 							whiteSpace: 'pre-line',
 							wordBreak: 'break-word',
@@ -208,8 +209,9 @@ export const DialogData = ({
 						width='100%'
 						height='100%'
 						display='flex'
-						justifyContent='left'
+						justifyContent='center'
 						alignItems='center'
+						textAlign='left'
 						sx={{
 							whiteSpace: 'pre-line',
 							wordBreak: 'break-word',

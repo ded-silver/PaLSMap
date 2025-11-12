@@ -13,10 +13,10 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { FC, useState } from 'react'
 import { toast } from 'react-toastify'
 
-import { useDialog } from '../../../hooks/useDialog'
-import { NodeService } from '../../../services/node.service'
-import { NodeData } from '../../../types/nodeTypes'
-import TableDialog from '../DialogData/TableDialog'
+import { TableDialog } from '@/entities/node-data'
+import { NodeDataService } from '@/entities/node-data'
+import type { NodeData } from '@/entities/node-data'
+import { useDialog } from '@/shared/hooks'
 
 interface Props {
 	row: NodeData
@@ -33,7 +33,7 @@ export const Cell: FC<Props> = ({ row, nodeId, items }) => {
 
 	const { mutate: deleteNodeData } = useMutation({
 		mutationKey: ['updateNodeData'],
-		mutationFn: (id: string) => NodeService.deleteNodeData(id),
+		mutationFn: (id: string) => NodeDataService.deleteNodeData(id),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['currentNodeData'] })
 			toast.success('Строка успешно удалена.')

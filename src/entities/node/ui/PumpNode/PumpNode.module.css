@@ -1,0 +1,46 @@
+.nodeName {
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.deleteButtonWrapper {
+	position: absolute;
+	bottom: -25px;
+	right: -20px;
+	z-index: 10;
+}
+
+.container {
+	position: relative;
+	width: 105px;
+	height: 105px;
+	background-color: #fcd34d;
+	border: 2px solid #facc15;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	overflow: visible;
+}
+
+.triangle-wrapper {
+	width: 67px;
+	height: 75px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	right: -4.5px;
+}
+
+.triangle {
+	width: 0;
+	height: 0;
+	border-top: 20px solid transparent;
+	border-bottom: 20px solid transparent;
+	border-left: 37.5px solid #e0f2fe;
+	transition: border-left-color 0.3s ease;
+}

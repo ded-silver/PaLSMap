@@ -1,4 +1,3 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import {
 	Background,
 	Connection,
@@ -18,33 +17,33 @@ import debounce from 'lodash/debounce'
 import { nanoid } from 'nanoid'
 import { useCallback, useEffect, useRef } from 'react'
 import { SubmitHandler } from 'react-hook-form'
-import { toast } from 'react-toastify'
-
-import { DnDProvider, useDnD } from '../../hooks/DnDContext'
-import { useCreateEdge } from '../../hooks/edges/useEdges'
-import { useEdges } from '../../hooks/nodes/useEdges'
-import { useChildNodes } from '../../hooks/nodes/useNodes'
-import { NodeService } from '../../services/node.service'
-import { NodeDto } from '../../types/nodeTypes'
-import { ChildObjectNode, FactoryNode, ObjectNode } from '../Nodes'
-import { AccountingSystemNode } from '../Nodes/AccountingSystemNode'
-import { CapacityNode } from '../Nodes/CapacityNode'
-import { ChildTankParkNode } from '../Nodes/ChildTankParkNode'
-import { FGUNode } from '../Nodes/FGUNode/FGUNode'
-import { KPPSODNode } from '../Nodes/KPPSODNode/KPPSODNode'
-import { MNSNode } from '../Nodes/MNSNode'
-import { PNSNode } from '../Nodes/PNSNode'
-import { PumpNode } from '../Nodes/PumpNode'
-import { SARNode } from '../Nodes/SARNode'
-import { ValveNode } from '../Nodes/ValveNode'
-import { DnDSidebar } from '../layouts/DnDSidebar'
 
 import styles from './Provider.module.css'
+import { useCreateEdge, useEdges } from '@/entities/edge'
+import type { NodeDto } from '@/entities/node'
+import { useChildNodes } from '@/entities/node'
+import { AccountingSystemNode } from '@/entities/node/ui/AccountingSystemNode'
+import { CapacityNode } from '@/entities/node/ui/CapacityNode'
+import { ChildObjectNode } from '@/entities/node/ui/ChildObjectNode'
+import { ChildTankParkNode } from '@/entities/node/ui/ChildTankParkNode'
+import { FGUNode } from '@/entities/node/ui/FGUNode'
+import { FactoryNode } from '@/entities/node/ui/FactoryNode'
+import { KPPSODNode } from '@/entities/node/ui/KPPSODNode'
+import { MNSNode } from '@/entities/node/ui/MNSNode'
+import { ObjectNode } from '@/entities/node/ui/ObjectNode'
+import { PNSNode } from '@/entities/node/ui/PNSNode'
+import { PumpNode } from '@/entities/node/ui/PumpNode'
+import { SARNode } from '@/entities/node/ui/SARNode'
+import { ValveNode } from '@/entities/node/ui/ValveNode'
+import { useCreateNode } from '@/features/node-create'
+import { useDeleteNode } from '@/features/node-delete'
+import { useUpdateNode } from '@/features/node-update'
+import { DnDProvider, useDnD } from '@/shared/hooks'
+import { DnDSidebar } from '@/widgets/dnd-sidebar'
 
 const nodeTypes = {
 	Factory: FactoryNode,
 	Object: ObjectNode,
-	MNSNode: MNSNode,
 	ChildObject: ChildObjectNode,
 	Valve: ValveNode,
 	Pump: PumpNode,
@@ -70,7 +69,6 @@ export const Provider = ({ id, currentNodeType }: Props) => {
 	const [nodes, setNodes, onNodesChange] = useNodesState<Node>([])
 	const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([])
 	const { screenToFlowPosition, getNodes } = useReactFlow()
-	const queryClient = useQueryClient()
 
 	const isAdmin = localStorage.getItem('isAdmin')
 
@@ -79,39 +77,9 @@ export const Provider = ({ id, currentNodeType }: Props) => {
 		setType: React.Dispatch<React.SetStateAction<string | null>>
 	}
 
-	const { mutate: node } = useMutation({
-		mutationKey: ['childNode'],
-		mutationFn: (data: NodeDto) => NodeService.create(data),
-		onSuccess: data => {
-			queryClient.invalidateQueries({ queryKey: ['childNodes'] })
-			toast.success('Объект успешно добавлен')
-		},
-		onError: error => {
-			toast.error('Ошибка при добавлении.')
-		}
-	})
-
-	const { mutate: deleteNode } = useMutation({
-		mutationKey: ['deleteChildNode'],
-		mutationFn: (nodeId: string) => NodeService.delete(nodeId),
-		onSuccess: data => {
-			queryClient.invalidateQueries({ queryKey: ['childNodes'] })
-		},
-		onError(error: unknown) {
-			toast.error('Ошибка при удалении')
-		}
-	})
-
-	const { mutate: nodeUpdate } = useMutation({
-		mutationKey: ['childNodeUpdate'],
-		mutationFn: (data: NodeDto) => NodeService.update(data.id, data),
-		onSuccess: data => {
-			queryClient.invalidateQueries({ queryKey: ['childNodes'] })
-		},
-		onError: error => {
-			toast.error('Ошибка при обновлении.')
-		}
-	})
+	const { mutate: node } = useCreateNode()
+	const { mutate: deleteNode } = useDeleteNode(['childNodes'])
+	const { mutate: nodeUpdate } = useUpdateNode(['childNodes'])
 
 	const handleCreate: SubmitHandler<NodeDto> = data => {
 		node(data)
@@ -183,7 +151,13 @@ export const Provider = ({ id, currentNodeType }: Props) => {
 				}
 				setEdges(eds => [...eds, edge])
 
-				createEdge(edge)
+				createEdge({
+					id: edge.id,
+					source: edge.source,
+					target: edge.target,
+					sourceHandle: edge.sourceHandle || null,
+					targetHandle: edge.targetHandle || null
+				})
 			}
 		},
 		[setEdges, createEdge]

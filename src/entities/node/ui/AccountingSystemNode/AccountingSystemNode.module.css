@@ -1,0 +1,33 @@
+.nodeName {
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.deleteButtonWrapper {
+	position: absolute;
+	bottom: -20px;
+	right: -30px;
+	z-index: 10;
+}
+
+.container {
+	position: relative;
+	width: 50px;
+	height: 50px;
+	background-color: #a5f3fc;
+	border: 1px solid #06b6d4;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.innerCircle {
+	width: 30px;
+	height: 30px;
+	background-color: #67e8f9;
+	border: 1px solid #0ea5e9;
+	border-radius: 50%;
+}
