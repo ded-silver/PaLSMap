@@ -1,1 +1,0 @@
-export { useDeleteNode } from './model';
