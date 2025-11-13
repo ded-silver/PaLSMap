@@ -156,7 +156,20 @@ export const Provider = ({ id, currentNodeType }: Props) => {
 					source: edge.source,
 					target: edge.target,
 					sourceHandle: edge.sourceHandle || null,
-					targetHandle: edge.targetHandle || null
+					targetHandle: edge.targetHandle || null,
+					type: edge.type,
+					style: edge.style
+						? {
+								strokeWidth:
+									typeof edge.style.strokeWidth === 'number'
+										? edge.style.strokeWidth
+										: undefined,
+								stroke:
+									typeof edge.style.stroke === 'string'
+										? edge.style.stroke
+										: undefined
+							}
+						: undefined
 				})
 			}
 		},
