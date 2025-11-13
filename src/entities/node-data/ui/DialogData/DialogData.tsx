@@ -12,7 +12,6 @@ import {
 	Typography
 } from '@mui/material'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
-import { ruRU } from '@mui/x-data-grid/locales'
 import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
 import { useMemo, useState } from 'react'
@@ -23,6 +22,7 @@ import TableDialog from './TableDialog'
 import { useGetNodeData } from '@/entities/node-data'
 import type { NodeData } from '@/entities/node-data'
 import { useDialog } from '@/shared/hooks'
+import { useDataGridLocaleText } from '@/shared/i18n/useDataGridLocaleText'
 
 interface Props {
 	open: boolean
@@ -36,6 +36,7 @@ export const DialogData = ({ id, open, handleClose, dialogName }: Props) => {
 	const { items, isLoading } = useGetNodeData(id)
 	const [pageSize, setPageSize] = useState<number>(10)
 	const [page, setPage] = useState<number>(0)
+	const localeText = useDataGridLocaleText()
 
 	const { isOpen, handleDialogOpen, handleDialogClose } = useDialog()
 
@@ -376,7 +377,7 @@ export const DialogData = ({ id, open, handleClose, dialogName }: Props) => {
 								paginationModel={{ page, pageSize }}
 								onPaginationModelChange={handlePaginationModelChange}
 								pageSizeOptions={[5, 10, 15, 20]}
-								localeText={ruRU.components.MuiDataGrid.defaultProps.localeText}
+								localeText={localeText}
 								getRowHeight={() => 'auto'}
 								sx={{
 									'& .MuiDataGrid-row:nth-of-type(odd)': {
