@@ -35,6 +35,7 @@ import { PNSNode } from '@/entities/node/ui/PNSNode'
 import { PumpNode } from '@/entities/node/ui/PumpNode'
 import { SARNode } from '@/entities/node/ui/SARNode'
 import { ValveNode } from '@/entities/node/ui/ValveNode'
+import { useIsAdmin } from '@/entities/user'
 import { useCreateNode } from '@/features/node-create'
 import { useDeleteNode } from '@/features/node-delete'
 import { useUpdateNode } from '@/features/node-update'
@@ -70,7 +71,7 @@ export const Provider = ({ id, currentNodeType }: Props) => {
 	const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([])
 	const { screenToFlowPosition, getNodes } = useReactFlow()
 
-	const isAdmin = localStorage.getItem('isAdmin')
+	const isAdmin = useIsAdmin()
 
 	const { type } = useDnD() as {
 		type: string | null
@@ -253,10 +254,10 @@ export const Provider = ({ id, currentNodeType }: Props) => {
 						width: '100%',
 						height: '400px'
 					}}
-					nodesDraggable={isAdmin === 'true' ? true : false}
-					nodesConnectable={isAdmin === 'true' ? true : false}
-					edgesFocusable={isAdmin === 'true' ? true : false}
-					nodesFocusable={isAdmin === 'true' ? true : false}
+					nodesDraggable={isAdmin}
+					nodesConnectable={isAdmin}
+					edgesFocusable={isAdmin}
+					nodesFocusable={isAdmin}
 				>
 					<Controls />
 					<Background color='#E6E6E6' />

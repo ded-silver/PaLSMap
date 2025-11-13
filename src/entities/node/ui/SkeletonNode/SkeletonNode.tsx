@@ -26,6 +26,7 @@ import type { CustomData, NodeDto } from '../../model/types'
 import styles from './SkeletonNode.module.css'
 import { DialogData } from '@/entities/node-data'
 import { NodeDataService } from '@/entities/node-data'
+import { useIsAdmin } from '@/entities/user'
 import { useDebouncedCallback } from '@/shared/hooks'
 
 interface Props {
@@ -76,7 +77,7 @@ export const SkeletonNode = ({
 
 	const queryClient = useQueryClient()
 
-	const isAdmin = localStorage.getItem('isAdmin')
+	const isAdmin = useIsAdmin()
 
 	const [confirmOpen, setConfirmOpen] = useState(false)
 
@@ -176,10 +177,10 @@ export const SkeletonNode = ({
 					className='node-name'
 					value={nodeName}
 					placeholder={t('placeholders.name', { ns: 'nodes' })}
-					readOnly={isAdmin !== 'true'}
+					readOnly={!isAdmin}
 					onClick={e => e.stopPropagation()}
 					onChange={e => {
-						if (isAdmin === 'true') {
+						if (isAdmin) {
 							setNodeName(e.target.value)
 							handleChangeNodeName()
 						}
@@ -190,7 +191,7 @@ export const SkeletonNode = ({
 				className={clsx(styles.node, styles[variant])}
 				onClick={handleClickOpen}
 			>
-				{isAdmin === 'true' ? (
+				{isAdmin ? (
 					<IconButton
 						onClick={e => {
 							e.stopPropagation()
@@ -201,7 +202,7 @@ export const SkeletonNode = ({
 					</IconButton>
 				) : null}
 			</div>
-			{isAdmin === 'true' && width && height ? (
+			{isAdmin && width && height ? (
 				<NodeResizer
 					minWidth={width}
 					minHeight={height}

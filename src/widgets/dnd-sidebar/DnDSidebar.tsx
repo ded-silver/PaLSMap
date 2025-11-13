@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { useDnD } from '@/shared/hooks'
-
 import styles from './DnDSidebar.module.css'
+import { useIsAdmin } from '@/entities/user'
+import { useDnD } from '@/shared/hooks'
 
 interface Props {
 	currentNodeType?: 'TankPark' | 'OPS' | 'Checkpoint'
@@ -11,7 +11,7 @@ interface Props {
 export const DnDSidebar = ({ currentNodeType }: Props) => {
 	const { setType } = useDnD()
 
-	const isAdmin = localStorage.getItem('isAdmin')
+	const isAdmin = useIsAdmin()
 
 	const onDragStart = (event: React.DragEvent, nodeType: string) => {
 		setType(nodeType)
@@ -21,7 +21,7 @@ export const DnDSidebar = ({ currentNodeType }: Props) => {
 
 	return (
 		<>
-			{isAdmin === 'true' ? (
+			{isAdmin ? (
 				<aside className={styles.sidebar}>
 					<div>
 						{currentNodeType === 'Checkpoint' ? (
@@ -150,18 +150,6 @@ export const DnDSidebar = ({ currentNodeType }: Props) => {
 								>
 									<div className={styles.container_mns}></div>
 								</div>
-
-								{/* ChildObject */}
-								{/* <div
-									className={styles.dndnode}
-									onDragStart={e => onDragStart(e, 'ChildObject')}
-									draggable
-									title='Вложенный объект'
-								>
-									<div className={styles['children-square-container']}>
-										<div className={styles['children-square']}></div>
-									</div>
-								</div> */}
 
 								{/* Capacity */}
 								<div

@@ -18,6 +18,7 @@ import { NodeService } from '../../model/api'
 import type { CustomNode, NodeDto } from '../../model/types'
 
 import styles from './River.module.css'
+import { useIsAdmin } from '@/entities/user'
 import { useDebouncedCallback } from '@/shared/hooks'
 
 export const River = ({ data, id }: NodeProps<CustomNode>) => {
@@ -28,7 +29,7 @@ export const River = ({ data, id }: NodeProps<CustomNode>) => {
 	const queryClient = useQueryClient()
 	const node = getNode(id)
 
-	const isAdmin = localStorage.getItem('isAdmin')
+	const isAdmin = useIsAdmin()
 
 	const [confirmOpen, setConfirmOpen] = useState(false)
 
@@ -91,9 +92,9 @@ export const River = ({ data, id }: NodeProps<CustomNode>) => {
 			<input
 				value={nodeName}
 				placeholder={t('placeholders.riverName', { ns: 'nodes' })}
-				readOnly={isAdmin !== 'true'}
+				readOnly={!isAdmin}
 				onChange={e => {
-					if (isAdmin === 'true') {
+					if (isAdmin) {
 						setNodeName(e.target.value)
 						handleChangeNodeName()
 					}
@@ -115,7 +116,7 @@ export const River = ({ data, id }: NodeProps<CustomNode>) => {
 				className={styles['deleteButtonWrapper']}
 				onClick={e => e.stopPropagation()}
 			>
-				{isAdmin === 'true' ? (
+				{isAdmin ? (
 					<IconButton
 						onClick={() => {
 							setConfirmOpen(true)

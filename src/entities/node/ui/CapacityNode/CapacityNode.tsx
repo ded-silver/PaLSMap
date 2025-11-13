@@ -17,6 +17,7 @@ import { toast } from 'react-toastify'
 import styles from './CapacityNode.module.css'
 import { type CustomNode, type NodeDto, NodeService } from '@/entities/node'
 import { DialogData, NodeDataService } from '@/entities/node-data'
+import { useIsAdmin } from '@/entities/user'
 import { useDebouncedCallback } from '@/shared/hooks'
 
 export const CapacityNode = ({ data, id, parentId }: NodeProps<CustomNode>) => {
@@ -27,7 +28,7 @@ export const CapacityNode = ({ data, id, parentId }: NodeProps<CustomNode>) => {
 	const [nodeName, setNodeName] = useState<string>(data.label)
 	const node = getNode(id)
 
-	const isAdmin = localStorage.getItem('isAdmin')
+	const isAdmin = useIsAdmin()
 
 	const [confirmOpen, setConfirmOpen] = useState(false)
 
@@ -106,9 +107,9 @@ export const CapacityNode = ({ data, id, parentId }: NodeProps<CustomNode>) => {
 			<input
 				value={nodeName}
 				placeholder={t('placeholders.nodeName', { ns: 'nodes' })}
-				readOnly={isAdmin !== 'true'}
+				readOnly={!isAdmin}
 				onChange={e => {
-					if (isAdmin === 'true') {
+					if (isAdmin) {
 						setNodeName(e.target.value)
 						handleChangeNodeName()
 					}
@@ -132,7 +133,7 @@ export const CapacityNode = ({ data, id, parentId }: NodeProps<CustomNode>) => {
 				className={styles['deleteButtonWrapper']}
 				onClick={e => e.stopPropagation()}
 			>
-				{isAdmin === 'true' ? (
+				{isAdmin ? (
 					<IconButton
 						onClick={() => {
 							setConfirmOpen(true)

@@ -17,6 +17,7 @@ import { toast } from 'react-toastify'
 import { TableDialog } from '@/entities/node-data'
 import { NodeDataService } from '@/entities/node-data'
 import type { NodeData } from '@/entities/node-data'
+import { useIsAdmin } from '@/entities/user'
 import { useDialog } from '@/shared/hooks'
 
 interface Props {
@@ -31,7 +32,7 @@ export const Cell: FC<Props> = ({ row, nodeId, items }) => {
 	const queryClient = useQueryClient()
 	const { isOpen, handleDialogOpen, handleDialogClose } = useDialog()
 
-	const isAdmin = localStorage.getItem('isAdmin')
+	const isAdmin = useIsAdmin()
 	const [confirmOpen, setConfirmOpen] = useState(false)
 
 	const { mutate: deleteNodeData } = useMutation({
@@ -53,7 +54,7 @@ export const Cell: FC<Props> = ({ row, nodeId, items }) => {
 
 	return (
 		<>
-			{isAdmin === 'true' && (
+			{isAdmin && (
 				<Box
 					width='100%'
 					display='flex'

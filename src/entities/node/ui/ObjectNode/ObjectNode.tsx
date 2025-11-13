@@ -15,6 +15,7 @@ import {
 	NodeService
 } from '@/entities/node'
 import { DialogData } from '@/entities/node-data'
+import { useIsAdmin } from '@/entities/user'
 import { useDebouncedCallback } from '@/shared/hooks'
 
 export const ObjectNode = ({ data, id, parentId }: NodeProps<CustomNode>) => {
@@ -25,7 +26,7 @@ export const ObjectNode = ({ data, id, parentId }: NodeProps<CustomNode>) => {
 	const [nodeName, setNodeName] = useState<string>(data.label)
 	const node = getNode(id)
 
-	const isAdmin = localStorage.getItem('isAdmin')
+	const isAdmin = useIsAdmin()
 
 	const handleClickOpen = () => {
 		setOpen(true)
@@ -89,9 +90,9 @@ export const ObjectNode = ({ data, id, parentId }: NodeProps<CustomNode>) => {
 			<input
 				value={nodeName}
 				placeholder={t('placeholders.nodeName', { ns: 'nodes' })}
-				readOnly={isAdmin !== 'true'}
+				readOnly={!isAdmin}
 				onChange={e => {
-					if (isAdmin === 'true') {
+					if (isAdmin) {
 						setNodeName(e.target.value)
 						handleChangeNodeName()
 					}

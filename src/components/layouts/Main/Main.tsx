@@ -28,6 +28,7 @@ import { CheckpointNode } from '@/entities/node/ui/CheckpointNode'
 import { OPSNode } from '@/entities/node/ui/OPSNode'
 import { River } from '@/entities/node/ui/River'
 import { TankParkNode } from '@/entities/node/ui/TankParkNode'
+import { useIsAdmin } from '@/entities/user'
 import { useCreateNode } from '@/features/node-create'
 import { useDeleteNode } from '@/features/node-delete'
 import { useUpdateNode } from '@/features/node-update'
@@ -54,7 +55,7 @@ const MMMain = ({ isSidebarOpen }: Props) => {
 	const [nodes, setNodes, onNodesChange] = useNodesState<Node>([])
 	const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([])
 	const { screenToFlowPosition, getNodes } = useReactFlow()
-	const isAdmin = localStorage.getItem('isAdmin')
+	const isAdmin = useIsAdmin()
 
 	const { mutate: deleteEdge } = useDeleteEdge()
 	const { mutate: node } = useCreateNode()
@@ -246,10 +247,10 @@ const MMMain = ({ isSidebarOpen }: Props) => {
 					snapGrid={[25, 25]}
 					selectionMode={SelectionMode.Partial}
 					fitView
-					nodesDraggable={isAdmin === 'true'}
-					nodesConnectable={isAdmin === 'true'}
-					edgesFocusable={isAdmin === 'true'}
-					nodesFocusable={isAdmin === 'true'}
+					nodesDraggable={isAdmin}
+					nodesConnectable={isAdmin}
+					edgesFocusable={isAdmin}
+					nodesFocusable={isAdmin}
 				>
 					<Controls />
 				</ReactFlow>

@@ -24,6 +24,7 @@ import {
 	type NodeHandlers,
 	NodeService
 } from '@/entities/node'
+import { useIsAdmin } from '@/entities/user'
 import { useDebouncedCallback } from '@/shared/hooks'
 
 export const TankParkNode = ({ data, id }: NodeProps<CustomNode>) => {
@@ -34,7 +35,7 @@ export const TankParkNode = ({ data, id }: NodeProps<CustomNode>) => {
 	const queryClient = useQueryClient()
 	const node = getNode(id)
 
-	const isAdmin = localStorage.getItem('isAdmin')
+	const isAdmin = useIsAdmin()
 
 	const [confirmOpen, setConfirmOpen] = useState(false)
 
@@ -114,7 +115,7 @@ export const TankParkNode = ({ data, id }: NodeProps<CustomNode>) => {
 				className={styles['deleteButtonWrapper']}
 				onClick={e => e.stopPropagation()}
 			>
-				{isAdmin === 'true' ? (
+				{isAdmin ? (
 					<IconButton
 						onClick={() => {
 							setConfirmOpen(true)

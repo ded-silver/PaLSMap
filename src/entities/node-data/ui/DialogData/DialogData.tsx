@@ -21,6 +21,7 @@ import { Cell } from './Cell'
 import TableDialog from './TableDialog'
 import { useGetNodeData } from '@/entities/node-data'
 import type { NodeData } from '@/entities/node-data'
+import { useIsAdmin } from '@/entities/user'
 import { useDialog } from '@/shared/hooks'
 import { useDataGridLocaleText } from '@/shared/i18n/useDataGridLocaleText'
 
@@ -40,7 +41,7 @@ export const DialogData = ({ id, open, handleClose, dialogName }: Props) => {
 
 	const { isOpen, handleDialogOpen, handleDialogClose } = useDialog()
 
-	const isAdmin = localStorage.getItem('isAdmin')
+	const isAdmin = useIsAdmin()
 
 	const exportJsonToExcel = async (jsonData: any[], filename = 'data.xlsx') => {
 		const workbook = new ExcelJS.Workbook()
@@ -321,7 +322,7 @@ export const DialogData = ({ id, open, handleClose, dialogName }: Props) => {
 										flexWrap: 'wrap'
 									}}
 								>
-									{isAdmin === 'true' && (
+									{isAdmin && (
 										<Button
 											onClick={handleDialogOpen}
 											variant='contained'
@@ -348,7 +349,7 @@ export const DialogData = ({ id, open, handleClose, dialogName }: Props) => {
 								autoHeight
 								rows={items}
 								columns={
-									isAdmin === 'true'
+									isAdmin
 										? [
 												{
 													field: 'deleteEdit',

@@ -17,6 +17,7 @@ import {
 	useDictionaries,
 	useUpdateDictionary
 } from '@/entities/dictionary'
+import { useIsAdmin } from '@/entities/user'
 import { SearchBar } from '@/shared/ui'
 
 export const DictionaryPage = () => {
@@ -27,7 +28,7 @@ export const DictionaryPage = () => {
 	const [selectedItem, setSelectedItem] = useState<IDictionary | null>(null)
 	const [modalMode, setModalMode] = useState<'create' | 'edit'>('create')
 
-	const isAdmin = localStorage.getItem('isAdmin') === 'true'
+	const isAdmin = useIsAdmin()
 
 	const { data, isLoading, error } = useDictionaries()
 	const { mutate: createDictionary, isPending: isCreating } =

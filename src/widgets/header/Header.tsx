@@ -1,10 +1,11 @@
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import DensityMediumIcon from '@mui/icons-material/DensityMedium'
-import { useEffect, useState } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import styles from './Header.module.css'
-import { userService } from '@/entities/user'
+import { useUserProfile } from '@/entities/user'
 import { LanguageSwitcher } from '@/shared/ui'
 import { UserInfoModal } from '@/widgets/user-info-modal'
 
@@ -14,26 +15,14 @@ interface Props {
 
 export const Header = ({ toggleSidebar }: Props) => {
 	const [isProfileOpen, setIsProfileOpen] = useState(false)
-	const [userName, setUserName] = useState<string | null>(null)
 	const { t } = useTranslation('common')
+	const { data: profile, isLoading } = useUserProfile()
+	const queryClient = useQueryClient()
 
-	const fetchUserName = async () => {
-		try {
-			const user = await userService.getProfile()
-			setUserName(user.name ?? null)
-			localStorage.setItem('isAdmin', user.isAdmin.toString())
-		} catch (error) {
-			console.error('Ошибка при загрузке профиля', error)
-			setUserName(null)
-		}
-	}
-
-	useEffect(() => {
-		fetchUserName()
-	}, [])
+	const userName = profile?.user?.name ?? profile?.name ?? null
 
 	const handleProfileUpdate = () => {
-		fetchUserName()
+		queryClient.invalidateQueries({ queryKey: ['user', 'profile'] })
 	}
 
 	const handleLogout = () => {
