@@ -8,6 +8,10 @@ import type {
 	IDictionary,
 	IUpdateDictionaryDto
 } from './types'
+import {
+	handleMutationError,
+	handleMutationSuccess
+} from '@/shared/lib/error-handler'
 
 export const useDictionaries = (search?: string) => {
 	return useQuery({
@@ -32,24 +36,16 @@ export const useCreateDictionary = () => {
 		mutationFn: (dto: ICreateDictionaryDto) => dictionaryApi.create(dto),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['dictionaries'] })
-			toast.success(i18n.t('messages.createSuccess', { ns: 'dictionary' }))
+			handleMutationSuccess({
+				successKey: 'messages.createSuccess',
+				namespace: 'dictionary'
+			})
 		},
 		onError: (error: any) => {
-			let errorMessage = i18n.t('messages.createError', { ns: 'dictionary' })
-
-			if (error?.response?.data?.message) {
-				errorMessage = error.response.data.message
-			} else if (error?.response?.status === 409) {
-				errorMessage = i18n.t('messages.duplicateError', { ns: 'dictionary' })
-			} else if (error?.response?.status === 403) {
-				errorMessage = i18n.t('messages.forbiddenError', { ns: 'dictionary' })
-			} else if (error?.response?.status === 401) {
-				errorMessage = i18n.t('messages.unauthorizedError', {
-					ns: 'dictionary'
-				})
-			}
-
-			toast.error(errorMessage)
+			handleMutationError(error, {
+				defaultErrorKey: 'messages.createError',
+				namespace: 'dictionary'
+			})
 		}
 	})
 }
@@ -65,26 +61,16 @@ export const useUpdateDictionary = () => {
 			queryClient.invalidateQueries({
 				queryKey: ['dictionary', variables.id]
 			})
-			toast.success(i18n.t('messages.updateSuccess', { ns: 'dictionary' }))
+			handleMutationSuccess({
+				successKey: 'messages.updateSuccess',
+				namespace: 'dictionary'
+			})
 		},
 		onError: (error: any) => {
-			let errorMessage = i18n.t('messages.updateError', { ns: 'dictionary' })
-
-			if (error?.response?.data?.message) {
-				errorMessage = error.response.data.message
-			} else if (error?.response?.status === 409) {
-				errorMessage = i18n.t('messages.duplicateError', { ns: 'dictionary' })
-			} else if (error?.response?.status === 403) {
-				errorMessage = i18n.t('messages.forbiddenError', { ns: 'dictionary' })
-			} else if (error?.response?.status === 401) {
-				errorMessage = i18n.t('messages.unauthorizedError', {
-					ns: 'dictionary'
-				})
-			} else if (error?.response?.status === 404) {
-				errorMessage = i18n.t('messages.notFoundError', { ns: 'dictionary' })
-			}
-
-			toast.error(errorMessage)
+			handleMutationError(error, {
+				defaultErrorKey: 'messages.updateError',
+				namespace: 'dictionary'
+			})
 		}
 	})
 }
@@ -96,24 +82,16 @@ export const useDeleteDictionary = () => {
 		mutationFn: (id: string) => dictionaryApi.delete(id),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['dictionaries'] })
-			toast.success(i18n.t('messages.deleteSuccess', { ns: 'dictionary' }))
+			handleMutationSuccess({
+				successKey: 'messages.deleteSuccess',
+				namespace: 'dictionary'
+			})
 		},
 		onError: (error: any) => {
-			let errorMessage = i18n.t('messages.deleteError', { ns: 'dictionary' })
-
-			if (error?.response?.data?.message) {
-				errorMessage = error.response.data.message
-			} else if (error?.response?.status === 403) {
-				errorMessage = i18n.t('messages.forbiddenError', { ns: 'dictionary' })
-			} else if (error?.response?.status === 401) {
-				errorMessage = i18n.t('messages.unauthorizedError', {
-					ns: 'dictionary'
-				})
-			} else if (error?.response?.status === 404) {
-				errorMessage = i18n.t('messages.notFoundError', { ns: 'dictionary' })
-			}
-
-			toast.error(errorMessage)
+			handleMutationError(error, {
+				defaultErrorKey: 'messages.deleteError',
+				namespace: 'dictionary'
+			})
 		}
 	})
 }

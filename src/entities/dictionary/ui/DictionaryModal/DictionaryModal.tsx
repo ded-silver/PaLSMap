@@ -15,6 +15,8 @@ import type {
 } from '../../model/types'
 import { DictionaryForm } from '../DictionaryForm'
 
+import { MUI_STYLES } from '@/shared/styles/constants'
+
 interface DictionaryModalProps {
 	isOpen: boolean
 	mode: 'create' | 'edit'
@@ -49,39 +51,23 @@ export const DictionaryModal = ({
 			maxWidth='md'
 			fullWidth
 			PaperProps={{
-				sx: {
-					borderRadius: '12px'
-				}
+				sx: MUI_STYLES.dialogPaper
 			}}
 		>
-			<DialogTitle
-				sx={{
-					backgroundColor: '#0073e6',
-					color: '#fff',
-					display: 'flex',
-					justifyContent: 'space-between',
-					alignItems: 'center',
-					padding: '16px 24px'
-				}}
-			>
-				<Typography sx={{ fontSize: '1.5rem', fontWeight: 600 }}>
+			<DialogTitle sx={MUI_STYLES.dialogTitlePrimary}>
+				<Typography sx={MUI_STYLES.typography.titleMedium}>
 					{mode === 'create' ? t('buttons.add') : t('buttons.edit')}
 				</Typography>
 				<IconButton
 					aria-label='close'
 					onClick={onClose}
-					sx={{
-						color: '#fff',
-						'&:hover': {
-							backgroundColor: 'rgba(255, 255, 255, 0.1)'
-						}
-					}}
+					sx={MUI_STYLES.iconButtonClosePrimary}
 				>
 					<CloseIcon />
 				</IconButton>
 			</DialogTitle>
 
-			<DialogContent sx={{ padding: '24px' }}>
+			<DialogContent sx={MUI_STYLES.dialogContent}>
 				<DictionaryForm
 					key={item?.id || 'create'}
 					initialData={item}

@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next'
 import type { IDictionary } from '../../model/types'
 
 import styles from './DeleteConfirmDialog.module.css'
+import { MUI_STYLES } from '@/shared/styles/constants'
 
 interface DeleteConfirmDialogProps {
 	isOpen: boolean
@@ -38,13 +39,11 @@ export const DeleteConfirmDialog = ({
 			maxWidth='sm'
 			fullWidth
 			PaperProps={{
-				sx: {
-					borderRadius: '12px'
-				}
+				sx: MUI_STYLES.dialogPaper
 			}}
 		>
 			<DialogTitle>
-				<Typography sx={{ fontSize: '1.25rem', fontWeight: 600 }}>
+				<Typography sx={MUI_STYLES.typography.titleSmall}>
 					{t('messages.deleteTitle', { ns: 'dictionary' })}
 				</Typography>
 			</DialogTitle>
@@ -56,19 +55,25 @@ export const DeleteConfirmDialog = ({
 				<div className={styles.itemInfo}>
 					<Typography
 						variant='body2'
-						sx={{ fontWeight: 600, marginBottom: '8px' }}
+						sx={{
+							...MUI_STYLES.typography.bodyBold,
+							...MUI_STYLES.spacing.mb1
+						}}
 					>
 						{t('messages.abbreviation', { ns: 'dictionary' })}
 					</Typography>
 					<Typography
 						variant='body1'
-						sx={{ marginBottom: '16px' }}
+						sx={MUI_STYLES.spacing.mb2px}
 					>
 						{item.short}
 					</Typography>
 					<Typography
 						variant='body2'
-						sx={{ fontWeight: 600, marginBottom: '8px' }}
+						sx={{
+							...MUI_STYLES.typography.bodyBold,
+							...MUI_STYLES.spacing.mb1
+						}}
 					>
 						{t('messages.fullName', { ns: 'dictionary' })}
 					</Typography>
@@ -76,7 +81,7 @@ export const DeleteConfirmDialog = ({
 				</div>
 			</DialogContent>
 
-			<DialogActions sx={{ padding: '16px 24px' }}>
+			<DialogActions sx={MUI_STYLES.dialogActions}>
 				<Button
 					onClick={onClose}
 					disabled={isLoading}

@@ -18,6 +18,7 @@ import {
 	useUpdateDictionary
 } from '@/entities/dictionary'
 import { useIsAdmin } from '@/entities/user'
+import { MUI_STYLES } from '@/shared/styles/constants'
 import { SearchBar } from '@/shared/ui'
 
 export const DictionaryPage = () => {
@@ -121,7 +122,7 @@ export const DictionaryPage = () => {
 		return (
 			<div className={styles['main-content']}>
 				<Typography
-					sx={{ fontSize: '2.125rem' }}
+					sx={MUI_STYLES.typography.titleLarge}
 					className={styles.pageTitle}
 					gutterBottom
 				>
@@ -137,7 +138,7 @@ export const DictionaryPage = () => {
 	return (
 		<div className={styles['main-content']}>
 			<Typography
-				sx={{ fontSize: '2.125rem' }}
+				sx={MUI_STYLES.typography.titleLarge}
 				className={styles.pageTitle}
 				gutterBottom
 			>

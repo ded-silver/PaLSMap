@@ -1,25 +1,21 @@
+import { Box } from '@mui/material'
 import {
 	Background,
-	Connection,
 	Controls,
 	Edge,
 	Node,
-	NodeChange,
 	ReactFlow,
 	ReactFlowProvider,
 	SelectionMode,
 	useEdgesState,
-	useNodesState,
-	useReactFlow
+	useNodesState
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
-import debounce from 'lodash/debounce'
-import { nanoid } from 'nanoid'
 import { useCallback, useEffect, useRef } from 'react'
 import { SubmitHandler } from 'react-hook-form'
 
 import styles from './Provider.module.css'
-import { useCreateEdge, useEdges } from '@/entities/edge'
+import { useEdges } from '@/entities/edge'
 import type { NodeDto } from '@/entities/node'
 import { useChildNodes } from '@/entities/node'
 import { AccountingSystemNode } from '@/entities/node/ui/AccountingSystemNode'
@@ -38,8 +34,13 @@ import { ValveNode } from '@/entities/node/ui/ValveNode'
 import { useIsAdmin } from '@/entities/user'
 import { useCreateNode } from '@/features/node-create'
 import { useDeleteNode } from '@/features/node-delete'
-import { useUpdateNode } from '@/features/node-update'
-import { DnDProvider, useDnD } from '@/shared/hooks'
+import {
+	DnDProvider,
+	useEdgeConnection,
+	useNodeDrop,
+	useNodePositionUpdate
+} from '@/shared/hooks'
+import { COLORS, MUI_STYLES, SIZES } from '@/shared/styles/constants'
 import { DnDSidebar } from '@/widgets/dnd-sidebar'
 
 const nodeTypes = {
@@ -69,28 +70,24 @@ export const Provider = ({ id, currentNodeType }: Props) => {
 	const { items: allEgdes } = useEdges()
 	const [nodes, setNodes, onNodesChange] = useNodesState<Node>([])
 	const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([])
-	const { screenToFlowPosition, getNodes } = useReactFlow()
 
 	const isAdmin = useIsAdmin()
 
-	const { type } = useDnD() as {
-		type: string | null
-		setType: React.Dispatch<React.SetStateAction<string | null>>
-	}
-
 	const { mutate: node } = useCreateNode()
 	const { mutate: deleteNode } = useDeleteNode(['childNodes'])
-	const { mutate: nodeUpdate } = useUpdateNode(['childNodes'])
 
 	const handleCreate: SubmitHandler<NodeDto> = data => {
 		node(data)
 	}
 
-	const handleNodesDelete = useCallback((deletedNodes: Node[]) => {
-		deletedNodes.forEach(node => {
-			deleteNode(node.id)
-		})
-	}, [])
+	const handleNodesDelete = useCallback(
+		(deletedNodes: Node[]) => {
+			deletedNodes.forEach(node => {
+				deleteNode(node.id)
+			})
+		},
+		[deleteNode]
+	)
 
 	useEffect(() => {
 		if (items) {
@@ -104,123 +101,26 @@ export const Provider = ({ id, currentNodeType }: Props) => {
 
 			setNodes(updatedNodes)
 		}
-	}, [items])
-
-	const handleNodeUpdate = useCallback(
-		debounce((changes: NodeChange[], allNodes: Node[]) => {
-			const updatedNodes = changes
-				.filter(change => change.type === 'position')
-				.map(change => allNodes.find(node => node.id === change.id))
-				.filter(Boolean) as Node[]
-
-			updatedNodes.forEach(node => {
-				nodeUpdate(node as unknown as NodeDto)
-			})
-		}, 500),
-		[]
-	)
-
-	const onNodesChangeWithDebounce = useCallback(
-		(changes: NodeChange[]) => {
-			onNodesChange(changes)
-			const currentNodes = getNodes()
-			handleNodeUpdate(changes, currentNodes)
-		},
-		[onNodesChange, getNodes]
-	)
-
-	const { mutate: createEdge } = useCreateEdge()
+	}, [items, setNodes])
 
 	useEffect(() => {
 		if (allEgdes) {
 			setEdges(allEgdes)
 		}
-	}, [allEgdes])
+	}, [allEgdes, setEdges])
 
-	const onConnect = useCallback(
-		(params: Connection | Edge) => {
-			if (params.targetHandle) {
-				const edge = {
-					...params,
-					type: 'straight',
-					id: nanoid(),
-					style: {
-						strokeWidth: 1,
-						stroke: 'black'
-					}
-				}
-				setEdges(eds => [...eds, edge])
-
-				createEdge({
-					id: edge.id,
-					source: edge.source,
-					target: edge.target,
-					sourceHandle: edge.sourceHandle || null,
-					targetHandle: edge.targetHandle || null,
-					type: edge.type,
-					style: edge.style
-						? {
-								strokeWidth:
-									typeof edge.style.strokeWidth === 'number'
-										? edge.style.strokeWidth
-										: undefined,
-								stroke:
-									typeof edge.style.stroke === 'string'
-										? edge.style.stroke
-										: undefined
-							}
-						: undefined
-				})
-			}
-		},
-		[setEdges, createEdge]
-	)
-
-	const onDrop = useCallback(
-		(event: React.DragEvent) => {
-			event.preventDefault()
-			event.stopPropagation()
-
-			const position = screenToFlowPosition({
-				x: event.clientX,
-				y: event.clientY
-			})
-			if (!type) return
-
-			const newNode: Node = {
-				id: nanoid(),
-				type,
-				position,
-				data: {
-					label: '',
-					tableName: [],
-					tableData: [],
-					handlers: [
-						{
-							id: nanoid(),
-							type: 'source'
-						},
-						{
-							id: nanoid(),
-							type: 'target'
-						}
-					]
-				}
-			}
-
-			handleCreate({ ...newNode, parentId: id } as unknown as NodeDto)
-		},
-		[screenToFlowPosition, type]
-	)
-
-	const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
-		event.preventDefault()
-		event.dataTransfer.dropEffect = 'move'
-	}, [])
+	const { onConnect } = useEdgeConnection({ setEdges })
+	const { onDrop, onDragOver } = useNodeDrop({
+		parentId: id,
+		onCreate: handleCreate
+	})
+	const { onNodesChangeWithDebounce } = useNodePositionUpdate({
+		onNodesChange
+	})
 
 	return (
 		<>
-			<div
+			<Box
 				className={styles['provider-content']}
 				ref={reactFlowWrapper}
 				onDrop={e => {
@@ -231,7 +131,7 @@ export const Provider = ({ id, currentNodeType }: Props) => {
 					e.preventDefault()
 					e.stopPropagation()
 				}}
-				style={{ zIndex: 9999, backgroundColor: '#e6f0ff' }}
+				sx={MUI_STYLES.providerWrapper}
 			>
 				<ReactFlow
 					nodes={nodes}
@@ -244,15 +144,15 @@ export const Provider = ({ id, currentNodeType }: Props) => {
 					onEdgesChange={onEdgesChange}
 					onNodesDelete={handleNodesDelete}
 					snapToGrid
-					snapGrid={[25, 25]}
+					snapGrid={[...SIZES.snapGrid]}
 					className='react-flow-subflows-example'
 					fitView
 					deleteKeyCode={null}
 					selectionMode={SelectionMode.Partial}
 					style={{
-						backgroundColor: '#F7F9FB',
+						backgroundColor: COLORS.backgroundLight,
 						width: '100%',
-						height: '400px'
+						height: SIZES.providerHeight
 					}}
 					nodesDraggable={isAdmin}
 					nodesConnectable={isAdmin}
@@ -260,9 +160,9 @@ export const Provider = ({ id, currentNodeType }: Props) => {
 					nodesFocusable={isAdmin}
 				>
 					<Controls />
-					<Background color='#E6E6E6' />
+					<Background color={COLORS.backgroundGrid} />
 				</ReactFlow>
-			</div>
+			</Box>
 			<DnDSidebar currentNodeType={currentNodeType} />
 		</>
 	)

@@ -12,9 +12,7 @@ import {
 	Typography
 } from '@mui/material'
 import { DataGrid, GridColDef } from '@mui/x-data-grid'
-import ExcelJS from 'exceljs'
-import { saveAs } from 'file-saver'
-import { useMemo, useState } from 'react'
+import { Suspense, lazy, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Cell } from './Cell'
@@ -24,18 +22,33 @@ import type { NodeData } from '@/entities/node-data'
 import { useIsAdmin } from '@/entities/user'
 import { useDialog } from '@/shared/hooks'
 import { useDataGridLocaleText } from '@/shared/i18n/useDataGridLocaleText'
+import { exportToExcel } from '@/shared/lib/excel-export'
+import { COLORS, MUI_STYLES, SIZES } from '@/shared/styles/constants'
+
+const Provider = lazy(() =>
+	import('@/components/Provider/Provider').then(module => ({
+		default: module.default
+	}))
+)
 
 interface Props {
 	open: boolean
 	id: string
 	dialogName: string
 	handleClose: () => void
+	currentNodeType?: 'OPS' | 'TankPark' | 'Checkpoint'
 }
 
-export const DialogData = ({ id, open, handleClose, dialogName }: Props) => {
+export const DialogData = ({
+	id,
+	open,
+	handleClose,
+	dialogName,
+	currentNodeType
+}: Props) => {
 	const { t } = useTranslation('nodes')
 	const { items, isLoading } = useGetNodeData(id)
-	const [pageSize, setPageSize] = useState<number>(10)
+	const [pageSize, setPageSize] = useState<number>(SIZES.defaultPageSize)
 	const [page, setPage] = useState<number>(0)
 	const localeText = useDataGridLocaleText()
 
@@ -43,81 +56,26 @@ export const DialogData = ({ id, open, handleClose, dialogName }: Props) => {
 
 	const isAdmin = useIsAdmin()
 
-	const exportJsonToExcel = async (jsonData: any[], filename = 'data.xlsx') => {
-		const workbook = new ExcelJS.Workbook()
-		const worksheet = workbook.addWorksheet('Sheet1')
-
-		worksheet.columns = [
-			{ header: t('excel.protectionName'), key: 'protectionName', width: 40 },
-			{ header: t('excel.excerpt'), key: 'excerpt', width: 40 },
-			{ header: t('excel.source'), key: 'source', width: 40 },
-			{
-				header: t('excel.triggeringConditions'),
-				key: 'triggeringConditions',
-				width: 60
-			},
-			{
-				header: t('excel.triggeringAlgorithm'),
-				key: 'triggeringAlgorithm',
-				width: 70
-			}
-		]
-
-		jsonData.forEach(item => {
-			worksheet.addRow({
-				protectionName: item.protectionName,
-				excerpt: item.excerpt,
-				source: item.source,
-				triggeringConditions: item.triggeringConditions,
-				triggeringAlgorithm: item.triggeringAlgorithm
-			})
+	const handleExportToExcel = async () => {
+		await exportToExcel({
+			columns: [
+				{ header: t('excel.protectionName'), key: 'protectionName', width: 40 },
+				{ header: t('excel.excerpt'), key: 'excerpt', width: 40 },
+				{ header: t('excel.source'), key: 'source', width: 40 },
+				{
+					header: t('excel.triggeringConditions'),
+					key: 'triggeringConditions',
+					width: 60
+				},
+				{
+					header: t('excel.triggeringAlgorithm'),
+					key: 'triggeringAlgorithm',
+					width: 70
+				}
+			],
+			data: items,
+			filename: t('excel.fileName')
 		})
-
-		const headerRow = worksheet.getRow(1)
-		headerRow.eachCell(cell => {
-			cell.font = { bold: true, color: { argb: 'FFFFFFFF' } }
-			cell.fill = {
-				type: 'pattern',
-				pattern: 'solid',
-				fgColor: { argb: 'FF4472C4' }
-			}
-			cell.alignment = {
-				horizontal: 'center',
-				vertical: 'middle',
-				wrapText: true
-			}
-			cell.border = {
-				top: { style: 'thin' },
-				left: { style: 'thin' },
-				bottom: { style: 'thin' },
-				right: { style: 'thin' }
-			}
-		})
-
-		worksheet.eachRow((row, rowNumber) => {
-			if (rowNumber !== 1) {
-				row.eachCell(cell => {
-					cell.alignment = {
-						horizontal: 'left',
-						vertical: 'top',
-						wrapText: true
-					}
-					cell.border = {
-						top: { style: 'thin' },
-						left: { style: 'thin' },
-						bottom: { style: 'thin' },
-						right: { style: 'thin' }
-					}
-				})
-			}
-		})
-
-		const buffer = await workbook.xlsx.writeBuffer()
-		const blob = new Blob([buffer], {
-			type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-		})
-
-		saveAs(blob, filename)
 	}
 
 	const columns: GridColDef[] = useMemo(
@@ -135,11 +93,7 @@ export const DialogData = ({ id, open, handleClose, dialogName }: Props) => {
 						display='flex'
 						justifyContent='left'
 						alignItems='center'
-						sx={{
-							whiteSpace: 'pre-line',
-							wordBreak: 'break-word',
-							hyphens: 'auto'
-						}}
+						sx={MUI_STYLES.textWrap}
 					>
 						{params.value}
 					</Box>
@@ -159,11 +113,7 @@ export const DialogData = ({ id, open, handleClose, dialogName }: Props) => {
 						justifyContent='center'
 						alignItems='center'
 						textAlign='center'
-						sx={{
-							whiteSpace: 'pre-line',
-							wordBreak: 'break-word',
-							hyphens: 'auto'
-						}}
+						sx={MUI_STYLES.textWrap}
 					>
 						{params.value}
 					</Box>
@@ -182,11 +132,7 @@ export const DialogData = ({ id, open, handleClose, dialogName }: Props) => {
 						display='flex'
 						justifyContent='left'
 						alignItems='center'
-						sx={{
-							whiteSpace: 'pre-line',
-							wordBreak: 'break-word',
-							hyphens: 'auto'
-						}}
+						sx={MUI_STYLES.textWrap}
 					>
 						{params.value}
 					</Box>
@@ -206,11 +152,7 @@ export const DialogData = ({ id, open, handleClose, dialogName }: Props) => {
 						justifyContent='center'
 						alignItems='center'
 						textAlign='center'
-						sx={{
-							whiteSpace: 'pre-line',
-							wordBreak: 'break-word',
-							hyphens: 'auto'
-						}}
+						sx={MUI_STYLES.textWrap}
 					>
 						{params.value}
 					</Box>
@@ -228,11 +170,7 @@ export const DialogData = ({ id, open, handleClose, dialogName }: Props) => {
 						display='flex'
 						justifyContent='left'
 						alignItems='center'
-						sx={{
-							whiteSpace: 'pre-line',
-							wordBreak: 'break-word',
-							hyphens: 'auto'
-						}}
+						sx={MUI_STYLES.textWrap}
 					>
 						{params.value}
 					</Box>
@@ -260,26 +198,18 @@ export const DialogData = ({ id, open, handleClose, dialogName }: Props) => {
 				fullScreen
 				PaperProps={{
 					sx: {
-						backgroundColor: '#e6f0ff'
+						backgroundColor: COLORS.background
 					}
 				}}
 			>
-				<DialogTitle
-					style={{ textAlign: 'center', width: '100%' }}
-					sx={{
-						backgroundColor: '#0073e6',
-						color: '#fff'
-					}}
-				>
-					<Typography sx={{ fontSize: '2.125rem' }}>{dialogName}</Typography>
+				<DialogTitle sx={MUI_STYLES.dialogTitleCentered}>
+					<Typography sx={MUI_STYLES.typography.titleLarge}>
+						{dialogName}
+					</Typography>
 					<IconButton
 						aria-label='close'
 						onClick={handleClose}
-						sx={{
-							position: 'absolute',
-							right: 8,
-							top: 8
-						}}
+						sx={MUI_STYLES.iconButtonClose}
 					>
 						<CloseIcon />
 					</IconButton>
@@ -291,34 +221,47 @@ export const DialogData = ({ id, open, handleClose, dialogName }: Props) => {
 						spacing={2}
 						height='100%'
 					>
+						{currentNodeType && (
+							<Grid
+								item
+								xs={6}
+							>
+								<Suspense fallback={<div>Загрузка...</div>}>
+									<Provider
+										currentNodeType={currentNodeType}
+										id={id}
+									/>
+								</Suspense>
+							</Grid>
+						)}
 						<Grid
 							item
-							xs={12}
-							sx={{ display: 'flex', flexDirection: 'column' }}
+							xs={currentNodeType ? 6 : 12}
+							sx={MUI_STYLES.flexColumn}
 						>
-							<div
-								style={{
-									display: 'flex',
+							<Box
+								sx={{
+									...MUI_STYLES.flexRow,
 									justifyContent: 'flex-end',
-									marginBottom: '8px'
+									...MUI_STYLES.spacing.mb1
 								}}
-							></div>
+							/>
 							<Box
 								sx={{
 									textAlign: 'center',
-									mb: 2
+									...MUI_STYLES.spacing.mb2
 								}}
 							>
-								<Typography sx={{ fontSize: '2.125rem' }}>
+								<Typography sx={MUI_STYLES.typography.titleLarge}>
 									{t('tableTitle')}
 								</Typography>
 
 								<Box
 									sx={{
-										mt: 2,
-										display: 'flex',
+										...MUI_STYLES.spacing.mt2,
+										...MUI_STYLES.flexRow,
 										justifyContent: 'right',
-										gap: '1rem',
+										...MUI_STYLES.spacing.gap1,
 										flexWrap: 'wrap'
 									}}
 								>
@@ -332,9 +275,7 @@ export const DialogData = ({ id, open, handleClose, dialogName }: Props) => {
 										</Button>
 									)}
 									<Button
-										onClick={() =>
-											exportJsonToExcel(items, t('excel.fileName'))
-										}
+										onClick={handleExportToExcel}
 										variant='contained'
 										startIcon={<FileDownloadIcon />}
 									>
@@ -370,12 +311,12 @@ export const DialogData = ({ id, open, handleClose, dialogName }: Props) => {
 								}
 								paginationModel={{ page, pageSize }}
 								onPaginationModelChange={handlePaginationModelChange}
-								pageSizeOptions={[5, 10, 15, 20]}
+								pageSizeOptions={SIZES.pageSizeOptions}
 								localeText={localeText}
 								getRowHeight={() => 'auto'}
 								sx={{
 									'& .MuiDataGrid-row:nth-of-type(odd)': {
-										backgroundColor: '#e6f0ff'
+										backgroundColor: COLORS.background
 									}
 								}}
 							/>

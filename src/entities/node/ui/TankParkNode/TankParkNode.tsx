@@ -15,8 +15,6 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 
-import { DialogData } from '@/components/Nodes/TankParkNode/DialogData'
-
 import styles from './TankParkNode.module.css'
 import {
 	type CustomNode,
@@ -24,6 +22,7 @@ import {
 	type NodeHandlers,
 	NodeService
 } from '@/entities/node'
+import { DialogData } from '@/entities/node-data'
 import { useIsAdmin } from '@/entities/user'
 import { useDebouncedCallback } from '@/shared/hooks'
 

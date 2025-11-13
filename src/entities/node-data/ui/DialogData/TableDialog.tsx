@@ -19,6 +19,7 @@ import { toast } from 'react-toastify'
 
 import { NodeDataService } from '@/entities/node-data'
 import type { NodeData, NodeDataPayload } from '@/entities/node-data'
+import { MUI_STYLES, SIZES } from '@/shared/styles/constants'
 
 const initialValues = {
 	protectionName: '',
@@ -108,11 +109,7 @@ export default function TableDialog({
 				<IconButton
 					aria-label='close'
 					onClick={handleClose}
-					sx={{
-						position: 'absolute',
-						right: 8,
-						top: 8
-					}}
+					sx={MUI_STYLES.iconButtonClose}
 				>
 					<CloseIcon />
 				</IconButton>
@@ -144,7 +141,7 @@ export default function TableDialog({
 									value={field.value || ''}
 									error={!!errors.protectionName?.message}
 									helperText={errors.protectionName?.message}
-									sx={{ mt: 2 }}
+									sx={MUI_STYLES.spacing.mt2}
 								/>
 							)}
 						/>
@@ -170,7 +167,7 @@ export default function TableDialog({
 									value={field.value || ''}
 									error={!!errors.excerpt?.message}
 									helperText={errors.excerpt?.message}
-									sx={{ mt: 2 }}
+									sx={MUI_STYLES.spacing.mt2}
 								/>
 							)}
 						/>
@@ -248,7 +245,7 @@ export default function TableDialog({
 									value={field.value || ''}
 									error={!!errors.triggeringAlgorithm?.message}
 									helperText={errors.triggeringAlgorithm?.message}
-									sx={{ width: '552px' }}
+									sx={{ width: SIZES.textFieldLarge }}
 								/>
 							)}
 						/>
