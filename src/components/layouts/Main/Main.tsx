@@ -72,7 +72,6 @@ const MMMain = ({ isSidebarOpen }: Props) => {
 
 	const { mutate: createEdge } = useCreateEdge()
 
-	// Создание нового ребра
 	const onConnect = useCallback(
 		(params: Connection | Edge) => {
 			if (params.targetHandle && 'source' in params && 'target' in params) {
@@ -111,7 +110,6 @@ const MMMain = ({ isSidebarOpen }: Props) => {
 		[setEdges, createEdge]
 	)
 
-	// Удаление ребра при сбросе на пустое место
 	const onReconnectStart = useCallback(() => {
 		edgeReconnectSuccessful.current = false
 	}, [])
@@ -147,7 +145,6 @@ const MMMain = ({ isSidebarOpen }: Props) => {
 		[setEdges, deleteEdge]
 	)
 
-	// Drop нового узла
 	const onDrop = useCallback(
 		(event: React.DragEvent) => {
 			event.preventDefault()

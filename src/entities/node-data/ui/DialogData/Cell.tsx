@@ -32,7 +32,7 @@ export const Cell: FC<Props> = ({ row, nodeId, items }) => {
 	const { isOpen, handleDialogOpen, handleDialogClose } = useDialog()
 
 	const isAdmin = localStorage.getItem('isAdmin')
-	const [confirmOpen, setConfirmOpen] = useState(false) // новое состояние
+	const [confirmOpen, setConfirmOpen] = useState(false)
 
 	const { mutate: deleteNodeData } = useMutation({
 		mutationKey: ['updateNodeData'],

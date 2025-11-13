@@ -13,7 +13,7 @@ export const useDictionaries = (search?: string) => {
 	return useQuery({
 		queryKey: ['dictionaries', search],
 		queryFn: () => dictionaryApi.getAll(search),
-		staleTime: 5 * 60 * 1000 // 5 минут
+		staleTime: 5 * 60 * 1000
 	})
 }
 

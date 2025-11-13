@@ -29,7 +29,6 @@ export const UserInfoModal = ({
 
 	const [requestSent, setRequestSent] = useState(false)
 
-	// Загрузка текущего профиля при открытии формы
 	useEffect(() => {
 		const fetchUser = async () => {
 			try {
@@ -53,9 +52,7 @@ export const UserInfoModal = ({
 		}
 	}
 
-	// Запрос на повышение прав
 	const handleRequestRights = () => {
-		// Просто сообщение и блокирование кнопки, без реального запроса
 		toast.success(t('profile.requestRightsSuccess'))
 		setRequestSent(true)
 	}

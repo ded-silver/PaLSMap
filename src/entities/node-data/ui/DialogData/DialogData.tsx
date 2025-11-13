@@ -46,7 +46,6 @@ export const DialogData = ({ id, open, handleClose, dialogName }: Props) => {
 		const workbook = new ExcelJS.Workbook()
 		const worksheet = workbook.addWorksheet('Sheet1')
 
-		// Определяем колонки
 		worksheet.columns = [
 			{ header: t('excel.protectionName'), key: 'protectionName', width: 40 },
 			{ header: t('excel.excerpt'), key: 'excerpt', width: 40 },
@@ -63,7 +62,6 @@ export const DialogData = ({ id, open, handleClose, dialogName }: Props) => {
 			}
 		]
 
-		// Добавляем данные
 		jsonData.forEach(item => {
 			worksheet.addRow({
 				protectionName: item.protectionName,
@@ -74,14 +72,13 @@ export const DialogData = ({ id, open, handleClose, dialogName }: Props) => {
 			})
 		})
 
-		// Стилизация шапки (первая строка)
 		const headerRow = worksheet.getRow(1)
 		headerRow.eachCell(cell => {
-			cell.font = { bold: true, color: { argb: 'FFFFFFFF' } } // белый цвет текста
+			cell.font = { bold: true, color: { argb: 'FFFFFFFF' } }
 			cell.fill = {
 				type: 'pattern',
 				pattern: 'solid',
-				fgColor: { argb: 'FF4472C4' } // синий фон
+				fgColor: { argb: 'FF4472C4' }
 			}
 			cell.alignment = {
 				horizontal: 'center',
@@ -96,12 +93,11 @@ export const DialogData = ({ id, open, handleClose, dialogName }: Props) => {
 			}
 		})
 
-		// Для всех остальных ячеек - перенос строк и выравнивание по левому краю
 		worksheet.eachRow((row, rowNumber) => {
 			if (rowNumber !== 1) {
 				row.eachCell(cell => {
 					cell.alignment = {
-						horizontal: 'left', // по левому краю
+						horizontal: 'left',
 						vertical: 'top',
 						wrapText: true
 					}
@@ -115,7 +111,6 @@ export const DialogData = ({ id, open, handleClose, dialogName }: Props) => {
 			}
 		})
 
-		// Записываем в буфер и сохраняем
 		const buffer = await workbook.xlsx.writeBuffer()
 		const blob = new Blob([buffer], {
 			type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
@@ -126,8 +121,6 @@ export const DialogData = ({ id, open, handleClose, dialogName }: Props) => {
 
 	const columns: GridColDef[] = useMemo(
 		() => [
-			// Отображение с учетом дочерних объектов
-
 			{
 				field: 'protectionName',
 				headerName: t('fields.protectionName'),
@@ -266,14 +259,14 @@ export const DialogData = ({ id, open, handleClose, dialogName }: Props) => {
 				fullScreen
 				PaperProps={{
 					sx: {
-						backgroundColor: '#e6f0ff' // светло-серый фон
+						backgroundColor: '#e6f0ff'
 					}
 				}}
 			>
 				<DialogTitle
 					style={{ textAlign: 'center', width: '100%' }}
 					sx={{
-						backgroundColor: '#0073e6', // темно-синий
+						backgroundColor: '#0073e6',
 						color: '#fff'
 					}}
 				>

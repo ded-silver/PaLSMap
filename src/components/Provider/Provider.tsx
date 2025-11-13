@@ -128,7 +128,6 @@ export const Provider = ({ id, currentNodeType }: Props) => {
 		[onNodesChange, getNodes]
 	)
 
-	//Добавление эджей
 	const { mutate: createEdge } = useCreateEdge()
 
 	useEffect(() => {
@@ -176,7 +175,6 @@ export const Provider = ({ id, currentNodeType }: Props) => {
 		[setEdges, createEdge]
 	)
 
-	// Обработчик для перетаскивания узлов
 	const onDrop = useCallback(
 		(event: React.DragEvent) => {
 			event.preventDefault()
@@ -188,14 +186,13 @@ export const Provider = ({ id, currentNodeType }: Props) => {
 			})
 			if (!type) return
 
-			// Используем состояние для имени узла
 			const newNode: Node = {
 				id: nanoid(),
 				type,
 				position,
 				data: {
 					label: '',
-					tableName: [], // Имя узла из состояния
+					tableName: [],
 					tableData: [],
 					handlers: [
 						{
@@ -215,7 +212,6 @@ export const Provider = ({ id, currentNodeType }: Props) => {
 		[screenToFlowPosition, type]
 	)
 
-	// Обработчик события перетаскивания
 	const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
 		event.preventDefault()
 		event.dataTransfer.dropEffect = 'move'
@@ -259,7 +255,6 @@ export const Provider = ({ id, currentNodeType }: Props) => {
 					}}
 					nodesDraggable={isAdmin === 'true' ? true : false}
 					nodesConnectable={isAdmin === 'true' ? true : false}
-					// elementsSelectable={isAdmin === 'true' ? true : false}
 					edgesFocusable={isAdmin === 'true' ? true : false}
 					nodesFocusable={isAdmin === 'true' ? true : false}
 				>

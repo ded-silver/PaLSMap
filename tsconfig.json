@@ -34,7 +34,6 @@
 			"@/components/*": ["src/components/*"]
 		}
 	},
-	// Необходим для работы typescript в webpack.config.ts
 	"ts-node": {
 		"compilerOptions": {
 			"module": "CommonJS"

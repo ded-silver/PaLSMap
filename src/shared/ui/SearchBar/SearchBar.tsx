@@ -36,7 +36,6 @@ export const SearchBar: FC<Props> = ({ ...props }) => {
 				className='search-input'
 				ref={inputRef}
 				type='text'
-				// placeholder='Поиск уставок...'
 				onBlur={handleBlur}
 			/>
 			<button

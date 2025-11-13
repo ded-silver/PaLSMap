@@ -49,38 +49,6 @@ export const Sidebar = ({ isOpen, onClose }: Props) => {
 						<span>{t('sidebar.dictionary')}</span>
 					</li>
 				</NavLink>
-				{/* <NavLink
-					to='/item3'
-					className={({ isActive }: { isActive: boolean }) =>
-						clsx(styles.link, { [styles.active]: isActive })
-					}
-					// Поменять когда придется
-					onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
-						e.preventDefault()
-						alert('Тебе туда не надо')
-					}}
-				>
-					<li>
-						<StarIcon fontSize='small' />
-						<span>Элемент 3</span>
-					</li>
-				</NavLink>
-				<NavLink
-					to='/item4'
-					className={({ isActive }: { isActive: boolean }) =>
-						clsx(styles.link, { [styles.active]: isActive })
-					}
-					// Поменять когда придется
-					onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
-						e.preventDefault()
-						alert('Тебе туда не надо')
-					}}
-				>
-					<li>
-						<SettingsIcon fontSize='small' />
-						<span>Элемент 4</span>
-					</li>
-				</NavLink> */}
 			</ul>
 		</div>
 	)
