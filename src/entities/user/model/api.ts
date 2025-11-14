@@ -1,4 +1,10 @@
-import type { IAuthForm, IAuthResponse, IProfileResponse, IUser } from './types'
+import type {
+	IAuthForm,
+	IAuthResponse,
+	IChangePasswordDto,
+	IProfileResponse,
+	IUser
+} from './types'
 import { axiosClassic, axiosWithAuth } from '@/shared/api'
 import { removeFromStorage, saveTokenStorage } from '@/shared/lib/auth-token'
 
@@ -40,9 +46,13 @@ class UserService {
 	}
 
 	async updateProfile(profileData: Partial<IUser>) {
+		const filteredData = Object.fromEntries(
+			Object.entries(profileData).filter(([_, value]) => value !== undefined)
+		) as Partial<IUser>
+
 		const response = await axiosWithAuth.put<IProfileResponse>(
 			this.BASE_URL,
-			profileData
+			filteredData
 		)
 		return response.data
 	}
@@ -53,11 +63,19 @@ class UserService {
 		)
 		return response.data
 	}
+
+	async changePassword(dto: IChangePasswordDto) {
+		const response = await axiosWithAuth.post<{
+			success: boolean
+			message: string
+		}>(`${this.BASE_URL}/change-password`, dto)
+		return response.data
+	}
 }
 
 export const userService = new UserService()
 
 export const getUserInfo = async () => {
 	const response = await userService.getProfile()
-	return response.user
+	return response
 }

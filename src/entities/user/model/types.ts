@@ -6,9 +6,14 @@ export interface IAuthForm {
 }
 
 export interface IUser {
-	id: number
+	id: string
 	name?: string
 	email: string
+	position?: string
+	avatar?: string
+	isAdmin: boolean
+	createdAt?: string
+	updatedAt?: string
 }
 
 export interface IAuthResponse {
@@ -17,7 +22,18 @@ export interface IAuthResponse {
 }
 
 export interface IProfileResponse {
-	user: IUser
+	id: string
 	name?: string
+	email: string
+	position?: string
+	avatar?: string
 	isAdmin: boolean
+	createdAt: string
+	updatedAt: string
+}
+
+export interface IChangePasswordDto {
+	currentPassword: string
+	newPassword: string
+	confirmPassword: string
 }

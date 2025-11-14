@@ -9,7 +9,8 @@ export default {
 		confirm: 'Подтвердить',
 		logout: 'Выйти',
 		login: 'Войти',
-		register: 'Зарегистрироваться'
+		register: 'Зарегистрироваться',
+		copy: 'Копировать'
 	},
 	titles: {
 		main: 'ГЕОГРАФИЧЕСКАЯ СХЕМА ТЕХНОЛОГИЧЕСКИХ ОБЪЕКТОВ',
@@ -46,7 +47,8 @@ export default {
 		searchAbbreviations: 'Поиск аббревиатур...',
 		email: 'example@mail.com',
 		password: '••••••••',
-		fullName: 'Фамилия Имя Отчество'
+		fullName: 'Фамилия Имя Отчество',
+		position: 'Например: Инженер, Администратор'
 	},
 	errors: {
 		required: 'Поле обязательно для заполнения',
@@ -54,12 +56,46 @@ export default {
 		password: 'Пароль обязателен',
 		minLength: 'Минимум {{count}} символов',
 		loadError: 'Ошибка при загрузке данных. Пожалуйста, обновите страницу.',
-		profileUpdateError: 'Ошибка при обновлении профиля'
+		profileUpdateError: 'Ошибка при обновлении профиля',
+		passwordChangeError: 'Ошибка при смене пароля',
+		logoutError: 'Ошибка при выходе из системы'
+	},
+	validation: {
+		required: 'Поле обязательно для заполнения',
+		passwordMinLength: 'Пароль должен содержать минимум 6 символов',
+		passwordsDoNotMatch: 'Пароли не совпадают'
 	},
 	profile: {
-		requestRights: 'Запросить права',
-		requestRightsSuccess: 'Ваш запрос на повышение прав отправлен',
-		saveSuccess: 'Изменения сохранены'
+		title: 'Профиль',
+		saveSuccess: 'Профиль успешно обновлен',
+		passwordChangedSuccess: 'Пароль успешно изменен',
+		requestRights: 'Запросить права администратора',
+		requestRightsSuccess: 'Запрос отправлен администратору',
+		emailCopied: 'Email скопирован в буфер обмена',
+		position: 'Должность',
+		role: {
+			label: 'Права',
+			admin: 'Администратор',
+			user: 'Пользователь'
+		},
+		registered: 'Зарегистрирован',
+		updated: 'Обновлено',
+		avatar: {
+			url: 'URL аватара'
+		},
+		security: {
+			title: 'Настройки безопасности',
+			currentPassword: 'Текущий пароль',
+			newPassword: 'Новый пароль',
+			confirmPassword: 'Подтверждение пароля',
+			changePassword: 'Изменить пароль'
+		},
+		actions: {
+			title: 'Действия',
+			logout: 'Выйти из системы',
+			logoutConfirmTitle: 'Подтверждение выхода',
+			logoutConfirmMessage: 'Вы уверены, что хотите выйти из системы?'
+		}
 	},
 	compass: {
 		north: 'С',

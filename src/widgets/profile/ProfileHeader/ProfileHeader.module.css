@@ -1,0 +1,66 @@
+.container {
+	background-color: #ffffff;
+	border-radius: 12px;
+	padding: 24px;
+	margin-bottom: 24px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.avatarSection {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 24px;
+}
+
+.avatar {
+	width: 120px;
+	height: 120px;
+	font-size: 60px;
+}
+
+.form {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.formRow {
+	width: 100%;
+}
+
+.roleSection {
+	display: flex;
+	justify-content: center;
+	margin: 16px 0;
+}
+
+.roleChip {
+	font-size: 0.875rem;
+	padding: 8px 16px;
+}
+
+.datesSection {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	margin: 16px 0;
+	padding: 16px;
+	background-color: #f7f9fb;
+	border-radius: 8px;
+}
+
+.dateLabel {
+	color: #64748b;
+	font-size: 0.875rem;
+}
+
+.dateValue {
+	color: #1e293b;
+	font-weight: 500;
+}
+
+.actions {
+	display: flex;
+	justify-content: flex-end;
+	margin-top: 16px;
+}

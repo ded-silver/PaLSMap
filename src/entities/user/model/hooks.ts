@@ -1,11 +1,13 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
+import { toast } from 'react-toastify'
 
 import { userService } from './api'
-import type { IProfileResponse } from './types'
+import type { IChangePasswordDto, IProfileResponse, IUser } from './types'
 import { getAccessToken } from '@/shared/lib/auth-token'
 
-const USER_PROFILE_QUERY_KEY = ['user', 'profile'] as const
+export const USER_PROFILE_QUERY_KEY = ['user', 'profile'] as const
 
 export const useUserProfile = () => {
 	const accessToken = useMemo(() => getAccessToken(), [])
@@ -28,4 +30,40 @@ export const useIsAdmin = (): boolean => {
 	}
 
 	return data.isAdmin ?? false
+}
+
+export const useUpdateProfile = () => {
+	const queryClient = useQueryClient()
+	const { t } = useTranslation('common')
+
+	return useMutation({
+		mutationFn: (data: Partial<IUser>) => userService.updateProfile(data),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: USER_PROFILE_QUERY_KEY })
+			toast.success(t('profile.saveSuccess'))
+		},
+		onError: (error: any) => {
+			const message =
+				error?.response?.data?.message || t('errors.profileUpdateError')
+			toast.error(message)
+		}
+	})
+}
+
+export const useChangePassword = () => {
+	const queryClient = useQueryClient()
+	const { t } = useTranslation('common')
+
+	return useMutation({
+		mutationFn: (dto: IChangePasswordDto) => userService.changePassword(dto),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: USER_PROFILE_QUERY_KEY })
+			toast.success(t('profile.passwordChangedSuccess'))
+		},
+		onError: (error: any) => {
+			const message =
+				error?.response?.data?.message || t('errors.passwordChangeError')
+			toast.error(message)
+		}
+	})
 }

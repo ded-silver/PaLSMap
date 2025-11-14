@@ -8,6 +8,7 @@ import Main from '@/components/layouts/Main/Main'
 
 import { Auth } from '@/pages/auth'
 import { DictionaryPage } from '@/pages/dictionary'
+import { ProfilePage } from '@/pages/profile'
 
 export const Router = () => {
 	const [isSidebarOpen, setSidebarOpen] = useState<boolean>(false)
@@ -53,6 +54,18 @@ export const Router = () => {
 							closeSidebar={closeSidebar}
 						>
 							<DictionaryPage />
+						</AppLayout>
+					}
+				/>
+				<Route
+					path='/profile'
+					element={
+						<AppLayout
+							isSidebarOpen={isSidebarOpen}
+							toggleSidebar={toggleSidebar}
+							closeSidebar={closeSidebar}
+						>
+							<ProfilePage />
 						</AppLayout>
 					}
 				/>
