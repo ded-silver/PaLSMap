@@ -19,7 +19,8 @@ export default {
 	},
 	sidebar: {
 		home: 'Главная',
-		dictionary: 'Справочная информация'
+		dictionary: 'Справочная информация',
+		users: 'Управление пользователями'
 	},
 	messages: {
 		loading: 'Загрузка...',

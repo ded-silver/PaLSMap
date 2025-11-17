@@ -1,14 +1,47 @@
-import { useEffect, useState } from 'react'
-import { Route, Routes, useLocation } from 'react-router-dom'
+import { CircularProgress } from '@mui/material'
+import { type ReactNode, useEffect, useState } from 'react'
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 import { AppLayout } from '@/components/layouts/AppLayout'
 import Main from '@/components/layouts/Main/Main'
 
+import { useIsAdminWithLoading } from '@/entities/user'
+import { AdminUsersPage } from '@/pages/admin-users'
 import { Auth } from '@/pages/auth'
 import { DictionaryPage } from '@/pages/dictionary'
 import { ProfilePage } from '@/pages/profile'
+
+const AdminRoute = ({ children }: { children: ReactNode }) => {
+	const { isAdmin, isLoading } = useIsAdminWithLoading()
+
+	if (isLoading) {
+		return (
+			<div
+				style={{
+					display: 'flex',
+					justifyContent: 'center',
+					alignItems: 'center',
+					minHeight: '50vh'
+				}}
+			>
+				<CircularProgress />
+			</div>
+		)
+	}
+
+	if (!isAdmin) {
+		return (
+			<Navigate
+				to='/'
+				replace
+			/>
+		)
+	}
+
+	return <>{children}</>
+}
 
 export const Router = () => {
 	const [isSidebarOpen, setSidebarOpen] = useState<boolean>(false)
@@ -66,6 +99,20 @@ export const Router = () => {
 							closeSidebar={closeSidebar}
 						>
 							<ProfilePage />
+						</AppLayout>
+					}
+				/>
+				<Route
+					path='/admin/users'
+					element={
+						<AppLayout
+							isSidebarOpen={isSidebarOpen}
+							toggleSidebar={toggleSidebar}
+							closeSidebar={closeSidebar}
+						>
+							<AdminRoute>
+								<AdminUsersPage />
+							</AdminRoute>
 						</AppLayout>
 					}
 				/>

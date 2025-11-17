@@ -3,7 +3,9 @@ import type {
 	IAuthResponse,
 	IChangePasswordDto,
 	IProfileResponse,
-	IUser
+	IUpdateUserByAdminDto,
+	IUser,
+	IUserForAdmin
 } from './types'
 import { axiosClassic, axiosWithAuth } from '@/shared/api'
 import { removeFromStorage, saveTokenStorage } from '@/shared/lib/auth-token'
@@ -39,6 +41,7 @@ export const authService = {
 
 class UserService {
 	private BASE_URL = '/user/profile'
+	private ADMIN_BASE_URL = '/user/admin/users'
 
 	async getProfile() {
 		const response = await axiosWithAuth.get<IProfileResponse>(this.BASE_URL)
@@ -69,6 +72,21 @@ class UserService {
 			success: boolean
 			message: string
 		}>(`${this.BASE_URL}/change-password`, dto)
+		return response.data
+	}
+
+	async getAllUsers() {
+		const response = await axiosWithAuth.get<IUserForAdmin[]>(
+			this.ADMIN_BASE_URL
+		)
+		return response.data
+	}
+
+	async updateUserByAdmin(id: string, dto: IUpdateUserByAdminDto) {
+		const response = await axiosWithAuth.put<IUserForAdmin>(
+			`${this.ADMIN_BASE_URL}/${id}`,
+			dto
+		)
 		return response.data
 	}
 }

@@ -28,6 +28,7 @@ export interface IProfileResponse {
 	position?: string
 	avatar?: string
 	isAdmin: boolean
+	isSuperAdmin?: boolean
 	createdAt: string
 	updatedAt: string
 }
@@ -36,4 +37,21 @@ export interface IChangePasswordDto {
 	currentPassword: string
 	newPassword: string
 	confirmPassword: string
+}
+
+export interface IUserForAdmin {
+	id: string
+	email: string
+	name: string | null
+	position: string | null
+	avatar: string | null
+	isAdmin: boolean
+	isSuperAdmin: boolean
+	createdAt: string
+	updatedAt: string
+}
+
+export interface IUpdateUserByAdminDto {
+	position?: string
+	isAdmin?: boolean
 }

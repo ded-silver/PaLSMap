@@ -18,7 +18,8 @@ export default {
 	},
 	sidebar: {
 		home: 'Home',
-		dictionary: 'Reference Information'
+		dictionary: 'Reference Information',
+		users: 'User Management'
 	},
 	messages: {
 		loading: 'Loading...',

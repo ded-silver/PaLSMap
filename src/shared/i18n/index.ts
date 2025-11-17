@@ -2,11 +2,13 @@ import i18n from 'i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
 import { initReactI18next } from 'react-i18next'
 
+import adminEn from './locales/en/admin'
 import authEn from './locales/en/auth'
 import commonEn from './locales/en/common'
 import dictionaryEn from './locales/en/dictionary'
 import nodesEn from './locales/en/nodes'
 import validationEn from './locales/en/validation'
+import adminRu from './locales/ru/admin'
 import authRu from './locales/ru/auth'
 import commonRu from './locales/ru/common'
 import dictionaryRu from './locales/ru/dictionary'
@@ -19,14 +21,16 @@ const resources = {
 		auth: authRu,
 		dictionary: dictionaryRu,
 		nodes: nodesRu,
-		validation: validationRu
+		validation: validationRu,
+		admin: adminRu
 	},
 	en: {
 		common: commonEn,
 		auth: authEn,
 		dictionary: dictionaryEn,
 		nodes: nodesEn,
-		validation: validationEn
+		validation: validationEn,
+		admin: adminEn
 	}
 }
 
