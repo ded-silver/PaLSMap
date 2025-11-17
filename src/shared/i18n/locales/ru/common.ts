@@ -69,6 +69,7 @@ export default {
 	},
 	profile: {
 		title: 'Профиль',
+		edit: 'Редактировать профиль',
 		saveSuccess: 'Профиль успешно обновлен',
 		passwordChangedSuccess: 'Пароль успешно изменен',
 		requestRights: 'Запросить права администратора',
@@ -78,13 +79,19 @@ export default {
 		role: {
 			label: 'Права',
 			admin: 'Администратор',
-			user: 'Пользователь'
+			user: 'Пользователь',
+			superAdmin: 'Суперадминистратор'
 		},
 		registered: 'Зарегистрирован',
 		updated: 'Обновлено',
+		dates: {
+			created: 'Дата регистрации',
+			updated: 'Дата обновления'
+		},
 		avatar: {
 			url: 'URL аватара',
 			urlHint: 'Или вставьте ссылку на изображение',
+			change: 'Изменить аватар',
 			uploadFromDevice: 'Загрузить с устройства',
 			uploadSuccess: 'Аватар успешно загружен',
 			uploadError: 'Ошибка при загрузке аватара',

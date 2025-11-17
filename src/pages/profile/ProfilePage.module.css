@@ -1,9 +1,17 @@
 .container {
-	padding: 2rem 1rem;
+	padding: 2rem 0;
 	min-height: 100vh;
 	background-color: #e6f0ff;
+	width: 100%;
+}
+
+.contentWrapper {
 	max-width: 900px;
 	margin: 0 auto;
+	padding: 0 1rem;
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
 }
 
 .title {

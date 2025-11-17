@@ -1,0 +1,58 @@
+.card {
+	background-color: #ffffff;
+	border-radius: 20px;
+	padding: 40px;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+	margin-bottom: 0;
+}
+
+.avatarSection {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 32px;
+	padding-bottom: 32px;
+	border-bottom: 1px solid #e2e8f0;
+}
+
+.avatarWrapper {
+	position: relative;
+	cursor: pointer;
+}
+
+.avatar {
+	width: 250px !important;
+	height: 250px !important;
+	font-size: 125px !important;
+	border: 4px solid #e2e8f0;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.avatar img {
+	width: 100% !important;
+	height: 100% !important;
+	object-fit: cover;
+}
+
+.infoSection {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	margin-bottom: 24px;
+}
+
+.actionsSection {
+	display: flex;
+	gap: 16px;
+	justify-content: center;
+	padding-top: 24px;
+	border-top: 1px solid #e2e8f0;
+}
+
+.actionsSection button {
+	padding: 12px 32px;
+	font-weight: 600;
+	text-transform: none;
+	border-radius: 12px;
+}

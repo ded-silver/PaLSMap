@@ -59,17 +59,48 @@ export default {
 		profileUpdateError: 'Error updating profile'
 	},
 	profile: {
+		title: 'Profile',
+		edit: 'Edit Profile',
+		saveSuccess: 'Changes saved',
+		passwordChangedSuccess: 'Password changed successfully',
 		requestRights: 'Request rights',
 		requestRightsSuccess: 'Your request for rights upgrade has been sent',
-		saveSuccess: 'Changes saved',
+		emailCopied: 'Email copied to clipboard',
+		position: 'Position',
+		role: {
+			label: 'Role',
+			admin: 'Administrator',
+			user: 'User',
+			superAdmin: 'Super Administrator'
+		},
+		registered: 'Registered',
+		updated: 'Updated',
+		dates: {
+			created: 'Registration Date',
+			updated: 'Update Date'
+		},
 		avatar: {
 			url: 'Avatar URL',
 			urlHint: 'Or paste an image link',
+			change: 'Change Avatar',
 			uploadFromDevice: 'Upload from device',
 			uploadSuccess: 'Avatar uploaded successfully',
 			uploadError: 'Error uploading avatar',
 			invalidFileType: 'Invalid file type. Allowed: JPEG, PNG, GIF, WebP',
 			fileTooLarge: 'File is too large. Maximum size: 5MB'
+		},
+		security: {
+			title: 'Security Settings',
+			currentPassword: 'Current Password',
+			newPassword: 'New Password',
+			confirmPassword: 'Confirm Password',
+			changePassword: 'Change Password'
+		},
+		actions: {
+			title: 'Actions',
+			logout: 'Logout',
+			logoutConfirmTitle: 'Confirm Logout',
+			logoutConfirmMessage: 'Are you sure you want to logout?'
 		}
 	},
 	compass: {
