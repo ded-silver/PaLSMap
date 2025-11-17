@@ -5,6 +5,14 @@
 }
 
 .uploadSection {
+	margin-top: 16px;
 	margin-bottom: 8px;
+}
+
+.actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 12px;
+	margin-top: 16px;
 }
 

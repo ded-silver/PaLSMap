@@ -87,6 +87,14 @@ export const MUI_STYLES = {
 		alignItems: 'center',
 		padding: '16px 24px'
 	},
+	dialogTitleError: {
+		backgroundColor: '#d32f2f',
+		color: COLORS.white,
+		display: 'flex',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		padding: '16px 24px'
+	},
 	dialogTitleCentered: {
 		backgroundColor: COLORS.primary,
 		color: COLORS.white,

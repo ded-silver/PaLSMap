@@ -1,9 +1,10 @@
+import CloseIcon from '@mui/icons-material/Close'
 import {
 	Button,
 	Dialog,
-	DialogActions,
 	DialogContent,
 	DialogTitle,
+	IconButton,
 	TextField,
 	Typography
 } from '@mui/material'
@@ -66,13 +67,20 @@ export const ChangePasswordModal = ({
 				sx: MUI_STYLES.dialogPaper
 			}}
 		>
-			<DialogTitle>
-				<Typography sx={MUI_STYLES.typography.titleSmall}>
+			<DialogTitle sx={MUI_STYLES.dialogTitlePrimary}>
+				<Typography sx={MUI_STYLES.typography.titleMedium}>
 					{t('profile.security.changePassword')}
 				</Typography>
+				<IconButton
+					aria-label='close'
+					onClick={handleClose}
+					sx={MUI_STYLES.iconButtonClosePrimary}
+				>
+					<CloseIcon />
+				</IconButton>
 			</DialogTitle>
 
-			<DialogContent>
+			<DialogContent sx={MUI_STYLES.dialogContent}>
 				<form
 					onSubmit={handleSubmit(handleFormSubmit)}
 					className={styles.form}
@@ -145,23 +153,29 @@ export const ChangePasswordModal = ({
 							/>
 						)}
 					/>
+
+					<div className={styles.actions}>
+						<Button
+							type='button'
+							onClick={handleClose}
+							variant='outlined'
+							disabled={isChanging}
+						>
+							{t('buttons.cancel')}
+						</Button>
+						<Button
+							type='submit'
+							variant='contained'
+							disabled={isChanging}
+							color='primary'
+						>
+							{isChanging
+								? t('messages.saving')
+								: t('profile.security.changePassword')}
+						</Button>
+					</div>
 				</form>
 			</DialogContent>
-
-			<DialogActions sx={MUI_STYLES.dialogActions}>
-				<Button onClick={handleClose} variant='outlined'>
-					{t('buttons.cancel')}
-				</Button>
-				<Button
-					onClick={handleSubmit(handleFormSubmit)}
-					variant='contained'
-					disabled={isChanging}
-				>
-					{isChanging
-						? t('messages.saving')
-						: t('profile.security.changePassword')}
-				</Button>
-			</DialogActions>
 		</Dialog>
 	)
 }

@@ -48,7 +48,7 @@ export const DictionaryModal = ({
 		<Dialog
 			open={isOpen}
 			onClose={onClose}
-			maxWidth='md'
+			maxWidth='sm'
 			fullWidth
 			PaperProps={{
 				sx: MUI_STYLES.dialogPaper

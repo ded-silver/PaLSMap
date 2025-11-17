@@ -1,10 +1,11 @@
+import CloseIcon from '@mui/icons-material/Close'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import {
 	Button,
 	Dialog,
-	DialogActions,
 	DialogContent,
 	DialogTitle,
+	IconButton,
 	TextField,
 	Typography
 } from '@mui/material'
@@ -63,6 +64,7 @@ export const EditProfileModal = ({
 			updateData.name = data.name.trim() || undefined
 		}
 		if (
+			profile.isAdmin &&
 			data.position !== undefined &&
 			data.position !== (profile.position || '')
 		) {
@@ -129,13 +131,20 @@ export const EditProfileModal = ({
 				sx: MUI_STYLES.dialogPaper
 			}}
 		>
-			<DialogTitle>
-				<Typography sx={MUI_STYLES.typography.titleSmall}>
+			<DialogTitle sx={MUI_STYLES.dialogTitlePrimary}>
+				<Typography sx={MUI_STYLES.typography.titleMedium}>
 					{t('profile.edit')}
 				</Typography>
+				<IconButton
+					aria-label='close'
+					onClick={handleClose}
+					sx={MUI_STYLES.iconButtonClosePrimary}
+				>
+					<CloseIcon />
+				</IconButton>
 			</DialogTitle>
 
-			<DialogContent>
+			<DialogContent sx={MUI_STYLES.dialogContent}>
 				<form
 					onSubmit={handleSubmit(handleFormSubmit)}
 					className={styles.form}
@@ -203,28 +212,33 @@ export const EditProfileModal = ({
 								label={t('profile.position')}
 								variant='outlined'
 								fullWidth
-								disabled={isUpdating}
+								disabled={isUpdating || !profile.isAdmin}
 								margin='normal'
 								placeholder={t('placeholders.position')}
 							/>
 						)}
 					/>
+
+					<div className={styles.actions}>
+						<Button
+							type='button'
+							onClick={handleClose}
+							variant='outlined'
+							disabled={isUpdating || isUploading}
+						>
+							{t('buttons.cancel')}
+						</Button>
+						<Button
+							type='submit'
+							variant='contained'
+							disabled={isUpdating || isUploading}
+							color='primary'
+						>
+							{isUpdating ? t('messages.saving') : t('buttons.save')}
+						</Button>
+					</div>
 				</form>
 			</DialogContent>
-
-			<DialogActions sx={MUI_STYLES.dialogActions}>
-				<Button onClick={handleClose} variant='outlined'>
-					{t('buttons.cancel')}
-				</Button>
-				<Button
-					onClick={handleSubmit(handleFormSubmit)}
-					variant='contained'
-					disabled={isUpdating || isUploading}
-				>
-					{isUpdating ? t('messages.saving') : t('buttons.save')}
-				</Button>
-			</DialogActions>
 		</Dialog>
 	)
 }
-

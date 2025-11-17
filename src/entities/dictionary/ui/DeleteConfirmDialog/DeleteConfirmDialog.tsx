@@ -1,3 +1,4 @@
+import CloseIcon from '@mui/icons-material/Close'
 import {
 	Button,
 	Dialog,
@@ -5,6 +6,7 @@ import {
 	DialogContent,
 	DialogContentText,
 	DialogTitle,
+	IconButton,
 	Typography
 } from '@mui/material'
 import { CircularProgress } from '@mui/material'
@@ -42,14 +44,21 @@ export const DeleteConfirmDialog = ({
 				sx: MUI_STYLES.dialogPaper
 			}}
 		>
-			<DialogTitle>
-				<Typography sx={MUI_STYLES.typography.titleSmall}>
+			<DialogTitle sx={MUI_STYLES.dialogTitleError}>
+				<Typography sx={MUI_STYLES.typography.titleMedium}>
 					{t('messages.deleteTitle', { ns: 'dictionary' })}
 				</Typography>
+				<IconButton
+					aria-label='close'
+					onClick={onClose}
+					sx={MUI_STYLES.iconButtonClosePrimary}
+				>
+					<CloseIcon />
+				</IconButton>
 			</DialogTitle>
 
-			<DialogContent>
-				<DialogContentText>
+			<DialogContent sx={MUI_STYLES.dialogContent}>
+				<DialogContentText sx={{ marginTop: '16px' }}>
 					{t('messages.deleteConfirm', { ns: 'dictionary' })}
 				</DialogContentText>
 				<div className={styles.itemInfo}>
