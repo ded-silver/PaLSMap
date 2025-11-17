@@ -26,6 +26,7 @@ export default {
 		loading: 'Загрузка...',
 		saving: 'Сохранение...',
 		deleting: 'Удаление...',
+		uploading: 'Загрузка...',
 		noResults: 'Ничего не найдено',
 		error: 'Ошибка',
 		success: 'Успешно'
@@ -82,7 +83,14 @@ export default {
 		registered: 'Зарегистрирован',
 		updated: 'Обновлено',
 		avatar: {
-			url: 'URL аватара'
+			url: 'URL аватара',
+			urlHint: 'Или вставьте ссылку на изображение',
+			uploadFromDevice: 'Загрузить с устройства',
+			uploadSuccess: 'Аватар успешно загружен',
+			uploadError: 'Ошибка при загрузке аватара',
+			invalidFileType:
+				'Недопустимый тип файла. Разрешены: JPEG, PNG, GIF, WebP',
+			fileTooLarge: 'Файл слишком большой. Максимальный размер: 5MB'
 		},
 		security: {
 			title: 'Настройки безопасности',

@@ -75,6 +75,17 @@ class UserService {
 		return response.data
 	}
 
+	async uploadAvatar(file: File) {
+		const formData = new FormData()
+		formData.append('avatar', file)
+
+		const response = await axiosWithAuth.post<IProfileResponse>(
+			`${this.BASE_URL}/avatar/upload`,
+			formData
+		)
+		return response.data
+	}
+
 	async getAllUsers() {
 		const response = await axiosWithAuth.get<IUserForAdmin[]>(
 			this.ADMIN_BASE_URL

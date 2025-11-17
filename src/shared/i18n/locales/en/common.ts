@@ -25,6 +25,7 @@ export default {
 		loading: 'Loading...',
 		saving: 'Saving...',
 		deleting: 'Deleting...',
+		uploading: 'Uploading...',
 		noResults: 'No results found',
 		error: 'Error',
 		success: 'Success'
@@ -60,7 +61,16 @@ export default {
 	profile: {
 		requestRights: 'Request rights',
 		requestRightsSuccess: 'Your request for rights upgrade has been sent',
-		saveSuccess: 'Changes saved'
+		saveSuccess: 'Changes saved',
+		avatar: {
+			url: 'Avatar URL',
+			urlHint: 'Or paste an image link',
+			uploadFromDevice: 'Upload from device',
+			uploadSuccess: 'Avatar uploaded successfully',
+			uploadError: 'Error uploading avatar',
+			invalidFileType: 'Invalid file type. Allowed: JPEG, PNG, GIF, WebP',
+			fileTooLarge: 'File is too large. Maximum size: 5MB'
+		}
 	},
 	compass: {
 		north: 'N',

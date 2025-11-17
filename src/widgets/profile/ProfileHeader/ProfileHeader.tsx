@@ -1,4 +1,5 @@
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
+import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import ShieldIcon from '@mui/icons-material/Shield'
 import {
@@ -10,12 +11,15 @@ import {
 	TextField,
 	Typography
 } from '@mui/material'
+import { useRef } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 
 import styles from './ProfileHeader.module.css'
+import { useUploadAvatar } from '@/entities/user'
 import type { IProfileResponse, IUser } from '@/entities/user'
+import { normalizeAvatarUrl } from '@/shared/lib'
 
 interface ProfileHeaderProps {
 	profile: IProfileResponse
@@ -36,6 +40,9 @@ export const ProfileHeader = ({
 	isUpdating
 }: ProfileHeaderProps) => {
 	const { t } = useTranslation('common')
+	const fileInputRef = useRef<HTMLInputElement>(null)
+	const { mutate: uploadAvatar, isPending: isUploading } = useUploadAvatar()
+
 	const {
 		control,
 		handleSubmit,
@@ -76,6 +83,38 @@ export const ProfileHeader = ({
 		toast.success(t('profile.emailCopied'))
 	}
 
+	const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const file = event.target.files?.[0]
+		if (!file) return
+
+		if (!file.type.startsWith('image/')) {
+			toast.error(t('profile.avatar.invalidFileType'))
+			return
+		}
+
+		if (file.size > 5 * 1024 * 1024) {
+			toast.error(t('profile.avatar.fileTooLarge'))
+			return
+		}
+
+		uploadAvatar(file, {
+			onSuccess: () => {
+				if (fileInputRef.current) {
+					fileInputRef.current.value = ''
+				}
+			},
+			onError: () => {
+				if (fileInputRef.current) {
+					fileInputRef.current.value = ''
+				}
+			}
+		})
+	}
+
+	const handleUploadClick = () => {
+		fileInputRef.current?.click()
+	}
+
 	const formatDate = (dateString: string) => {
 		const date = new Date(dateString)
 		return date.toLocaleDateString('ru-RU', {
@@ -87,16 +126,40 @@ export const ProfileHeader = ({
 		})
 	}
 
+	const avatarUrl = normalizeAvatarUrl(profile.avatar, profile.updatedAt)
+
 	return (
 		<div className={styles.container}>
 			<div className={styles.avatarSection}>
 				<Avatar
-					src={profile.avatar}
+					src={avatarUrl}
 					alt={profile.name || profile.email}
 					className={styles.avatar}
+					key={`${profile.avatar}-${profile.updatedAt}`}
 				>
 					{!profile.avatar && <AccountCircleIcon />}
 				</Avatar>
+				<div className={styles.avatarControls}>
+					<input
+						ref={fileInputRef}
+						type='file'
+						accept='image/jpeg,image/png,image/gif,image/webp'
+						style={{ display: 'none' }}
+						onChange={handleFileSelect}
+						disabled={isUploading || isUpdating}
+					/>
+					<Button
+						variant='outlined'
+						startIcon={<CloudUploadIcon />}
+						onClick={handleUploadClick}
+						disabled={isUploading || isUpdating}
+						size='small'
+					>
+						{isUploading
+							? t('messages.uploading')
+							: t('profile.avatar.uploadFromDevice')}
+					</Button>
+				</div>
 			</div>
 
 			<form
@@ -116,6 +179,7 @@ export const ProfileHeader = ({
 								disabled={isUpdating}
 								margin='normal'
 								placeholder='https://example.com/avatar.jpg'
+								helperText={t('profile.avatar.urlHint')}
 							/>
 						)}
 					/>

@@ -100,6 +100,24 @@ export const useChangePassword = () => {
 	})
 }
 
+export const useUploadAvatar = () => {
+	const queryClient = useQueryClient()
+	const { t } = useTranslation('common')
+
+	return useMutation({
+		mutationFn: (file: File) => userService.uploadAvatar(file),
+		onSuccess: data => {
+			queryClient.setQueryData<IProfileResponse>(USER_PROFILE_QUERY_KEY, data)
+			toast.success(t('profile.avatar.uploadSuccess'))
+		},
+		onError: (error: any) => {
+			const message =
+				error?.response?.data?.message || t('profile.avatar.uploadError')
+			toast.error(message)
+		}
+	})
+}
+
 export const useAllUsers = () => {
 	return useQuery({
 		queryKey: ['users', 'all'],
