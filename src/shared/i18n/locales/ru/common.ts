@@ -118,5 +118,9 @@ export default {
 		south: 'Ю',
 		west: 'З',
 		east: 'В'
+	},
+	dndSidebar: {
+		collapse: 'Свернуть',
+		expand: 'Развернуть'
 	}
 } as const

@@ -108,5 +108,9 @@ export default {
 		south: 'S',
 		west: 'W',
 		east: 'E'
+	},
+	dndSidebar: {
+		collapse: 'Collapse',
+		expand: 'Expand'
 	}
 } as const

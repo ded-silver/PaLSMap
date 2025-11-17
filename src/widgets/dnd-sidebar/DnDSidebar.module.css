@@ -1,3 +1,17 @@
+.wrapper {
+	position: fixed;
+	bottom: 20px;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 10;
+	transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+	will-change: transform;
+}
+
+.wrapper.collapsed {
+	transform: translateX(-50%) translateY(calc(100% + 20px));
+}
+
 .sidebar {
 	display: flex;
 	flex-direction: row;
@@ -6,27 +20,50 @@
 	gap: 16px;
 	padding: 12px 24px;
 
-	position: absolute;
-	bottom: 20px;
-	left: 50%;
-	transform: translateX(-50%);
-
 	background: linear-gradient(135deg, #e6f0ff, #ffffff);
 	border: 1px solid #bfd6f6;
 	border-radius: 12px;
 	box-shadow: 0 4px 12px rgba(147, 197, 253, 0.3);
 	backdrop-filter: blur(3px);
 
-	transition:
-		box-shadow 0.3s ease,
-		transform 0.3s ease;
-	z-index: 10;
+	transition: box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+	position: relative;
 }
 
-.sidebar > div {
+.content {
 	display: flex;
 	align-items: center;
 	gap: 12px;
+}
+
+.toggleButton {
+	position: absolute;
+	top: -24px;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 40px;
+	height: 24px;
+	background: linear-gradient(135deg, #e6f0ff, #ffffff);
+	border: 1px solid #bfd6f6;
+	border-bottom: none;
+	border-radius: 8px 8px 0 0;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.3s ease;
+	z-index: 11;
+	color: #0073e6;
+	padding: 0;
+}
+
+.toggleButton:hover {
+	background: linear-gradient(135deg, #dbeafe, #f0f9ff);
+	transform: translateX(-50%) translateY(-2px);
+}
+
+.sidebar.collapsed .toggleButton {
+	top: -24px;
 }
 
 .dndnode {
@@ -35,12 +72,28 @@
 	padding: 6px 12px;
 	cursor: grab;
 	background: white;
-	transition: background 0.2s;
+	transition:
+		opacity 0.2s,
+		transform 0.2s,
+		border 0.2s,
+		background 0.2s,
+		box-shadow 0.2s;
 	text-align: center;
 }
 
 .dndnode:hover {
 	background: #e6e6e6;
+}
+
+.dndnode:active {
+	border: none;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.dndnode.dragging {
+	border: none;
+	opacity: 0.5;
+	transform: scale(0.95);
 }
 
 input {
