@@ -52,13 +52,6 @@ export const ProfileActions = ({ isAdmin }: ProfileActionsProps) => {
 
 	return (
 		<div className={styles.container}>
-			<Typography
-				variant='h6'
-				className={styles.title}
-			>
-				{t('profile.actions.title')}
-			</Typography>
-
 			<div className={styles.actions}>
 				{!isAdmin && (
 					<Button

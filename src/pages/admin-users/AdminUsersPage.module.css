@@ -23,6 +23,7 @@
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 	gap: 16px;
+	margin-top: 24px;
 	margin-bottom: 24px;
 }
 
@@ -139,25 +140,6 @@
 	padding: 16px;
 	vertical-align: middle;
 	border-bottom: none;
-}
-
-.editedRow {
-	background-color: #fef3c7 !important;
-	position: relative;
-}
-
-.editedRow::before {
-	content: '';
-	position: absolute;
-	left: 0;
-	top: 0;
-	bottom: 0;
-	width: 4px;
-	background-color: #f59e0b;
-}
-
-.editedRow:hover {
-	background-color: #fde68a !important;
 }
 
 .userCell {

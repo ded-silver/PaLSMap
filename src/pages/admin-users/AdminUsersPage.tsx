@@ -19,12 +19,13 @@ import {
 	TextField,
 	Typography
 } from '@mui/material'
-import { useMemo, useState } from 'react'
+import { memo, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import styles from './AdminUsersPage.module.css'
 import { useAllUsers, useIsAdmin, useUpdateUserByAdmin } from '@/entities/user'
 import type { IUpdateUserByAdminDto, IUserForAdmin } from '@/entities/user'
+import { normalizeAvatarUrl } from '@/shared/lib'
 import { MUI_STYLES } from '@/shared/styles/constants'
 import { SearchBar } from '@/shared/ui'
 
@@ -111,10 +112,16 @@ export const AdminUsersPage = () => {
 		})
 	}
 
-	const hasChanges = (userId: string) => {
-		const changes = editedUsers[userId]
-		return changes && Object.keys(changes).length > 0
-	}
+	const hasChanges = useMemo(() => {
+		const changesMap = new Set<string>()
+		Object.keys(editedUsers).forEach(userId => {
+			const changes = editedUsers[userId]
+			if (changes && Object.keys(changes).length > 0) {
+				changesMap.add(userId)
+			}
+		})
+		return (userId: string) => changesMap.has(userId)
+	}, [editedUsers])
 
 	if (!isAdmin) {
 		return (
@@ -292,121 +299,115 @@ export const AdminUsersPage = () => {
 								</TableRow>
 							</TableHead>
 							<TableBody>
-								{filteredUsers.map(user => (
-									<TableRow
-										key={user.id}
-										className={
-											hasChanges(user.id) ? styles.editedRow : undefined
-										}
-									>
-										<TableCell>
-											<div className={styles.userCell}>
-												<Avatar
-													src={user.avatar || undefined}
-													className={styles.avatar}
-												>
-													{!user.avatar && <AccountCircleIcon />}
-												</Avatar>
-												<div className={styles.userInfo}>
-													<Typography
-														variant='body2'
-														className={styles.userName}
+								{filteredUsers.map(user => {
+									const userHasChanges = hasChanges(user.id)
+									const editedPosition =
+										editedUsers[user.id]?.position !== undefined
+											? editedUsers[user.id].position || ''
+											: user.position || ''
+									const editedIsAdmin =
+										editedUsers[user.id]?.isAdmin !== undefined
+											? editedUsers[user.id].isAdmin
+											: user.isAdmin
+
+									return (
+										<TableRow key={user.id}>
+											<TableCell>
+												<div className={styles.userCell}>
+													<Avatar
+														src={normalizeAvatarUrl(
+															user.avatar,
+															user.updatedAt
+														)}
+														className={styles.avatar}
 													>
-														{user.name || user.email}
-													</Typography>
-													{user.isSuperAdmin && (
-														<Chip
-															icon={<ShieldIcon />}
-															label={t('superAdmin', { ns: 'admin' })}
-															size='small'
-															color='error'
-															className={styles.superAdminChip}
-														/>
-													)}
+														{!user.avatar && <AccountCircleIcon />}
+													</Avatar>
+													<div className={styles.userInfo}>
+														<Typography
+															variant='body2'
+															className={styles.userName}
+														>
+															{user.name || user.email}
+														</Typography>
+														{user.isSuperAdmin && (
+															<Chip
+																icon={<ShieldIcon />}
+																label={t('superAdmin', { ns: 'admin' })}
+																size='small'
+																color='error'
+																className={styles.superAdminChip}
+															/>
+														)}
+													</div>
 												</div>
-											</div>
-										</TableCell>
-										<TableCell>
-											<Typography
-												variant='body2'
-												className={styles.email}
-											>
-												{user.email}
-											</Typography>
-										</TableCell>
-										<TableCell>
-											<TextField
-												size='small'
-												value={
-													editedUsers[user.id]?.position !== undefined
-														? editedUsers[user.id].position || ''
-														: user.position || ''
-												}
-												onChange={e =>
-													handlePositionChange(user.id, e.target.value)
-												}
-												placeholder={t('placeholders.position', {
-													ns: 'common'
-												})}
-												disabled={user.isSuperAdmin || isPending}
-												className={styles.positionInput}
-											/>
-										</TableCell>
-										<TableCell>
-											<div className={styles.roleCell}>
-												<Switch
-													checked={
-														editedUsers[user.id]?.isAdmin !== undefined
-															? editedUsers[user.id].isAdmin
-															: user.isAdmin
-													}
-													onChange={e =>
-														handleAdminToggle(user.id, e.target.checked)
-													}
-													disabled={user.isSuperAdmin || isPending}
-													color='primary'
-												/>
-												<Chip
-													label={
-														editedUsers[user.id]?.isAdmin !== undefined
-															? editedUsers[user.id].isAdmin
-																? t('admin', { ns: 'admin' })
-																: t('user', { ns: 'admin' })
-															: user.isAdmin
-																? t('admin', { ns: 'admin' })
-																: t('user', { ns: 'admin' })
-													}
+											</TableCell>
+											<TableCell>
+												<Typography
+													variant='body2'
+													className={styles.email}
+												>
+													{user.email}
+												</Typography>
+											</TableCell>
+											<TableCell>
+												<TextField
 													size='small'
-													color={
-														editedUsers[user.id]?.isAdmin !== undefined
-															? editedUsers[user.id].isAdmin
-																? 'primary'
-																: 'default'
-															: user.isAdmin
-																? 'primary'
-																: 'default'
+													value={editedPosition}
+													onChange={e =>
+														handlePositionChange(user.id, e.target.value)
 													}
-													variant='outlined'
+													placeholder={t('placeholders.position', {
+														ns: 'common'
+													})}
+													disabled={user.isSuperAdmin || isPending}
+													className={styles.positionInput}
+													autoComplete='off'
+													inputProps={{
+														autoComplete: 'off'
+													}}
 												/>
-											</div>
-										</TableCell>
-										<TableCell>{formatDate(user.createdAt)}</TableCell>
-										<TableCell align='right'>
-											<Button
-												variant='contained'
-												size='small'
-												startIcon={<SaveIcon />}
-												onClick={() => handleSave(user)}
-												disabled={
-													!hasChanges(user.id) || user.isSuperAdmin || isPending
-												}
-												className={styles.saveButton}
-											>
-												{t('buttons.save', { ns: 'common' })}
-											</Button>
-										</TableCell>
-									</TableRow>
-								))}
+											</TableCell>
+											<TableCell>
+												<div className={styles.roleCell}>
+													<Switch
+														checked={editedIsAdmin}
+														onChange={e =>
+															handleAdminToggle(user.id, e.target.checked)
+														}
+														disabled={user.isSuperAdmin || isPending}
+														color='primary'
+													/>
+													<Chip
+														label={
+															editedIsAdmin
+																? t('admin', { ns: 'admin' })
+																: t('user', { ns: 'admin' })
+														}
+														size='small'
+														color={editedIsAdmin ? 'primary' : 'default'}
+														variant='outlined'
+													/>
+												</div>
+											</TableCell>
+											<TableCell>{formatDate(user.createdAt)}</TableCell>
+											<TableCell align='right'>
+												<Button
+													variant='contained'
+													size='small'
+													startIcon={<SaveIcon />}
+													onClick={() => handleSave(user)}
+													disabled={
+														!userHasChanges || user.isSuperAdmin || isPending
+													}
+													className={styles.saveButton}
+												>
+													{t('buttons.save', { ns: 'common' })}
+												</Button>
+											</TableCell>
+										</TableRow>
+									)
+								})}
 							</TableBody>
 						</Table>
 					</TableContainer>
