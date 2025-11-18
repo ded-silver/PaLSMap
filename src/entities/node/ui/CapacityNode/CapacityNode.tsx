@@ -1,18 +1,12 @@
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
-import {
-	Button,
-	Dialog,
-	DialogActions,
-	DialogContent,
-	DialogContentText,
-	DialogTitle,
-	IconButton
-} from '@mui/material'
+import { IconButton } from '@mui/material'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { NodeProps, useReactFlow } from '@xyflow/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
+
+import { DeleteNodeConfirmDialog } from '../DeleteNodeConfirmDialog'
 
 import styles from './CapacityNode.module.css'
 import { type CustomNode, type NodeDto, NodeService } from '@/entities/node'
@@ -158,36 +152,15 @@ export const CapacityNode = ({ data, id, parentId }: NodeProps<CustomNode>) => {
 				/>
 			) : null}
 
-			<Dialog
-				open={confirmOpen}
+			<DeleteNodeConfirmDialog
+				isOpen={confirmOpen}
+				nodeName={nodeName || t('labels.withoutName', { ns: 'nodes' })}
 				onClose={() => setConfirmOpen(false)}
-			>
-				<DialogTitle>{t('dialogs.deleteTitle', { ns: 'nodes' })}</DialogTitle>
-				<DialogContent>
-					<DialogContentText>
-						{t('dialogs.deleteConfirm', { ns: 'nodes' })}{' '}
-						<b>{nodeName || t('labels.withoutName', { ns: 'nodes' })}</b>?
-					</DialogContentText>
-				</DialogContent>
-				<DialogActions>
-					<Button
-						onClick={() => setConfirmOpen(false)}
-						variant='contained'
-					>
-						{t('buttons.cancel', { ns: 'common' })}
-					</Button>
-					<Button
-						onClick={() => {
-							handleDelete()
-							setConfirmOpen(false)
-						}}
-						color='error'
-						variant='contained'
-					>
-						{t('buttons.delete', { ns: 'common' })}
-					</Button>
-				</DialogActions>
-			</Dialog>
+				onConfirm={() => {
+					handleDelete()
+					setConfirmOpen(false)
+				}}
+			/>
 		</div>
 	)
 }

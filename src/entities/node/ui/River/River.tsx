@@ -1,13 +1,5 @@
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
-import {
-	Button,
-	Dialog,
-	DialogActions,
-	DialogContent,
-	DialogContentText,
-	DialogTitle,
-	IconButton
-} from '@mui/material'
+import { IconButton } from '@mui/material'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { NodeProps, useReactFlow } from '@xyflow/react'
 import { useState } from 'react'
@@ -16,6 +8,7 @@ import { toast } from 'react-toastify'
 
 import { NodeService } from '../../model/api'
 import type { CustomNode, NodeDto } from '../../model/types'
+import { DeleteNodeConfirmDialog } from '../DeleteNodeConfirmDialog'
 
 import styles from './River.module.css'
 import { useIsAdmin } from '@/entities/user'
@@ -152,36 +145,15 @@ export const River = ({ data, id }: NodeProps<CustomNode>) => {
 					/>
 				</svg>
 			</div>
-			<Dialog
-				open={confirmOpen}
+			<DeleteNodeConfirmDialog
+				isOpen={confirmOpen}
+				nodeName={nodeName || t('labels.withoutName', { ns: 'nodes' })}
 				onClose={() => setConfirmOpen(false)}
-			>
-				<DialogTitle>{t('dialogs.deleteTitle', { ns: 'nodes' })}</DialogTitle>
-				<DialogContent>
-					<DialogContentText>
-						{t('dialogs.deleteConfirm', { ns: 'nodes' })}{' '}
-						<b>{nodeName || t('labels.withoutName', { ns: 'nodes' })}</b>?
-					</DialogContentText>
-				</DialogContent>
-				<DialogActions>
-					<Button
-						onClick={() => setConfirmOpen(false)}
-						variant='contained'
-					>
-						{t('buttons.cancel', { ns: 'common' })}
-					</Button>
-					<Button
-						onClick={() => {
-							handleDelete()
-							setConfirmOpen(false)
-						}}
-						color='error'
-						variant='contained'
-					>
-						{t('buttons.delete', { ns: 'common' })}
-					</Button>
-				</DialogActions>
-			</Dialog>
+				onConfirm={() => {
+					handleDelete()
+					setConfirmOpen(false)
+				}}
+			/>
 		</div>
 	)
 }

@@ -47,6 +47,7 @@ export default function TableDialog({
 	items
 }: Props) {
 	const { t: tNodes } = useTranslation('nodes')
+	const { t: tCommon } = useTranslation('common')
 	const { t: tValidation } = useTranslation('validation')
 	const queryClient = useQueryClient()
 
@@ -104,17 +105,28 @@ export default function TableDialog({
 		}
 	}, [isDetails, reset, row])
 	return (
-		<Dialog open={open}>
-			<DialogTitle>
+		<Dialog
+			open={open}
+			onClose={handleClose}
+			maxWidth='sm'
+			fullWidth
+			PaperProps={{
+				sx: MUI_STYLES.dialogPaper
+			}}
+		>
+			<DialogTitle sx={MUI_STYLES.dialogTitlePrimary}>
+				<Typography sx={MUI_STYLES.typography.titleMedium}>
+					{isDetails && row ? tNodes('actions.edit') : tNodes('actions.add')}
+				</Typography>
 				<IconButton
 					aria-label='close'
 					onClick={handleClose}
-					sx={MUI_STYLES.iconButtonClose}
+					sx={MUI_STYLES.iconButtonClosePrimary}
 				>
 					<CloseIcon />
 				</IconButton>
 			</DialogTitle>
-			<DialogContent>
+			<DialogContent sx={MUI_STYLES.dialogContent}>
 				<Grid
 					container
 					spacing={2}
@@ -252,12 +264,18 @@ export default function TableDialog({
 					</Grid>
 				</Grid>
 			</DialogContent>
-			<DialogActions>
+			<DialogActions sx={MUI_STYLES.dialogActions}>
+				<Button
+					onClick={handleClose}
+					variant='outlined'
+				>
+					{tCommon('buttons.cancel')}
+				</Button>
 				<Button
 					variant='contained'
 					onClick={handleSubmit(onSubmit)}
+					startIcon={<SaveIcon />}
 				>
-					<SaveIcon />
 					{tNodes('actions.save')}
 				</Button>
 			</DialogActions>
