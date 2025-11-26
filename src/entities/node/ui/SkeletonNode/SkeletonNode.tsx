@@ -1,5 +1,6 @@
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
-import { IconButton } from '@mui/material'
+import SettingsIcon from '@mui/icons-material/Settings'
+import { IconButton, Typography } from '@mui/material'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import {
 	NodeResizer,
@@ -8,13 +9,14 @@ import {
 	useReactFlow
 } from '@xyflow/react'
 import clsx from 'clsx'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 
 import { NodeService } from '../../model/api'
 import type { CustomData, NodeDto } from '../../model/types'
 import { DeleteNodeConfirmDialog } from '../DeleteNodeConfirmDialog'
+import { NodeSettingsDrawer } from '../NodeSettingsDrawer'
 
 import styles from './SkeletonNode.module.css'
 import { DialogData } from '@/entities/node-data'
@@ -66,6 +68,8 @@ export const SkeletonNode = ({
 	const [open, setOpen] = useState(false)
 
 	const [nodeName, setNodeName] = useState<string>(name ?? '')
+	const [drawerOpen, setDrawerOpen] = useState(false)
+	const [editingName, setEditingName] = useState<string>(name ?? '')
 	const node = getNode(id)
 
 	const queryClient = useQueryClient()
@@ -90,27 +94,29 @@ export const SkeletonNode = ({
 		deleteNode(id)
 	}
 
-	const { mutate: updateCurrentNode } = useMutation({
+	const { mutate: updateCurrentNode, isPending: isSaving } = useMutation({
 		mutationKey: ['updateCurrentNode'],
 		mutationFn: (data: NodeDto) =>
 			NodeService.update(data.id, {
 				...data,
 				data: {
 					...data.data,
-					label: nodeName
+					label: editingName
 				},
 				parentId
 			}),
 		onSuccess: data => {
+			setNodeName(editingName)
 			queryClient.invalidateQueries({ queryKey: ['childNodes'] })
+			setDrawerOpen(false)
 		},
 		onError: error => {
 			toast.error(t('messages.updateDataError', { ns: 'nodes' }))
 		}
 	})
 
-	const handleChangeNodeName = useDebouncedCallback((text: string) => {
-		if (node?.position) {
+	const handleSaveName = () => {
+		if (node?.position && editingName !== nodeName) {
 			updateCurrentNode({
 				...node,
 				id,
@@ -120,7 +126,7 @@ export const SkeletonNode = ({
 				data: node.data as unknown as CustomData
 			})
 		}
-	}, 500)
+	}
 
 	const handleClickOpen = () => {
 		setOpen(true)
@@ -163,36 +169,61 @@ export const SkeletonNode = ({
 		500
 	)
 
+	useEffect(() => {
+		setNodeName(name ?? '')
+		setEditingName(name ?? '')
+	}, [name])
+
 	return (
 		<>
 			{isName ? (
-				<input
-					className='node-name'
-					value={nodeName}
-					placeholder={t('placeholders.name', { ns: 'nodes' })}
-					readOnly={!isAdmin}
-					onClick={e => e.stopPropagation()}
-					onChange={e => {
-						if (isAdmin) {
-							setNodeName(e.target.value)
-							handleChangeNodeName()
-						}
-					}}
-				/>
+				<Typography
+					className={styles.nodeName}
+					sx={{ fontSize: '22px', fontFamily: 'inherit' }}
+				>
+					{nodeName}
+				</Typography>
 			) : null}
 			<div
 				className={clsx(styles.node, styles[variant])}
 				onClick={handleClickOpen}
 			>
-				{isAdmin ? (
-					<IconButton
-						onClick={e => {
-							e.stopPropagation()
-							setConfirmOpen(true)
-						}}
+				{isAdmin && isName ? (
+					<div
+						className={styles.settingsButtonWrapper}
+						onClick={e => e.stopPropagation()}
+						onMouseDown={e => e.stopPropagation()}
 					>
-						<DeleteOutlineIcon fontSize='small' />
-					</IconButton>
+						<IconButton
+							onClick={e => {
+								e.stopPropagation()
+								e.preventDefault()
+								setEditingName(nodeName)
+								setDrawerOpen(true)
+							}}
+							onMouseDown={e => {
+								e.stopPropagation()
+								e.preventDefault()
+							}}
+						>
+							<SettingsIcon fontSize='small' />
+						</IconButton>
+					</div>
+				) : null}
+				{isAdmin ? (
+					<div
+						className={styles.deleteButtonWrapper}
+						onClick={e => e.stopPropagation()}
+					>
+						<IconButton
+							onClick={e => {
+								e.stopPropagation()
+								setConfirmOpen(true)
+							}}
+						>
+							<DeleteOutlineIcon fontSize='small' />
+						</IconButton>
+					</div>
 				) : null}
 			</div>
 			{isAdmin && width && height ? (
@@ -222,6 +253,22 @@ export const SkeletonNode = ({
 					setConfirmOpen(false)
 				}}
 			/>
+
+			{isName ? (
+				<NodeSettingsDrawer
+					open={drawerOpen}
+					onClose={() => {
+						setEditingName(nodeName)
+						setDrawerOpen(false)
+					}}
+					nodeName={nodeName}
+					editingName={editingName}
+					onEditingNameChange={setEditingName}
+					onSave={handleSaveName}
+					isAdmin={isAdmin}
+					isSaving={isSaving}
+				/>
+			) : null}
 		</>
 	)
 }

@@ -6,6 +6,13 @@
 	justify-content: center;
 }
 
+.settingsButtonWrapper {
+	position: absolute;
+	bottom: -5px;
+	right: 50px;
+	z-index: 10;
+}
+
 .deleteButtonWrapper {
 	position: absolute;
 	bottom: -5px;

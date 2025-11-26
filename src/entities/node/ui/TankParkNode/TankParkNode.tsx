@@ -1,5 +1,6 @@
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
-import { IconButton } from '@mui/material'
+import SettingsIcon from '@mui/icons-material/Settings'
+import { IconButton, Typography } from '@mui/material'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Handle, NodeProps, Position, useReactFlow } from '@xyflow/react'
 import { nanoid } from 'nanoid'
@@ -8,6 +9,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 
 import { DeleteNodeConfirmDialog } from '../DeleteNodeConfirmDialog'
+import { NodeSettingsDrawer } from '../NodeSettingsDrawer'
 
 import styles from './TankParkNode.module.css'
 import {
@@ -18,13 +20,14 @@ import {
 } from '@/entities/node'
 import { DialogData } from '@/entities/node-data'
 import { useIsAdmin } from '@/entities/user'
-import { useDebouncedCallback } from '@/shared/hooks'
 
 export const TankParkNode = ({ data, id }: NodeProps<CustomNode>) => {
 	const { t } = useTranslation(['common', 'nodes'])
 	const [open, setOpen] = useState(false)
 	const { getNode } = useReactFlow()
 	const [nodeName, setNodeName] = useState<string>(data.label)
+	const [drawerOpen, setDrawerOpen] = useState(false)
+	const [editingName, setEditingName] = useState<string>(data.label)
 	const queryClient = useQueryClient()
 	const node = getNode(id)
 
@@ -52,18 +55,20 @@ export const TankParkNode = ({ data, id }: NodeProps<CustomNode>) => {
 		}
 	})
 
-	const { mutate: updateCurrentNode } = useMutation({
+	const { mutate: updateCurrentNode, isPending: isSaving } = useMutation({
 		mutationKey: ['updateCurrentNode'],
 		mutationFn: (data: NodeDto) =>
 			NodeService.update(data.id, {
 				...data,
 				data: {
 					...data.data,
-					label: nodeName
+					label: editingName
 				}
 			}),
 		onSuccess: data => {
+			setNodeName(editingName)
 			queryClient.invalidateQueries({ queryKey: ['nodes'] })
+			setDrawerOpen(false)
 		},
 		onError: error => {
 			toast.error(t('messages.updateDataError', { ns: 'nodes' }))
@@ -74,8 +79,8 @@ export const TankParkNode = ({ data, id }: NodeProps<CustomNode>) => {
 		deleteNode(id)
 	}
 
-	const handleChangeNodeName = useDebouncedCallback(() => {
-		if (node?.position) {
+	const handleSaveName = () => {
+		if (node?.position && editingName !== nodeName) {
 			updateCurrentNode({
 				...node,
 				id,
@@ -84,26 +89,36 @@ export const TankParkNode = ({ data, id }: NodeProps<CustomNode>) => {
 				data
 			})
 		}
-	}, 500)
+	}
 
 	return (
 		<div className={styles['nodeName']}>
-			<input
-				value={nodeName}
-				placeholder={t('placeholders.nodeName', { ns: 'nodes' })}
-				onChange={e => {
-					setNodeName(e.target.value)
-					handleChangeNodeName()
-				}}
-				style={{
+			<Typography
+				sx={{
 					backgroundColor: 'transparent',
-					border: 'none',
-					outline: 'none',
 					color: 'inherit',
 					textAlign: 'center',
-					fontSize: '30px'
+					fontSize: '30px',
+					whiteSpace: 'nowrap'
 				}}
-			/>
+			>
+				{nodeName}
+			</Typography>
+			{isAdmin ? (
+				<div
+					className={styles['settingsButtonWrapper']}
+					onClick={e => e.stopPropagation()}
+				>
+					<IconButton
+						onClick={() => {
+							setEditingName(nodeName)
+							setDrawerOpen(true)
+						}}
+					>
+						<SettingsIcon fontSize='small' />
+					</IconButton>
+				</div>
+			) : null}
 			<div
 				className={styles['deleteButtonWrapper']}
 				onClick={e => e.stopPropagation()}
@@ -152,6 +167,20 @@ export const TankParkNode = ({ data, id }: NodeProps<CustomNode>) => {
 					handleDelete()
 					setConfirmOpen(false)
 				}}
+			/>
+
+			<NodeSettingsDrawer
+				open={drawerOpen}
+				onClose={() => {
+					setEditingName(nodeName)
+					setDrawerOpen(false)
+				}}
+				nodeName={nodeName}
+				editingName={editingName}
+				onEditingNameChange={setEditingName}
+				onSave={handleSaveName}
+				isAdmin={isAdmin}
+				isSaving={isSaving}
 			/>
 		</div>
 	)

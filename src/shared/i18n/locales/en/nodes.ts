@@ -14,7 +14,9 @@ export default {
 	},
 	labels: {
 		withoutName: 'without name',
-		nameNotSet: 'Name not set'
+		nameNotSet: 'Name not set',
+		settings: 'Settings',
+		nodeName: 'Name'
 	},
 	messages: {
 		addSuccess: 'Object added successfully.',

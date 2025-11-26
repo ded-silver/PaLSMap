@@ -1,5 +1,6 @@
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
-import { IconButton } from '@mui/material'
+import SettingsIcon from '@mui/icons-material/Settings'
+import { IconButton, Typography } from '@mui/material'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { NodeProps, useReactFlow } from '@xyflow/react'
 import { useState } from 'react'
@@ -9,16 +10,18 @@ import { toast } from 'react-toastify'
 import { NodeService } from '../../model/api'
 import type { CustomNode, NodeDto } from '../../model/types'
 import { DeleteNodeConfirmDialog } from '../DeleteNodeConfirmDialog'
+import { NodeSettingsDrawer } from '../NodeSettingsDrawer'
 
 import styles from './River.module.css'
 import { useIsAdmin } from '@/entities/user'
-import { useDebouncedCallback } from '@/shared/hooks'
 
 export const River = ({ data, id }: NodeProps<CustomNode>) => {
 	const { t } = useTranslation(['common', 'nodes'])
 	const [open, setOpen] = useState(false)
 	const { getNode } = useReactFlow()
 	const [nodeName, setNodeName] = useState<string>(data.label)
+	const [drawerOpen, setDrawerOpen] = useState(false)
+	const [editingName, setEditingName] = useState<string>(data.label)
 	const queryClient = useQueryClient()
 	const node = getNode(id)
 
@@ -46,18 +49,20 @@ export const River = ({ data, id }: NodeProps<CustomNode>) => {
 		}
 	})
 
-	const { mutate: updateCurrentNode } = useMutation({
+	const { mutate: updateCurrentNode, isPending: isSaving } = useMutation({
 		mutationKey: ['updateCurrentNode'],
 		mutationFn: (data: NodeDto) =>
 			NodeService.update(data.id, {
 				...data,
 				data: {
 					...data.data,
-					label: nodeName
+					label: editingName
 				}
 			}),
 		onSuccess: data => {
+			setNodeName(editingName)
 			queryClient.invalidateQueries({ queryKey: ['nodes'] })
+			setDrawerOpen(false)
 		},
 		onError: error => {
 			toast.error(t('messages.updateDataError', { ns: 'nodes' }))
@@ -68,8 +73,8 @@ export const River = ({ data, id }: NodeProps<CustomNode>) => {
 		deleteNode(id)
 	}
 
-	const handleChangeNodeName = useDebouncedCallback(() => {
-		if (node?.position) {
+	const handleSaveName = () => {
+		if (node?.position && editingName !== nodeName) {
 			updateCurrentNode({
 				...node,
 				id,
@@ -78,33 +83,48 @@ export const River = ({ data, id }: NodeProps<CustomNode>) => {
 				data
 			})
 		}
-	}, 500)
+	}
 
 	return (
 		<div className={styles['nodeName']}>
-			<input
-				value={nodeName}
-				placeholder={t('placeholders.riverName', { ns: 'nodes' })}
-				readOnly={!isAdmin}
-				onChange={e => {
-					if (isAdmin) {
-						setNodeName(e.target.value)
-						handleChangeNodeName()
-					}
-				}}
-				style={{
+			<Typography
+				sx={{
+					position: 'absolute',
+					top: 'calc(10% - 55px)',
+					left: '50%',
+					transform: 'translateX(-50%) rotate(60deg)',
+					transformOrigin: 'center',
 					backgroundColor: 'transparent',
-					top: 'calc(10% - 25px)',
-					border: 'none',
-					outline: 'none',
 					color: 'inherit',
 					textAlign: 'center',
-					transform: 'rotate(60deg)',
-					transformOrigin: 'center',
-					fontSize: '30px'
+					fontSize: '30px',
+					whiteSpace: 'nowrap'
 				}}
-			/>
-
+			>
+				{nodeName}
+			</Typography>
+			{isAdmin ? (
+				<div
+					className={styles['settingsButtonWrapper']}
+					onClick={e => e.stopPropagation()}
+					onMouseDown={e => e.stopPropagation()}
+				>
+					<IconButton
+						onClick={e => {
+							e.stopPropagation()
+							e.preventDefault()
+							setEditingName(nodeName)
+							setDrawerOpen(true)
+						}}
+						onMouseDown={e => {
+							e.stopPropagation()
+							e.preventDefault()
+						}}
+					>
+						<SettingsIcon fontSize='small' />
+					</IconButton>
+				</div>
+			) : null}
 			<div
 				className={styles['deleteButtonWrapper']}
 				onClick={e => e.stopPropagation()}
@@ -153,6 +173,20 @@ export const River = ({ data, id }: NodeProps<CustomNode>) => {
 					handleDelete()
 					setConfirmOpen(false)
 				}}
+			/>
+
+			<NodeSettingsDrawer
+				open={drawerOpen}
+				onClose={() => {
+					setEditingName(nodeName)
+					setDrawerOpen(false)
+				}}
+				nodeName={nodeName}
+				editingName={editingName}
+				onEditingNameChange={setEditingName}
+				onSave={handleSaveName}
+				isAdmin={isAdmin}
+				isSaving={isSaving}
 			/>
 		</div>
 	)

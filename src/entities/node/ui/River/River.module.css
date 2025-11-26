@@ -5,11 +5,26 @@
 	justify-content: center;
 }
 
+.settingsButtonWrapper {
+	position: absolute;
+	bottom: -280px;
+	right: 115px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1000;
+	pointer-events: auto;
+}
+
 .deleteButtonWrapper {
 	position: absolute;
-	bottom: -320px;
-	right: 130px;
-	transform: translateX(50%);
+	bottom: -280px;
+	right: 80px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1000;
+	pointer-events: auto;
 }
 
 /* River */

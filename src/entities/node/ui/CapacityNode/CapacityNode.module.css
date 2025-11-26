@@ -5,10 +5,23 @@
 	justify-content: center;
 }
 
+.settingsButtonWrapper {
+	position: absolute;
+	bottom: -25px;
+	right: -15px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 10;
+}
+
 .deleteButtonWrapper {
 	position: absolute;
 	bottom: -25px;
-	right: -25px;
+	right: -45px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	z-index: 10;
 }
 
