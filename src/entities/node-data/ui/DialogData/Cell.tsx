@@ -72,7 +72,6 @@ export const Cell: FC<Props> = ({ row, nodeId, items }) => {
 							/>
 						</IconButton>
 					</Tooltip>
-					{/* оно */}
 					<Tooltip title={tNodes('actions.delete')}>
 						<IconButton
 							size='large'

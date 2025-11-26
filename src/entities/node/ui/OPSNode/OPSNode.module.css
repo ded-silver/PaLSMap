@@ -27,7 +27,8 @@
 	min-width: 100px;
 	text-align: center;
 	color: inherit;
-	font-size: 30px;
+	font-size: 30px !important;
+	font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif !important;
 	z-index: 2;
 	white-space: nowrap;
 	overflow: visible;

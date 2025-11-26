@@ -93,7 +93,6 @@ export const OPSNode = ({ data, id }: NodeProps<CustomNode>) => {
 
 	return (
 		<div className={styles['nodeWrapper']}>
-			{/* Визуальный элемент - центр ноды */}
 			<div
 				className={styles['circle-container']}
 				onClick={handleClickOpen}
@@ -112,15 +111,17 @@ export const OPSNode = ({ data, id }: NodeProps<CustomNode>) => {
 				))}
 			</div>
 
-			{/* Название - абсолютно позиционировано сверху */}
 			<Typography
 				className={styles['nodeName']}
-				sx={{ fontSize: '30px', fontFamily: 'inherit', whiteSpace: 'nowrap' }}
+				sx={{
+					fontSize: '30px',
+					fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+					whiteSpace: 'nowrap'
+				}}
 			>
 				{nodeName}
 			</Typography>
 
-			{/* Кнопка настроек - абсолютно позиционирована */}
 			{isAdmin ? (
 				<div
 					className={styles['settingsButtonWrapper']}
@@ -137,7 +138,6 @@ export const OPSNode = ({ data, id }: NodeProps<CustomNode>) => {
 				</div>
 			) : null}
 
-			{/* Кнопка удаления - абсолютно позиционирована */}
 			<div
 				className={styles['deleteButtonWrapper']}
 				onClick={e => e.stopPropagation()}
