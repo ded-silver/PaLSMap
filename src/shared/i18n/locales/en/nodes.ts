@@ -19,11 +19,21 @@ export default {
 		nodeName: 'Name',
 		lock: 'Lock',
 		unlock: 'Unlock',
-		lockNode: 'Lock movement'
+		lockNode: 'Lock movement',
+		visualSettings: 'Object status',
+		status: 'Object status'
 	},
 	hints: {
 		lockNode: 'Locked object cannot be moved',
-		saveChanges: 'Change the name and click "Save"'
+		saveChanges: 'Change the name and click "Save"',
+		statusHint:
+			'Select object status. The object color will change automatically'
+	},
+	status: {
+		normal: 'Operating normally',
+		warning: 'Warning',
+		error: 'Emergency state',
+		info: 'Technical maintenance'
 	},
 	messages: {
 		addSuccess: 'Object added successfully.',

@@ -33,11 +33,20 @@ export interface NodeDto {
 		| undefined
 	parentId?: string
 	locked?: boolean
+	visualState?: VisualState
 }
 
 export interface NodeHandlers {
 	id: string
 	type: 'target' | 'source'
+}
+
+export interface VisualState {
+	status?: 'normal' | 'warning' | 'error' | 'info'
+	borderColor?: string
+	borderWidth?: number
+	backgroundColor?: string
+	opacity?: number
 }
 
 export interface CustomData {
@@ -46,6 +55,7 @@ export interface CustomData {
 	tableData: NodeData[]
 	handlers: NodeHandlers[]
 	locked?: boolean
+	visualState?: VisualState
 	[key: string]: unknown
 }
 

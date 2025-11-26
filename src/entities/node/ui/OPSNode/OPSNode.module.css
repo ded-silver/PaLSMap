@@ -78,15 +78,12 @@
 	width: 100px;
 	height: 100px;
 	border-radius: 50%;
-	background: conic-gradient(
-		#1d502f 0deg 90deg,
-		#9cf8bc 90deg 180deg,
-		#1d502f 180deg 270deg,
-		#9cf8bc 270deg 360deg
-	);
 	border: 1px solid #15803d;
 	position: relative;
 	transform: rotate(135deg);
+	transition:
+		border-color 0.3s ease,
+		background 0.3s ease;
 }
 
 /* Крестик "×" в центре круга

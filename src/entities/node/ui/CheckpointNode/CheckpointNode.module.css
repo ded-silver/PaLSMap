@@ -50,4 +50,7 @@
 	border-radius: 0;
 	background-color: #bbf7d0;
 	border: 1px solid #4ade80;
+	transition:
+		border-color 0.3s ease,
+		background-color 0.3s ease;
 }

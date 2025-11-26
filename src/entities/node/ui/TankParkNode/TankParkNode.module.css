@@ -55,6 +55,9 @@
 	background-color: #f1f5f9;
 	position: relative;
 	overflow: hidden;
+	transition:
+		border-color 0.3s ease,
+		background-color 0.3s ease;
 }
 
 /* Овал сверху цилиндра */
@@ -66,6 +69,9 @@
 	right: 0;
 	height: 40px;
 	border-radius: 50%;
-	border: 1px solid #464748;
-	background-color: #e2e8f0;
+	border: 1px solid var(--cylinder-top-border-color, #464748);
+	background-color: var(--cylinder-top-bg, #e2e8f0);
+	transition:
+		border-color 0.3s ease,
+		background-color 0.3s ease;
 }

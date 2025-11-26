@@ -3,12 +3,10 @@ import LockIcon from '@mui/icons-material/Lock'
 import LockOpenIcon from '@mui/icons-material/LockOpen'
 import SettingsIcon from '@mui/icons-material/Settings'
 import { IconButton, Typography } from '@mui/material'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { Handle, NodeProps, Position, useReactFlow } from '@xyflow/react'
+import { Handle, NodeProps, Position } from '@xyflow/react'
 import { nanoid } from 'nanoid'
-import { useEffect, useState } from 'react'
+import { CSSProperties, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'react-toastify'
 
 import { DeleteNodeConfirmDialog } from '../DeleteNodeConfirmDialog'
 import { NodeSettingsDrawer } from '../NodeSettingsDrawer'
@@ -16,160 +14,44 @@ import { NodeSettingsDrawer } from '../NodeSettingsDrawer'
 import styles from './CheckpointNode.module.css'
 import {
 	type CustomNode,
-	type NodeDto,
 	type NodeHandlers,
-	NodeService
+	getCylinderBackground,
+	getStatusBorderColor,
+	useNodeSettings
 } from '@/entities/node'
 import { DialogData } from '@/entities/node-data'
-import { useIsAdmin } from '@/entities/user'
 
 export const CheckpointNode = ({ data, id }: NodeProps<CustomNode>) => {
 	const { t } = useTranslation(['common', 'nodes'])
-	const [open, setOpen] = useState(false)
-	const { getNode, setNodes } = useReactFlow()
-	const [nodeName, setNodeName] = useState<string>(data.label)
-	const [drawerOpen, setDrawerOpen] = useState(false)
-	const [editingName, setEditingName] = useState<string>(data.label)
-	const [isLocked, setIsLocked] = useState<boolean>(data.locked ?? false)
-	const [initialLocked, setInitialLocked] = useState<boolean>(
-		data.locked ?? false
-	)
-	const queryClient = useQueryClient()
-	const node = getNode(id)
 
-	useEffect(() => {
-		if (drawerOpen) {
-			setInitialLocked(data.locked ?? false)
-		}
-	}, [drawerOpen, data.locked])
-
-	const isAdmin = useIsAdmin()
-
-	const [confirmOpen, setConfirmOpen] = useState(false)
-
-	useEffect(() => {
-		if (node && isAdmin) {
-			const shouldBeDraggable = !isLocked
-			if (node.draggable !== shouldBeDraggable) {
-				setNodes(nodes =>
-					nodes.map(n =>
-						n.id === id ? { ...n, draggable: shouldBeDraggable } : n
-					)
-				)
-			}
-		}
-	}, [isLocked, isAdmin, node, id, setNodes])
-
-	const handleClickOpen = () => {
-		setOpen(true)
-	}
-
-	const handleClose = () => {
-		queryClient.invalidateQueries({ queryKey: ['currentNodeData'] })
-		setOpen(false)
-	}
-
-	const { mutate: deleteNode } = useMutation({
-		mutationKey: ['deleteNode'],
-		mutationFn: (nodeId: string) => NodeService.delete(nodeId),
-		onSuccess: data => {
-			queryClient.invalidateQueries({ queryKey: ['nodes'] })
-		},
-		onError(error: unknown) {
-			toast.error(t('messages.deleteError', { ns: 'nodes' }))
-		}
+	const {
+		nodeName,
+		setNodeName,
+		drawerOpen,
+		setDrawerOpen,
+		editingName,
+		setEditingName,
+		isLocked,
+		visualState,
+		confirmOpen,
+		setConfirmOpen,
+		open,
+		isSaving,
+		isTogglingLock,
+		isAdmin,
+		handleLockChange,
+		handleLockToggle,
+		handleVisualStateChange,
+		handleSaveFromDrawer,
+		handleDelete,
+		handleCloseDrawer,
+		handleClickOpen,
+		handleClose
+	} = useNodeSettings({
+		id,
+		data,
+		nodeType: 'Checkpoint'
 	})
-
-	const { mutate: updateCurrentNode, isPending: isSaving } = useMutation({
-		mutationKey: ['updateCurrentNode'],
-		mutationFn: (data: NodeDto) =>
-			NodeService.update(data.id, {
-				...data,
-				data: {
-					...data.data,
-					label: editingName
-				},
-				locked: isLocked
-			}),
-		onSuccess: data => {
-			setNodeName(editingName)
-			queryClient.invalidateQueries({ queryKey: ['nodes'] })
-			setDrawerOpen(false)
-		},
-		onError: error => {
-			toast.error(t('messages.updateDataError', { ns: 'nodes' }))
-		}
-	})
-
-	const { mutate: updateLockStatus, isPending: isLocking } = useMutation({
-		mutationKey: ['updateLockStatus'],
-		mutationFn: (locked: boolean) => {
-			if (!node?.position) throw new Error('Node position not found')
-			return NodeService.update(id, {
-				...node,
-				id,
-				type: 'Checkpoint',
-				position: node.position,
-				data,
-				locked
-			})
-		},
-		onSuccess: (_, locked) => {
-			setIsLocked(locked)
-			setInitialLocked(locked)
-			if (isAdmin) {
-				setNodes(nodes =>
-					nodes.map(n => (n.id === id ? { ...n, draggable: !locked } : n))
-				)
-			}
-			queryClient.invalidateQueries({ queryKey: ['nodes'] })
-		},
-		onError: error => {
-			toast.error(t('messages.updateDataError', { ns: 'nodes' }))
-		}
-	})
-
-	const handleLockToggle = () => {
-		updateLockStatus(!isLocked)
-	}
-
-	const handleDelete = () => {
-		deleteNode(id)
-	}
-
-	const handleSaveName = () => {
-		if (node?.position && editingName !== nodeName) {
-			updateCurrentNode({
-				...node,
-				id,
-				type: 'Checkpoint',
-				position: node?.position,
-				data,
-				locked: isLocked
-			})
-		}
-	}
-
-	const handleLockChange = (locked: boolean) => {
-		setIsLocked(locked)
-	}
-
-	const handleSaveFromDrawer = (newName: string, newLocked: boolean) => {
-		if (!node?.position) return
-
-		const nameChanged = newName !== nodeName
-		const lockChanged = newLocked !== initialLocked
-
-		if (lockChanged) {
-			updateLockStatus(newLocked)
-			setInitialLocked(newLocked)
-		}
-
-		if (nameChanged) {
-			setEditingName(newName)
-			handleSaveName()
-		}
-	}
 
 	return (
 		<div className={styles['nodeName']}>
@@ -207,7 +89,7 @@ export const CheckpointNode = ({ data, id }: NodeProps<CustomNode>) => {
 				>
 					<IconButton
 						onClick={handleLockToggle}
-						disabled={isLocking}
+						disabled={isSaving || isTogglingLock}
 						title={
 							isLocked
 								? t('labels.unlock', { ns: 'nodes' })
@@ -241,7 +123,18 @@ export const CheckpointNode = ({ data, id }: NodeProps<CustomNode>) => {
 				className={styles['circle-container']}
 				onClick={handleClickOpen}
 			>
-				<div className={styles['circle']} />
+				<div
+					className={styles['circle']}
+					style={
+						visualState?.status && visualState.status !== 'normal'
+							? ({
+									backgroundColor: getCylinderBackground(visualState),
+									borderColor: getStatusBorderColor(visualState?.status),
+									borderWidth: '1px'
+								} as CSSProperties)
+							: undefined
+					}
+				/>
 				{data.handlers.map((h: NodeHandlers) => (
 					<div key={nanoid()}>
 						<Handle
@@ -274,11 +167,7 @@ export const CheckpointNode = ({ data, id }: NodeProps<CustomNode>) => {
 
 			<NodeSettingsDrawer
 				open={drawerOpen}
-				onClose={() => {
-					setEditingName(nodeName)
-					setIsLocked(initialLocked)
-					setDrawerOpen(false)
-				}}
+				onClose={handleCloseDrawer}
 				nodeName={nodeName}
 				editingName={editingName}
 				onEditingNameChange={setEditingName}
@@ -287,6 +176,8 @@ export const CheckpointNode = ({ data, id }: NodeProps<CustomNode>) => {
 				isSaving={isSaving}
 				isLocked={isLocked}
 				onLockChange={handleLockChange}
+				visualState={visualState}
+				onVisualStateChange={handleVisualStateChange}
 			/>
 		</div>
 	)
