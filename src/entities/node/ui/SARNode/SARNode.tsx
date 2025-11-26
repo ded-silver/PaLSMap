@@ -15,6 +15,7 @@ export const SARNode = ({ data, id, parentId }: NodeProps<CustomNode>) => {
 				parentId={parentId}
 				isName
 				isData
+				locked={data.locked ?? false}
 			/>
 		</>
 	)

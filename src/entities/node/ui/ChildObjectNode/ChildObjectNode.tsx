@@ -1,9 +1,11 @@
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
+import LockIcon from '@mui/icons-material/Lock'
+import LockOpenIcon from '@mui/icons-material/LockOpen'
 import SettingsIcon from '@mui/icons-material/Settings'
 import { IconButton, Typography } from '@mui/material'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { NodeProps, useReactFlow } from '@xyflow/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 
@@ -21,14 +23,37 @@ export const ChildObjectNode = ({
 }: NodeProps<CustomNode>) => {
 	const { t } = useTranslation(['common', 'nodes'])
 	const [open, setOpen] = useState(false)
-	const { getNode } = useReactFlow()
+	const { getNode, setNodes } = useReactFlow()
 	const queryClient = useQueryClient()
 	const [nodeName, setNodeName] = useState<string>(data.label)
 	const [drawerOpen, setDrawerOpen] = useState(false)
 	const [editingName, setEditingName] = useState<string>(data.label)
+	const [isLocked, setIsLocked] = useState<boolean>(data.locked ?? false)
+	const [initialLocked, setInitialLocked] = useState<boolean>(
+		data.locked ?? false
+	)
 	const node = getNode(id)
 
+	useEffect(() => {
+		if (drawerOpen) {
+			setInitialLocked(data.locked ?? false)
+		}
+	}, [drawerOpen, data.locked])
+
 	const isAdmin = useIsAdmin()
+
+	useEffect(() => {
+		if (node && isAdmin) {
+			const shouldBeDraggable = !isLocked
+			if (node.draggable !== shouldBeDraggable) {
+				setNodes(nodes =>
+					nodes.map(n =>
+						n.id === id ? { ...n, draggable: shouldBeDraggable } : n
+					)
+				)
+			}
+		}
+	}, [isLocked, isAdmin, node, id, setNodes])
 
 	const handleClickOpen = () => {
 		setOpen(true)
@@ -72,7 +97,8 @@ export const ChildObjectNode = ({
 					...data.data,
 					label: editingName
 				},
-				parentId
+				parentId,
+				locked: isLocked
 			}),
 		onSuccess: data => {
 			setNodeName(editingName)
@@ -83,6 +109,39 @@ export const ChildObjectNode = ({
 			toast.error(t('messages.updateDataError', { ns: 'nodes' }))
 		}
 	})
+
+	const { mutate: updateLockStatus, isPending: isLocking } = useMutation({
+		mutationKey: ['updateLockStatus'],
+		mutationFn: (locked: boolean) => {
+			if (!node?.position) throw new Error('Node position not found')
+			return NodeService.update(id, {
+				...node,
+				id,
+				type: 'ChildObject',
+				position: node.position,
+				data,
+				parentId,
+				locked
+			})
+		},
+		onSuccess: (_, locked) => {
+			setIsLocked(locked)
+			setInitialLocked(locked)
+			if (isAdmin) {
+				setNodes(nodes =>
+					nodes.map(n => (n.id === id ? { ...n, draggable: !locked } : n))
+				)
+			}
+			queryClient.invalidateQueries({ queryKey: ['childNodes'] })
+		},
+		onError: error => {
+			toast.error(t('messages.updateDataError', { ns: 'nodes' }))
+		}
+	})
+
+	const handleLockToggle = () => {
+		updateLockStatus(!isLocked)
+	}
 
 	const handleDelete = () => {
 		deleteNode(id)
@@ -95,8 +154,30 @@ export const ChildObjectNode = ({
 				id,
 				type: 'ChildObject',
 				position: node?.position,
-				data
+				data,
+				locked: isLocked
 			})
+		}
+	}
+
+	const handleLockChange = (locked: boolean) => {
+		setIsLocked(locked)
+	}
+
+	const handleSaveFromDrawer = (newName: string, newLocked: boolean) => {
+		if (!node?.position) return
+
+		const nameChanged = newName !== nodeName
+		const lockChanged = newLocked !== initialLocked
+
+		if (lockChanged) {
+			updateLockStatus(newLocked)
+			setInitialLocked(newLocked)
+		}
+
+		if (nameChanged) {
+			setEditingName(newName)
+			handleSaveName()
 		}
 	}
 
@@ -135,6 +216,30 @@ export const ChildObjectNode = ({
 					</IconButton>
 				</div>
 			) : null}
+
+			{isAdmin ? (
+				<div
+					className={styles['lockButtonWrapper']}
+					onClick={e => e.stopPropagation()}
+				>
+					<IconButton
+						onClick={handleLockToggle}
+						disabled={isLocking}
+						title={
+							isLocked
+								? t('labels.unlock', { ns: 'nodes' })
+								: t('labels.lock', { ns: 'nodes' })
+						}
+					>
+						{isLocked ? (
+							<LockIcon fontSize='small' />
+						) : (
+							<LockOpenIcon fontSize='small' />
+						)}
+					</IconButton>
+				</div>
+			) : null}
+
 			<div
 				className={styles['deleteButtonWrapper']}
 				onClick={e => e.stopPropagation()}
@@ -164,14 +269,17 @@ export const ChildObjectNode = ({
 				open={drawerOpen}
 				onClose={() => {
 					setEditingName(nodeName)
+					setIsLocked(initialLocked)
 					setDrawerOpen(false)
 				}}
 				nodeName={nodeName}
 				editingName={editingName}
 				onEditingNameChange={setEditingName}
-				onSave={handleSaveName}
+				onSave={handleSaveFromDrawer}
 				isAdmin={isAdmin}
 				isSaving={isSaving}
+				isLocked={isLocked}
+				onLockChange={handleLockChange}
 			/>
 		</div>
 	)

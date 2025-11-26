@@ -16,10 +16,21 @@
 	pointer-events: auto;
 }
 
+.lockButtonWrapper {
+	position: absolute;
+	bottom: -24px;
+	right: -32px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1000;
+	pointer-events: auto;
+}
+
 .deleteButtonWrapper {
 	position: absolute;
 	bottom: -24px;
-	right: -40px;
+	right: -54px;
 	display: flex;
 	align-items: center;
 	justify-content: center;

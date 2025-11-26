@@ -16,7 +16,14 @@ export default {
 		withoutName: 'without name',
 		nameNotSet: 'Name not set',
 		settings: 'Settings',
-		nodeName: 'Name'
+		nodeName: 'Name',
+		lock: 'Lock',
+		unlock: 'Unlock',
+		lockNode: 'Lock movement'
+	},
+	hints: {
+		lockNode: 'Locked object cannot be moved',
+		saveChanges: 'Change the name and click "Save"'
 	},
 	messages: {
 		addSuccess: 'Object added successfully.',

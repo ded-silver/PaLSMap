@@ -32,6 +32,7 @@ export interface NodeDto {
 		  }
 		| undefined
 	parentId?: string
+	locked?: boolean
 }
 
 export interface NodeHandlers {
@@ -44,9 +45,11 @@ export interface CustomData {
 	label: string
 	tableData: NodeData[]
 	handlers: NodeHandlers[]
+	locked?: boolean
 	[key: string]: unknown
 }
 
 export interface CustomNode extends Node {
 	data: CustomData
+	locked?: boolean
 }

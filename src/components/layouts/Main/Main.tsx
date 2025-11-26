@@ -113,8 +113,14 @@ const MMMain = ({ isSidebarOpen }: Props) => {
 	}, [])
 
 	useEffect(() => {
-		if (items) setNodes(items)
-	}, [items, setNodes])
+		if (items) {
+			const nodesWithDraggable = items.map(node => ({
+				...node,
+				draggable: isAdmin && !(node.locked ?? false)
+			}))
+			setNodes(nodesWithDraggable)
+		}
+	}, [items, setNodes, isAdmin])
 
 	useEffect(() => {
 		if (allEgdes) setEdges(allEgdes)

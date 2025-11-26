@@ -12,6 +12,7 @@ export const FactoryNode = ({ data, id, parentId }: NodeProps<CustomNode>) => {
 			variant='Factory'
 			name={data.label}
 			parentId={parentId}
+			locked={data.locked ?? false}
 		/>
 	)
 }

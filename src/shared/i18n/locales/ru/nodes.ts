@@ -16,7 +16,14 @@ export default {
 		withoutName: 'без имени',
 		nameNotSet: 'Имя не задано',
 		settings: 'Настройки',
-		nodeName: 'Название'
+		nodeName: 'Название',
+		lock: 'Заблокировать',
+		unlock: 'Разблокировать',
+		lockNode: 'Заблокировать перемещение'
+	},
+	hints: {
+		lockNode: 'Заблокированный объект не может быть перемещен',
+		saveChanges: 'Измените название и нажмите «Сохранить»'
 	},
 	messages: {
 		addSuccess: 'Объект успешно добавлен.',

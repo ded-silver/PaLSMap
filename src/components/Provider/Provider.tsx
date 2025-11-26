@@ -96,12 +96,13 @@ export const Provider = ({ id, currentNodeType }: Props) => {
 				style: {
 					width: item.measured?.width,
 					height: item.measured?.height
-				}
+				},
+				draggable: isAdmin && !(item.locked ?? false)
 			}))
 
 			setNodes(updatedNodes)
 		}
-	}, [items, setNodes])
+	}, [items, setNodes, isAdmin])
 
 	useEffect(() => {
 		if (allEgdes) {

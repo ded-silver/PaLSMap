@@ -1,4 +1,6 @@
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
+import LockIcon from '@mui/icons-material/Lock'
+import LockOpenIcon from '@mui/icons-material/LockOpen'
 import SettingsIcon from '@mui/icons-material/Settings'
 import { IconButton, Typography } from '@mui/material'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -51,6 +53,7 @@ interface Props {
 	name?: string
 	parentId?: string
 	isData?: boolean
+	locked?: boolean
 }
 
 export const SkeletonNode = ({
@@ -61,22 +64,53 @@ export const SkeletonNode = ({
 	name,
 	parentId,
 	isName,
-	isData
+	isData,
+	locked: initialLocked = false
 }: Props) => {
 	const { t } = useTranslation(['common', 'nodes'])
-	const { getNode } = useReactFlow()
+	const { getNode, setNodes } = useReactFlow()
 	const [open, setOpen] = useState(false)
 
 	const [nodeName, setNodeName] = useState<string>(name ?? '')
 	const [drawerOpen, setDrawerOpen] = useState(false)
 	const [editingName, setEditingName] = useState<string>(name ?? '')
+	const [isLocked, setIsLocked] = useState<boolean>(initialLocked)
+	const [initialLockedState, setInitialLockedState] =
+		useState<boolean>(initialLocked)
 	const node = getNode(id)
+
+	useEffect(() => {
+		setIsLocked(initialLocked)
+	}, [initialLocked])
+
+	useEffect(() => {
+		if (drawerOpen) {
+			setInitialLockedState(initialLocked)
+		}
+	}, [drawerOpen, initialLocked])
 
 	const queryClient = useQueryClient()
 
 	const isAdmin = useIsAdmin()
 
 	const [confirmOpen, setConfirmOpen] = useState(false)
+
+	useEffect(() => {
+		setIsLocked(initialLocked)
+	}, [initialLocked])
+
+	useEffect(() => {
+		if (node && isAdmin) {
+			const shouldBeDraggable = !isLocked
+			if (node.draggable !== shouldBeDraggable) {
+				setNodes(nodes =>
+					nodes.map(n =>
+						n.id === id ? { ...n, draggable: shouldBeDraggable } : n
+					)
+				)
+			}
+		}
+	}, [isLocked, isAdmin, node, id, setNodes])
 
 	const { mutate: deleteNode } = useMutation({
 		mutationKey: ['deleteNode'],
@@ -103,7 +137,8 @@ export const SkeletonNode = ({
 					...data.data,
 					label: editingName
 				},
-				parentId
+				parentId,
+				locked: isLocked
 			}),
 		onSuccess: data => {
 			setNodeName(editingName)
@@ -115,6 +150,40 @@ export const SkeletonNode = ({
 		}
 	})
 
+	const { mutate: updateLockStatus, isPending: isLocking } = useMutation({
+		mutationKey: ['updateLockStatus'],
+		mutationFn: (locked: boolean) => {
+			if (!node?.position) throw new Error('Node position not found')
+			return NodeService.update(id, {
+				...node,
+				id,
+				type: variant,
+				position: node.position,
+				measured: node.measured,
+				data: node.data as unknown as CustomData,
+				parentId,
+				locked
+			})
+		},
+		onSuccess: (_, locked) => {
+			setIsLocked(locked)
+			setInitialLockedState(locked)
+			if (isAdmin) {
+				setNodes(nodes =>
+					nodes.map(n => (n.id === id ? { ...n, draggable: !locked } : n))
+				)
+			}
+			queryClient.invalidateQueries({ queryKey: ['childNodes'] })
+		},
+		onError: error => {
+			toast.error(t('messages.updateDataError', { ns: 'nodes' }))
+		}
+	})
+
+	const handleLockToggle = () => {
+		updateLockStatus(!isLocked)
+	}
+
 	const handleSaveName = () => {
 		if (node?.position && editingName !== nodeName) {
 			updateCurrentNode({
@@ -123,8 +192,30 @@ export const SkeletonNode = ({
 				type: variant,
 				position: node?.position,
 				measured: node.measured,
-				data: node.data as unknown as CustomData
+				data: node.data as unknown as CustomData,
+				locked: isLocked
 			})
+		}
+	}
+
+	const handleLockChange = (locked: boolean) => {
+		setIsLocked(locked)
+	}
+
+	const handleSaveFromDrawer = (newName: string, newLocked: boolean) => {
+		if (!node?.position) return
+
+		const nameChanged = newName !== nodeName
+		const lockChanged = newLocked !== initialLockedState
+
+		if (lockChanged) {
+			updateLockStatus(newLocked)
+			setInitialLockedState(newLocked)
+		}
+
+		if (nameChanged) {
+			setEditingName(newName)
+			handleSaveName()
 		}
 	}
 
@@ -162,7 +253,8 @@ export const SkeletonNode = ({
 						width,
 						height
 					},
-					data: node.data as unknown as CustomData
+					data: node.data as unknown as CustomData,
+					locked: isLocked
 				})
 			}
 		},
@@ -210,6 +302,39 @@ export const SkeletonNode = ({
 						</IconButton>
 					</div>
 				) : null}
+
+				{isAdmin && isName ? (
+					<div
+						className={styles.lockButtonWrapper}
+						onClick={e => e.stopPropagation()}
+						onMouseDown={e => e.stopPropagation()}
+					>
+						<IconButton
+							onClick={e => {
+								e.stopPropagation()
+								e.preventDefault()
+								handleLockToggle()
+							}}
+							onMouseDown={e => {
+								e.stopPropagation()
+								e.preventDefault()
+							}}
+							disabled={isLocking}
+							title={
+								isLocked
+									? t('labels.unlock', { ns: 'nodes' })
+									: t('labels.lock', { ns: 'nodes' })
+							}
+						>
+							{isLocked ? (
+								<LockIcon fontSize='small' />
+							) : (
+								<LockOpenIcon fontSize='small' />
+							)}
+						</IconButton>
+					</div>
+				) : null}
+
 				{isAdmin ? (
 					<div
 						className={styles.deleteButtonWrapper}
@@ -259,14 +384,17 @@ export const SkeletonNode = ({
 					open={drawerOpen}
 					onClose={() => {
 						setEditingName(nodeName)
+						setIsLocked(initialLockedState)
 						setDrawerOpen(false)
 					}}
 					nodeName={nodeName}
 					editingName={editingName}
 					onEditingNameChange={setEditingName}
-					onSave={handleSaveName}
+					onSave={handleSaveFromDrawer}
 					isAdmin={isAdmin}
 					isSaving={isSaving}
+					isLocked={isLocked}
+					onLockChange={handleLockChange}
 				/>
 			) : null}
 		</>

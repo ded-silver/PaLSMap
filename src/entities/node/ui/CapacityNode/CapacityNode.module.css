@@ -15,6 +15,16 @@
 	z-index: 10;
 }
 
+.lockButtonWrapper {
+	position: absolute;
+	bottom: -25px;
+	right: -30px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 10;
+}
+
 .deleteButtonWrapper {
 	position: absolute;
 	bottom: -25px;
