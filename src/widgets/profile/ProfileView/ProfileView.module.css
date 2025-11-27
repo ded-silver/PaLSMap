@@ -40,6 +40,9 @@
 	flex-direction: column;
 	gap: 8px;
 	margin-bottom: 24px;
+	max-width: 600px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .actionsSection {
@@ -52,7 +55,6 @@
 
 .actionsSection button {
 	padding: 12px 32px;
-	font-weight: 600;
 	text-transform: none;
 	border-radius: 12px;
 }

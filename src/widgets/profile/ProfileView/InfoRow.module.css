@@ -14,6 +14,12 @@
 	display: flex;
 	align-items: center;
 	gap: 10px;
+	font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+}
+
+.label p {
+	font-size: 0.875rem !important;
+	font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif !important;
 }
 
 .label svg {
@@ -24,5 +30,11 @@
 	flex: 1;
 	color: #1e293b;
 	font-weight: 500;
-	font-size: 0.9375rem;
+	font-size: 0.875rem;
+	font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+}
+
+.value p {
+	font-size: 0.875rem !important;
+	font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif !important;
 }

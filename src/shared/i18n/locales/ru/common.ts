@@ -77,7 +77,7 @@ export default {
 		emailCopied: 'Email скопирован в буфер обмена',
 		position: 'Должность',
 		role: {
-			label: 'Права',
+			label: 'Роль',
 			admin: 'Администратор',
 			user: 'Пользователь',
 			superAdmin: 'Суперадминистратор'
