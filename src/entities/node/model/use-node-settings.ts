@@ -1,22 +1,54 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useReactFlow } from '@xyflow/react'
+import { ResizeDragEvent, ResizeParams, useReactFlow } from '@xyflow/react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 
 import { NodeService } from './api'
 import type { CustomNode, VisualState } from './types'
+import { NodeDataService } from '@/entities/node-data'
 import { useIsAdmin } from '@/entities/user'
+import { useDebouncedCallback } from '@/shared/hooks'
 
-type NodeType = 'OPS' | 'TankPark' | 'Checkpoint'
+type NodeType =
+	| 'OPS'
+	| 'TankPark'
+	| 'Checkpoint'
+	| 'Object'
+	| 'Pump'
+	| 'Valve'
+	| 'AccountingSystem'
+	| 'ChildObject'
+	| 'ChildTankPark'
+	| 'Capacity'
+	| 'FGU'
+	| 'KPPSOD'
+	| 'SAR'
+	| 'MNS'
+	| 'PNS'
+	| 'Factory'
+	| 'River'
+	| 'ParentObject'
 
 interface UseNodeSettingsProps {
 	id: string
 	data: CustomNode['data']
 	nodeType: NodeType
+	parentId?: string
+	supportVisualState?: boolean
+	invalidateParentData?: boolean
+	initialName?: string
 }
 
-export function useNodeSettings({ id, data, nodeType }: UseNodeSettingsProps) {
+export function useNodeSettings({
+	id,
+	data,
+	nodeType,
+	parentId,
+	supportVisualState = false,
+	invalidateParentData = false,
+	initialName
+}: UseNodeSettingsProps) {
 	const { t } = useTranslation(['common', 'nodes'])
 	const { getNode, setNodes } = useReactFlow()
 	const queryClient = useQueryClient()
@@ -24,36 +56,49 @@ export function useNodeSettings({ id, data, nodeType }: UseNodeSettingsProps) {
 
 	const node = getNode(id)
 
-	const [nodeName, setNodeName] = useState<string>(data.label)
+	const initialNodeName = initialName ?? data.label
+	const [nodeName, setNodeName] = useState<string>(initialNodeName)
 	const [drawerOpen, setDrawerOpen] = useState(false)
-	const [editingName, setEditingName] = useState<string>(data.label)
+	const [editingName, setEditingName] = useState<string>(initialNodeName)
 	const [isLocked, setIsLocked] = useState<boolean>(data.locked ?? false)
 	const [initialLocked, setInitialLocked] = useState<boolean>(
 		data.locked ?? false
 	)
 	const [visualState, setVisualState] = useState<VisualState | undefined>(
-		data.visualState
+		supportVisualState ? data.visualState : undefined
 	)
 	const [initialVisualState, setInitialVisualState] = useState<
 		VisualState | undefined
-	>(data.visualState)
+	>(supportVisualState ? data.visualState : undefined)
 	const [confirmOpen, setConfirmOpen] = useState(false)
 	const [open, setOpen] = useState(false)
 
 	useEffect(() => {
 		if (drawerOpen) {
 			setInitialLocked(data.locked ?? false)
-			setInitialVisualState(data.visualState)
+			if (supportVisualState) {
+				setInitialVisualState(data.visualState)
+			}
 		}
-	}, [drawerOpen, data.locked, data.visualState])
+	}, [drawerOpen, data.locked, data.visualState, supportVisualState])
 
 	useEffect(() => {
-		setVisualState(data.visualState)
-		setInitialVisualState(data.visualState)
-		setNodeName(data.label)
+		if (supportVisualState) {
+			setVisualState(data.visualState)
+			setInitialVisualState(data.visualState)
+		}
+		const newName = initialName ?? data.label
+		setNodeName(newName)
+		setEditingName(newName)
 		setIsLocked(data.locked ?? false)
 		setInitialLocked(data.locked ?? false)
-	}, [data.visualState, data.label, data.locked])
+	}, [
+		data.visualState,
+		data.label,
+		data.locked,
+		supportVisualState,
+		initialName
+	])
 
 	useEffect(() => {
 		if (node && isAdmin) {
@@ -73,6 +118,7 @@ export function useNodeSettings({ id, data, nodeType }: UseNodeSettingsProps) {
 		mutationFn: (nodeId: string) => NodeService.delete(nodeId),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['nodes'] })
+			queryClient.invalidateQueries({ queryKey: ['childNodes'] })
 		},
 		onError: () => {
 			toast.error(t('messages.deleteError', { ns: 'nodes' }))
@@ -84,17 +130,19 @@ export function useNodeSettings({ id, data, nodeType }: UseNodeSettingsProps) {
 		mutationFn: ({
 			newName,
 			newLocked,
-			newVisualState
+			newVisualState,
+			measured
 		}: {
 			newName: string
 			newLocked: boolean
 			newVisualState?: VisualState
+			measured?: { width: number; height: number }
 		}) => {
 			if (!node?.position) throw new Error('Node position not found')
 			const updatedData = {
 				...data,
 				label: newName,
-				visualState: newVisualState
+				...(supportVisualState && { visualState: newVisualState })
 			}
 			return NodeService.update(id, {
 				...node,
@@ -102,19 +150,22 @@ export function useNodeSettings({ id, data, nodeType }: UseNodeSettingsProps) {
 				type: nodeType,
 				position: node.position,
 				data: updatedData,
+				parentId,
 				locked: newLocked,
-				visualState: newVisualState
+				measured: measured ?? node.measured,
+				...(supportVisualState && { visualState: newVisualState })
 			})
 		},
 		onSuccess: (_, variables) => {
 			setNodeName(variables.newName)
 			setIsLocked(variables.newLocked)
 			setInitialLocked(variables.newLocked)
-			if (variables.newVisualState !== undefined) {
+			if (supportVisualState && variables.newVisualState !== undefined) {
 				setVisualState(variables.newVisualState)
 				setInitialVisualState(variables.newVisualState)
 			}
 			queryClient.invalidateQueries({ queryKey: ['nodes'] })
+			queryClient.invalidateQueries({ queryKey: ['childNodes'] })
 			setDrawerOpen(false)
 		},
 		onError: () => {
@@ -137,15 +188,20 @@ export function useNodeSettings({ id, data, nodeType }: UseNodeSettingsProps) {
 	) => {
 		const nameChanged = newName !== nodeName
 		const lockChanged = newLocked !== initialLocked
-		const currentStatus = newVisualState?.status || 'normal'
-		const originalStatus = initialVisualState?.status || 'normal'
-		const visualStateChanged = currentStatus !== originalStatus
+		let visualStateChanged = false
+		if (supportVisualState) {
+			const currentStatus = newVisualState?.status || 'normal'
+			const originalStatus = initialVisualState?.status || 'normal'
+			visualStateChanged = currentStatus !== originalStatus
+		}
 
 		if (nameChanged || lockChanged || visualStateChanged) {
 			updateNode({
 				newName,
 				newLocked,
-				newVisualState: newVisualState || visualState
+				newVisualState: supportVisualState
+					? newVisualState || visualState
+					: undefined
 			})
 		}
 	}
@@ -162,7 +218,7 @@ export function useNodeSettings({ id, data, nodeType }: UseNodeSettingsProps) {
 			const updatedData = {
 				...data,
 				label: nodeName,
-				visualState: visualState
+				...(supportVisualState && { visualState: visualState })
 			}
 			return NodeService.update(id, {
 				...node,
@@ -170,8 +226,9 @@ export function useNodeSettings({ id, data, nodeType }: UseNodeSettingsProps) {
 				type: nodeType,
 				position: node.position,
 				data: updatedData,
+				parentId,
 				locked: newLocked,
-				visualState: visualState
+				...(supportVisualState && { visualState: visualState })
 			})
 		},
 		onSuccess: () => {
@@ -179,6 +236,7 @@ export function useNodeSettings({ id, data, nodeType }: UseNodeSettingsProps) {
 			setIsLocked(newLocked)
 			setInitialLocked(newLocked)
 			queryClient.invalidateQueries({ queryKey: ['nodes'] })
+			queryClient.invalidateQueries({ queryKey: ['childNodes'] })
 		},
 		onError: () => {
 			toast.error(t('messages.updateDataError', { ns: 'nodes' }))
@@ -200,10 +258,40 @@ export function useNodeSettings({ id, data, nodeType }: UseNodeSettingsProps) {
 		setOpen(true)
 	}
 
+	const { mutate: invalidateParentDataMutation } = useMutation({
+		mutationKey: ['invalidateParentData'],
+		mutationFn: (parentId: string) => NodeDataService.getNodeData(parentId),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['currentNodeData'] })
+		},
+		onError: () => {
+			// Silent fail
+		}
+	})
+
 	const handleClose = () => {
-		queryClient.invalidateQueries({ queryKey: ['currentNodeData'] })
+		if (invalidateParentData && parentId) {
+			invalidateParentDataMutation(parentId)
+		} else {
+			queryClient.invalidateQueries({ queryKey: ['currentNodeData'] })
+		}
 		setOpen(false)
 	}
+
+	const handleChangeNodeSize = useDebouncedCallback(
+		(event: ResizeDragEvent, params: ResizeParams) => {
+			const { width, height } = params
+			if (node?.position) {
+				updateNode({
+					newName: nodeName,
+					newLocked: isLocked,
+					newVisualState: supportVisualState ? visualState : undefined,
+					measured: { width, height }
+				})
+			}
+		},
+		500
+	)
 
 	return {
 		nodeName,
@@ -231,6 +319,8 @@ export function useNodeSettings({ id, data, nodeType }: UseNodeSettingsProps) {
 		handleDelete,
 		handleCloseDrawer,
 		handleClickOpen,
-		handleClose
+		handleClose,
+		handleChangeNodeSize,
+		node
 	}
 }

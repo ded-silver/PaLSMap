@@ -3,28 +3,53 @@ import LockIcon from '@mui/icons-material/Lock'
 import LockOpenIcon from '@mui/icons-material/LockOpen'
 import SettingsIcon from '@mui/icons-material/Settings'
 import { IconButton, Typography } from '@mui/material'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import {
-	NodeResizer,
-	ResizeDragEvent,
-	ResizeParams,
-	useReactFlow
-} from '@xyflow/react'
+import { NodeResizer } from '@xyflow/react'
 import clsx from 'clsx'
-import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'react-toastify'
 
-import { NodeService } from '../../model/api'
-import type { CustomData, NodeDto } from '../../model/types'
 import { DeleteNodeConfirmDialog } from '../DeleteNodeConfirmDialog'
 import { NodeSettingsDrawer } from '../NodeSettingsDrawer'
 
 import styles from './SkeletonNode.module.css'
+import { type CustomData, useNodeSettings } from '@/entities/node'
 import { DialogData } from '@/entities/node-data'
-import { NodeDataService } from '@/entities/node-data'
-import { useIsAdmin } from '@/entities/user'
-import { useDebouncedCallback } from '@/shared/hooks'
+
+interface Props {
+	id: string
+	width?: number
+	height?: number
+	variant:
+		| 'OPS'
+		| 'TankPark'
+		| 'Checkpoint'
+		| 'Valve'
+		| 'Pump'
+		| 'AccountingSystem'
+		| 'ChildTankPark'
+		| 'PNS'
+		| 'MNS'
+		| 'SAR'
+		| 'FGU'
+		| 'KPPSOD'
+		| 'Capacity'
+		| 'River'
+		| 'Factory'
+		| 'Object'
+		| 'ParentObject'
+		| 'ChildObject'
+	isName?: boolean
+	name?: string
+	parentId?: string
+	isData?: boolean
+	locked?: boolean
+	data?: {
+		label: string
+		measured?: { width: number; height: number }
+		tableData?: unknown[]
+		handlers?: unknown[]
+		[key: string]: unknown
+	}
+}
 
 interface Props {
 	id: string
@@ -65,206 +90,71 @@ export const SkeletonNode = ({
 	parentId,
 	isName,
 	isData,
-	locked: initialLocked = false
+	locked = false,
+	data: nodeData
 }: Props) => {
 	const { t } = useTranslation(['common', 'nodes'])
-	const { getNode, setNodes } = useReactFlow()
-	const [open, setOpen] = useState(false)
 
-	const [nodeName, setNodeName] = useState<string>(name ?? '')
-	const [drawerOpen, setDrawerOpen] = useState(false)
-	const [editingName, setEditingName] = useState<string>(name ?? '')
-	const [isLocked, setIsLocked] = useState<boolean>(initialLocked)
-	const [initialLockedState, setInitialLockedState] =
-		useState<boolean>(initialLocked)
-	const node = getNode(id)
-
-	useEffect(() => {
-		setIsLocked(initialLocked)
-	}, [initialLocked])
-
-	useEffect(() => {
-		if (drawerOpen) {
-			setInitialLockedState(initialLocked)
-		}
-	}, [drawerOpen, initialLocked])
-
-	const queryClient = useQueryClient()
-
-	const isAdmin = useIsAdmin()
-
-	const [confirmOpen, setConfirmOpen] = useState(false)
-
-	useEffect(() => {
-		setIsLocked(initialLocked)
-	}, [initialLocked])
-
-	useEffect(() => {
-		if (node && isAdmin) {
-			const shouldBeDraggable = !isLocked
-			if (node.draggable !== shouldBeDraggable) {
-				setNodes(nodes =>
-					nodes.map(n =>
-						n.id === id ? { ...n, draggable: shouldBeDraggable } : n
-					)
-				)
-			}
-		}
-	}, [isLocked, isAdmin, node, id, setNodes])
-
-	const { mutate: deleteNode } = useMutation({
-		mutationKey: ['deleteNode'],
-		mutationFn: (nodeId: string) => NodeService.delete(nodeId),
-		onSuccess: data => {
-			queryClient.invalidateQueries({ queryKey: ['childNodes'] })
-		},
-		onError(error: unknown) {
-			toast.error(t('messages.deleteError', { ns: 'nodes' }))
-		}
-	})
-
-	const handleDelete = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-		e.stopPropagation()
-		deleteNode(id)
-	}
-
-	const { mutate: updateCurrentNode, isPending: isSaving } = useMutation({
-		mutationKey: ['updateCurrentNode'],
-		mutationFn: (data: NodeDto) =>
-			NodeService.update(data.id, {
-				...data,
-				data: {
-					...data.data,
-					label: editingName
-				},
-				parentId,
-				locked: isLocked
-			}),
-		onSuccess: data => {
-			setNodeName(editingName)
-			queryClient.invalidateQueries({ queryKey: ['childNodes'] })
-			setDrawerOpen(false)
-		},
-		onError: error => {
-			toast.error(t('messages.updateDataError', { ns: 'nodes' }))
-		}
-	})
-
-	const { mutate: updateLockStatus, isPending: isLocking } = useMutation({
-		mutationKey: ['updateLockStatus'],
-		mutationFn: (locked: boolean) => {
-			if (!node?.position) throw new Error('Node position not found')
-			return NodeService.update(id, {
-				...node,
-				id,
-				type: variant,
-				position: node.position,
-				measured: node.measured,
-				data: node.data as unknown as CustomData,
-				parentId,
-				locked
-			})
-		},
-		onSuccess: (_, locked) => {
-			setIsLocked(locked)
-			setInitialLockedState(locked)
-			if (isAdmin) {
-				setNodes(nodes =>
-					nodes.map(n => (n.id === id ? { ...n, draggable: !locked } : n))
-				)
-			}
-			queryClient.invalidateQueries({ queryKey: ['childNodes'] })
-		},
-		onError: error => {
-			toast.error(t('messages.updateDataError', { ns: 'nodes' }))
-		}
-	})
-
-	const handleLockToggle = () => {
-		updateLockStatus(!isLocked)
-	}
-
-	const handleSaveName = () => {
-		if (node?.position && editingName !== nodeName) {
-			updateCurrentNode({
-				...node,
-				id,
-				type: variant,
-				position: node?.position,
-				measured: node.measured,
-				data: node.data as unknown as CustomData,
-				locked: isLocked
-			})
-		}
-	}
-
-	const handleLockChange = (locked: boolean) => {
-		setIsLocked(locked)
-	}
-
-	const handleSaveFromDrawer = (newName: string, newLocked: boolean) => {
-		if (!node?.position) return
-
-		const nameChanged = newName !== nodeName
-		const lockChanged = newLocked !== initialLockedState
-
-		if (lockChanged) {
-			updateLockStatus(newLocked)
-			setInitialLockedState(newLocked)
-		}
-
-		if (nameChanged) {
-			setEditingName(newName)
-			handleSaveName()
-		}
-	}
-
-	const handleClickOpen = () => {
-		setOpen(true)
-	}
-	const { mutate: invalidateParentData } = useMutation({
-		mutationKey: ['invalidateParentData'],
-		mutationFn: (parentId: string) => NodeDataService.getNodeData(parentId),
-		onSuccess: data => {
-			queryClient.invalidateQueries({ queryKey: ['currentNodeData'] })
-		},
-		onError(error: unknown) {
-			toast.error(t('messages.deleteError', { ns: 'nodes' }))
-		}
-	})
-
-	const handleClose = () => {
-		if (parentId) {
-			invalidateParentData(parentId)
-		}
-		setOpen(false)
-	}
-
-	const handleChangeNodeSize = useDebouncedCallback(
-		(event: ResizeDragEvent, params: ResizeParams) => {
-			const { width, height } = params
-			if (node?.position) {
-				updateCurrentNode({
-					...node,
-					id,
-					type: variant,
-					position: node?.position,
-					measured: {
-						width,
-						height
+	// Создаем data объект для хука, если его нет
+	const dataForHook: CustomData = (
+		nodeData
+			? {
+					...nodeData,
+					measured: nodeData.measured ?? {
+						width: width ?? 0,
+						height: height ?? 0
 					},
-					data: node.data as unknown as CustomData,
-					locked: isLocked
-				})
-			}
-		},
-		500
-	)
+					tableData: (nodeData.tableData as CustomData['tableData']) ?? [],
+					handlers: (nodeData.handlers as CustomData['handlers']) ?? []
+				}
+			: {
+					label: name ?? '',
+					measured: { width: width ?? 0, height: height ?? 0 },
+					tableData: [],
+					handlers: []
+				}
+	) as CustomData
 
-	useEffect(() => {
-		setNodeName(name ?? '')
-		setEditingName(name ?? '')
-	}, [name])
+	const {
+		nodeName,
+		drawerOpen,
+		setDrawerOpen,
+		editingName,
+		setEditingName,
+		isLocked,
+		open,
+		setOpen,
+		isSaving,
+		isTogglingLock,
+		isAdmin,
+		confirmOpen,
+		setConfirmOpen,
+		handleLockChange,
+		handleLockToggle,
+		handleSaveFromDrawer,
+		handleDelete,
+		handleCloseDrawer,
+		handleClickOpen,
+		handleClose,
+		handleChangeNodeSize
+	} = useNodeSettings({
+		id,
+		data: dataForHook,
+		nodeType: variant,
+		parentId,
+		supportVisualState: false,
+		invalidateParentData: !!parentId,
+		initialName: name
+	})
+
+	const handleDeleteWithEvent = (
+		e?: React.MouseEvent<HTMLButtonElement, MouseEvent>
+	) => {
+		if (e) {
+			e.stopPropagation()
+		}
+		handleDelete()
+	}
 
 	return (
 		<>
@@ -319,7 +209,7 @@ export const SkeletonNode = ({
 								e.stopPropagation()
 								e.preventDefault()
 							}}
-							disabled={isLocking}
+							disabled={isTogglingLock}
 							title={
 								isLocked
 									? t('labels.unlock', { ns: 'nodes' })
@@ -371,10 +261,10 @@ export const SkeletonNode = ({
 
 			<DeleteNodeConfirmDialog
 				isOpen={confirmOpen}
-				nodeName={name ?? t('labels.withoutName', { ns: 'nodes' })}
+				nodeName={nodeName || t('labels.withoutName', { ns: 'nodes' })}
 				onClose={() => setConfirmOpen(false)}
 				onConfirm={() => {
-					handleDelete({} as any)
+					handleDeleteWithEvent()
 					setConfirmOpen(false)
 				}}
 			/>
@@ -382,11 +272,7 @@ export const SkeletonNode = ({
 			{isName ? (
 				<NodeSettingsDrawer
 					open={drawerOpen}
-					onClose={() => {
-						setEditingName(nodeName)
-						setIsLocked(initialLockedState)
-						setDrawerOpen(false)
-					}}
+					onClose={handleCloseDrawer}
 					nodeName={nodeName}
 					editingName={editingName}
 					onEditingNameChange={setEditingName}

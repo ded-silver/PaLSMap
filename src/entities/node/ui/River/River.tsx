@@ -3,167 +3,46 @@ import LockIcon from '@mui/icons-material/Lock'
 import LockOpenIcon from '@mui/icons-material/LockOpen'
 import SettingsIcon from '@mui/icons-material/Settings'
 import { IconButton, Typography } from '@mui/material'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { NodeProps, useReactFlow } from '@xyflow/react'
-import { useEffect, useState } from 'react'
+import { NodeProps } from '@xyflow/react'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'react-toastify'
 
-import { NodeService } from '../../model/api'
-import type { CustomNode, NodeDto } from '../../model/types'
 import { DeleteNodeConfirmDialog } from '../DeleteNodeConfirmDialog'
 import { NodeSettingsDrawer } from '../NodeSettingsDrawer'
 
 import styles from './River.module.css'
-import { useIsAdmin } from '@/entities/user'
+import { type CustomNode, useNodeSettings } from '@/entities/node'
+import { DialogData } from '@/entities/node-data'
 
 export const River = ({ data, id }: NodeProps<CustomNode>) => {
 	const { t } = useTranslation(['common', 'nodes'])
-	const [open, setOpen] = useState(false)
-	const { getNode, setNodes } = useReactFlow()
-	const [nodeName, setNodeName] = useState<string>(data.label)
-	const [drawerOpen, setDrawerOpen] = useState(false)
-	const [editingName, setEditingName] = useState<string>(data.label)
-	const [isLocked, setIsLocked] = useState<boolean>(data.locked ?? false)
-	const [initialLocked, setInitialLocked] = useState<boolean>(
-		data.locked ?? false
-	)
-	const queryClient = useQueryClient()
-	const node = getNode(id)
 
-	useEffect(() => {
-		if (drawerOpen) {
-			setInitialLocked(data.locked ?? false)
-		}
-	}, [drawerOpen, data.locked])
-
-	const isAdmin = useIsAdmin()
-
-	const [confirmOpen, setConfirmOpen] = useState(false)
-
-	useEffect(() => {
-		if (node && isAdmin) {
-			const shouldBeDraggable = !isLocked
-			if (node.draggable !== shouldBeDraggable) {
-				setNodes(nodes =>
-					nodes.map(n =>
-						n.id === id ? { ...n, draggable: shouldBeDraggable } : n
-					)
-				)
-			}
-		}
-	}, [isLocked, isAdmin, node, id, setNodes])
-
-	const handleClickOpen = () => {
-		setOpen(true)
-	}
-
-	const handleClose = () => {
-		queryClient.invalidateQueries({ queryKey: ['currentNodeData'] })
-		setOpen(false)
-	}
-
-	const { mutate: deleteNode } = useMutation({
-		mutationKey: ['deleteNode'],
-		mutationFn: (nodeId: string) => NodeService.delete(nodeId),
-		onSuccess: data => {
-			queryClient.invalidateQueries({ queryKey: ['nodes'] })
-		},
-		onError(error: unknown) {
-			toast.error(t('messages.deleteError', { ns: 'nodes' }))
-		}
+	const {
+		nodeName,
+		drawerOpen,
+		setDrawerOpen,
+		editingName,
+		setEditingName,
+		isLocked,
+		open,
+		setOpen,
+		isSaving,
+		isTogglingLock,
+		isAdmin,
+		confirmOpen,
+		setConfirmOpen,
+		handleLockChange,
+		handleLockToggle,
+		handleSaveFromDrawer,
+		handleDelete,
+		handleCloseDrawer,
+		handleClickOpen,
+		handleClose
+	} = useNodeSettings({
+		id,
+		data,
+		nodeType: 'River',
+		supportVisualState: false
 	})
-
-	const { mutate: updateCurrentNode, isPending: isSaving } = useMutation({
-		mutationKey: ['updateCurrentNode'],
-		mutationFn: (data: NodeDto) =>
-			NodeService.update(data.id, {
-				...data,
-				data: {
-					...data.data,
-					label: editingName
-				},
-				locked: isLocked
-			}),
-		onSuccess: data => {
-			setNodeName(editingName)
-			queryClient.invalidateQueries({ queryKey: ['nodes'] })
-			setDrawerOpen(false)
-		},
-		onError: error => {
-			toast.error(t('messages.updateDataError', { ns: 'nodes' }))
-		}
-	})
-
-	const { mutate: updateLockStatus, isPending: isLocking } = useMutation({
-		mutationKey: ['updateLockStatus'],
-		mutationFn: (locked: boolean) => {
-			if (!node?.position) throw new Error('Node position not found')
-			return NodeService.update(id, {
-				...node,
-				id,
-				type: 'River',
-				position: node.position,
-				data,
-				locked
-			})
-		},
-		onSuccess: (_, locked) => {
-			setIsLocked(locked)
-			setInitialLocked(locked)
-			if (isAdmin) {
-				setNodes(nodes =>
-					nodes.map(n => (n.id === id ? { ...n, draggable: !locked } : n))
-				)
-			}
-			queryClient.invalidateQueries({ queryKey: ['nodes'] })
-		},
-		onError: error => {
-			toast.error(t('messages.updateDataError', { ns: 'nodes' }))
-		}
-	})
-
-	const handleLockToggle = () => {
-		updateLockStatus(!isLocked)
-	}
-
-	const handleDelete = () => {
-		deleteNode(id)
-	}
-
-	const handleSaveName = () => {
-		if (node?.position && editingName !== nodeName) {
-			updateCurrentNode({
-				...node,
-				id,
-				type: 'River',
-				position: node?.position,
-				data,
-				locked: isLocked
-			})
-		}
-	}
-
-	const handleLockChange = (locked: boolean) => {
-		setIsLocked(locked)
-	}
-
-	const handleSaveFromDrawer = (newName: string, newLocked: boolean) => {
-		if (!node?.position) return
-
-		const nameChanged = newName !== nodeName
-		const lockChanged = newLocked !== initialLocked
-
-		if (lockChanged) {
-			updateLockStatus(newLocked)
-			setInitialLocked(newLocked)
-		}
-
-		if (nameChanged) {
-			setEditingName(newName)
-			handleSaveName()
-		}
-	}
 
 	return (
 		<div className={styles['nodeName']}>
@@ -222,7 +101,7 @@ export const River = ({ data, id }: NodeProps<CustomNode>) => {
 							e.stopPropagation()
 							e.preventDefault()
 						}}
-						disabled={isLocking}
+						disabled={isTogglingLock}
 						title={
 							isLocked
 								? t('labels.unlock', { ns: 'nodes' })
@@ -290,11 +169,7 @@ export const River = ({ data, id }: NodeProps<CustomNode>) => {
 
 			<NodeSettingsDrawer
 				open={drawerOpen}
-				onClose={() => {
-					setEditingName(nodeName)
-					setIsLocked(initialLocked)
-					setDrawerOpen(false)
-				}}
+				onClose={handleCloseDrawer}
 				nodeName={nodeName}
 				editingName={editingName}
 				onEditingNameChange={setEditingName}
