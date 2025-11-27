@@ -56,10 +56,13 @@ export const Cell: FC<Props> = ({ row, nodeId, items }) => {
 		<>
 			{isAdmin && (
 				<Box
-					width='100%'
 					display='flex'
-					justifyContent='space-around'
+					justifyContent='center'
 					alignItems='center'
+					sx={{
+						width: '100%',
+						height: '100%'
+					}}
 				>
 					<Tooltip title={tNodes('actions.edit')}>
 						<IconButton

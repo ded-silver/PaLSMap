@@ -297,6 +297,8 @@ export const DialogData = ({
 													headerName: '',
 													minWidth: 100,
 													maxWidth: 100,
+													align: 'center',
+													headerAlign: 'center',
 													renderCell: ({ row }: { row: NodeData }) => (
 														<Cell
 															items={items}
@@ -317,6 +319,11 @@ export const DialogData = ({
 								sx={{
 									'& .MuiDataGrid-row:nth-of-type(odd)': {
 										backgroundColor: COLORS.background
+									},
+									'& .MuiDataGrid-cell[data-field="deleteEdit"]': {
+										display: 'flex',
+										justifyContent: 'center',
+										alignItems: 'center'
 									}
 								}}
 							/>
