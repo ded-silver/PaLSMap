@@ -51,7 +51,8 @@ export const TankParkNode = ({ data, id }: NodeProps<CustomNode>) => {
 	} = useNodeSettings({
 		id,
 		data,
-		nodeType: 'TankPark'
+		nodeType: 'TankPark',
+		supportVisualState: true
 	})
 
 	return (

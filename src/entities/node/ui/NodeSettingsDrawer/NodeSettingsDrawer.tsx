@@ -355,7 +355,7 @@ export const NodeSettingsDrawer = ({
 							if (onLockChange && editingLocked !== isLocked) {
 								onLockChange(editingLocked)
 							}
-							const visualStateToSave = statusChanged
+							const visualStateToSave = onVisualStateChange
 								? editingVisualState
 								: undefined
 							onSave(editingName, editingLocked, visualStateToSave)

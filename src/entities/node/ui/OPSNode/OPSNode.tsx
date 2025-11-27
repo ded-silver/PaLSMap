@@ -50,7 +50,8 @@ export const OPSNode = ({ data, id }: NodeProps<CustomNode>) => {
 	} = useNodeSettings({
 		id,
 		data,
-		nodeType: 'OPS'
+		nodeType: 'OPS',
+		supportVisualState: true
 	})
 
 	return (

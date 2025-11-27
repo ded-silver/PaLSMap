@@ -50,7 +50,8 @@ export const CheckpointNode = ({ data, id }: NodeProps<CustomNode>) => {
 	} = useNodeSettings({
 		id,
 		data,
-		nodeType: 'Checkpoint'
+		nodeType: 'Checkpoint',
+		supportVisualState: true
 	})
 
 	return (
