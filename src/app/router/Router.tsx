@@ -1,17 +1,25 @@
 import { CircularProgress } from '@mui/material'
 import { type ReactNode, useEffect, useState } from 'react'
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import {
+	Navigate,
+	Route,
+	Routes,
+	useLocation,
+	useNavigate
+} from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 import { AppLayout } from '@/components/layouts/AppLayout'
 import Main from '@/components/layouts/Main/Main'
 
-import { useIsAdminWithLoading } from '@/entities/user'
+import { useIsAdminWithLoading, userService } from '@/entities/user'
 import { AdminUsersPage } from '@/pages/admin-users'
 import { Auth } from '@/pages/auth'
 import { DictionaryPage } from '@/pages/dictionary'
 import { ProfilePage } from '@/pages/profile'
+import { resetAuthState } from '@/shared/lib/auth-manager'
+import { getAccessToken, hasRefreshTokenCookie } from '@/shared/lib/auth-token'
 
 const AdminRoute = ({ children }: { children: ReactNode }) => {
 	const { isAdmin, isLoading } = useIsAdminWithLoading()
@@ -46,6 +54,7 @@ const AdminRoute = ({ children }: { children: ReactNode }) => {
 export const Router = () => {
 	const [isSidebarOpen, setSidebarOpen] = useState<boolean>(false)
 	const location = useLocation()
+	const navigate = useNavigate()
 
 	const toggleSidebar = () => {
 		setSidebarOpen(!isSidebarOpen)
@@ -58,6 +67,24 @@ export const Router = () => {
 	useEffect(() => {
 		setSidebarOpen(false)
 	}, [location.pathname])
+
+	useEffect(() => {
+		const bootstrapAuth = async () => {
+			const accessToken = getAccessToken()
+			const hasRefreshCookie = hasRefreshTokenCookie()
+
+			if (!accessToken && !hasRefreshCookie) return
+
+			try {
+				await userService.getProfile()
+			} catch {
+				resetAuthState()
+				navigate('/auth', { replace: true })
+			}
+		}
+
+		void bootstrapAuth()
+	}, [navigate])
 
 	return (
 		<>

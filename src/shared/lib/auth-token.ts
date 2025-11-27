@@ -1,17 +1,55 @@
 export enum EnumTokens {
-	'ACCESS_TOKEN' = 'accessToken',
-	'REFRESH_TOKEN' = 'refreshToken'
+	ACCESS_TOKEN = 'accessToken',
+	REFRESH_TOKEN = 'refreshToken'
+}
+
+const isBrowser = typeof window !== 'undefined'
+
+const getLocalStorage = () => {
+	if (!isBrowser) return null
+	try {
+		return window.localStorage
+	} catch {
+		return null
+	}
+}
+
+const getSessionStorage = () => {
+	if (!isBrowser) return null
+	try {
+		return window.sessionStorage
+	} catch {
+		return null
+	}
 }
 
 export const getAccessToken = () => {
-	const accessToken = localStorage.getItem('accesstoken')
-	return accessToken || null
+	const storage = getLocalStorage()
+	return storage?.getItem(EnumTokens.ACCESS_TOKEN) ?? null
 }
 
 export const saveTokenStorage = (accessToken: string) => {
-	localStorage.setItem('accesstoken', accessToken)
+	const storage = getLocalStorage()
+	storage?.setItem(EnumTokens.ACCESS_TOKEN, accessToken)
 }
 
 export const removeFromStorage = () => {
-	localStorage.removeItem('accesstoken')
+	const storage = getLocalStorage()
+	storage?.removeItem(EnumTokens.ACCESS_TOKEN)
+}
+
+export const clearClientStorage = () => {
+	const local = getLocalStorage()
+	const session = getSessionStorage()
+
+	local?.clear()
+	session?.clear()
+}
+
+export const hasRefreshTokenCookie = () => {
+	if (!isBrowser || typeof document === 'undefined') return false
+
+	return document.cookie
+		.split(';')
+		.some(cookie => cookie.trim().startsWith(`${EnumTokens.REFRESH_TOKEN}=`))
 }

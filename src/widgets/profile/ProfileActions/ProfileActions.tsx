@@ -30,12 +30,12 @@ export const ProfileActions = ({ isAdmin }: ProfileActionsProps) => {
 	const handleLogout = async () => {
 		try {
 			await authService.logout()
-			localStorage.removeItem('accessToken')
-			navigate('/auth')
 		} catch (error) {
 			toast.error(t('errors.logoutError'))
+		} finally {
+			setIsLogoutDialogOpen(false)
+			navigate('/auth')
 		}
-		setIsLogoutDialogOpen(false)
 	}
 
 	const handleRequestRights = async () => {

@@ -26,7 +26,6 @@ export const DnDSidebar = ({ currentNodeType }: Props) => {
 		const { dataTransfer } = event
 		dataTransfer.effectAllowed = 'move'
 
-		// Улучшаем визуализацию: убираем рамку, делаем полупрозрачным
 		const target = event.currentTarget as HTMLElement
 		target.classList.add(styles.dragging)
 	}

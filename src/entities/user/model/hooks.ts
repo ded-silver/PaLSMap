@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useMemo } from 'react'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 
@@ -15,13 +15,20 @@ import { getAccessToken } from '@/shared/lib/auth-token'
 export const USER_PROFILE_QUERY_KEY = ['user', 'profile'] as const
 
 export const useUserProfile = () => {
-	const accessToken = useMemo(() => getAccessToken(), [])
+	const accessToken = getAccessToken()
+	const queryClient = useQueryClient()
+
+	useEffect(() => {
+		if (!accessToken) {
+			queryClient.removeQueries({ queryKey: USER_PROFILE_QUERY_KEY })
+		}
+	}, [accessToken, queryClient])
 
 	return useQuery<IProfileResponse>({
 		queryKey: USER_PROFILE_QUERY_KEY,
 		queryFn: () => userService.getProfile(),
 		enabled: !!accessToken,
-		staleTime: 5 * 60 * 1000, // 5 минут
+		staleTime: 5 * 60 * 1000,
 		retry: false,
 		refetchOnWindowFocus: false
 	})

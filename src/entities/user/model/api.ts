@@ -8,7 +8,8 @@ import type {
 	IUserForAdmin
 } from './types'
 import { axiosClassic, axiosWithAuth } from '@/shared/api'
-import { removeFromStorage, saveTokenStorage } from '@/shared/lib/auth-token'
+import { resetAuthState } from '@/shared/lib/auth-manager'
+import { saveTokenStorage } from '@/shared/lib/auth-token'
 
 export const authService = {
 	async main(type: 'login' | 'register', data: IAuthForm) {
@@ -31,11 +32,11 @@ export const authService = {
 	},
 
 	async logout() {
-		const response = await axiosClassic.post<boolean>('/auth/logout')
-
-		if (response.data) removeFromStorage()
-
-		return response
+		try {
+			return await axiosClassic.post<boolean>('/auth/logout')
+		} finally {
+			resetAuthState()
+		}
 	}
 }
 

@@ -1,5 +1,5 @@
 import { Button, Tab, Tabs, TextField, Typography } from '@mui/material'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -7,10 +7,16 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 import styles from './Auth.module.css'
-import { type IAuthForm, authService } from '@/entities/user'
+import {
+	type IAuthForm,
+	USER_PROFILE_QUERY_KEY,
+	authService
+} from '@/entities/user'
+import { resetAuthState } from '@/shared/lib/auth-manager'
 
 export function Auth() {
 	const { t } = useTranslation(['common', 'auth'])
+	const queryClient = useQueryClient()
 	const [tab, setTab] = useState<'login' | 'register'>('login')
 	const { register, handleSubmit, reset } = useForm<IAuthForm>({
 		mode: 'onChange'
@@ -21,8 +27,8 @@ export function Auth() {
 		mutationKey: ['auth'],
 		mutationFn: (data: IAuthForm) =>
 			authService.main(tab === 'login' ? 'login' : 'register', data),
-		onSuccess: data => {
-			localStorage.setItem('authToken', data!.data!.accessToken!)
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: USER_PROFILE_QUERY_KEY })
 			toast.success(t('messages.success', { ns: 'auth' }))
 			reset()
 			navigate('/')
@@ -37,6 +43,10 @@ export function Auth() {
 	})
 
 	const onSubmit: SubmitHandler<IAuthForm> = data => {
+		if (tab === 'login') {
+			resetAuthState()
+		}
+
 		auth({ ...data, isAdmin: false })
 	}
 
