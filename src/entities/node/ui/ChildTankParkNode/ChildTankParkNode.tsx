@@ -175,6 +175,7 @@ export const ChildTankParkNode = ({
 				isSaving={isSaving}
 				isLocked={isLocked}
 				onLockChange={handleLockChange}
+				nodeId={id}
 			/>
 		</div>
 	)

@@ -179,6 +179,7 @@ export const OPSNode = ({ data, id }: NodeProps<CustomNode>) => {
 				onLockChange={handleLockChange}
 				visualState={visualState}
 				onVisualStateChange={handleVisualStateChange}
+				nodeId={id}
 			/>
 		</div>
 	)

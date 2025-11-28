@@ -20,7 +20,8 @@ export default {
 	sidebar: {
 		home: 'Главная',
 		dictionary: 'Справочная информация',
-		users: 'Управление пользователями'
+		users: 'Управление пользователями',
+		history: 'История изменений'
 	},
 	messages: {
 		loading: 'Загрузка...',

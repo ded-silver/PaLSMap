@@ -281,6 +281,7 @@ export const SkeletonNode = ({
 					isSaving={isSaving}
 					isLocked={isLocked}
 					onLockChange={handleLockChange}
+					nodeId={id}
 				/>
 			) : null}
 		</>

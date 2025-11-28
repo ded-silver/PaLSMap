@@ -171,6 +171,7 @@ export const CapacityNode = ({ data, id, parentId }: NodeProps<CustomNode>) => {
 				isSaving={isSaving}
 				isLocked={isLocked}
 				onLockChange={handleLockChange}
+				nodeId={id}
 			/>
 		</div>
 	)

@@ -1,4 +1,5 @@
 import BookIcon from '@mui/icons-material/Book'
+import HistoryIcon from '@mui/icons-material/History'
 import HomeIcon from '@mui/icons-material/Home'
 import PeopleIcon from '@mui/icons-material/People'
 import clsx from 'clsx'
@@ -51,18 +52,32 @@ export const Sidebar = ({ isOpen, onClose }: Props) => {
 					</li>
 				</NavLink>
 				{isAdmin && (
-					<NavLink
-						to='/admin/users'
-						className={({ isActive }: { isActive: boolean }) =>
-							clsx(styles.link, { [styles.active]: isActive })
-						}
-						onClick={handleLinkClick}
-					>
-						<li>
-							<PeopleIcon fontSize='small' />
-							<span>{t('sidebar.users')}</span>
-						</li>
-					</NavLink>
+					<>
+						<NavLink
+							to='/admin/users'
+							className={({ isActive }: { isActive: boolean }) =>
+								clsx(styles.link, { [styles.active]: isActive })
+							}
+							onClick={handleLinkClick}
+						>
+							<li>
+								<PeopleIcon fontSize='small' />
+								<span>{t('sidebar.users')}</span>
+							</li>
+						</NavLink>
+						<NavLink
+							to='/node-history'
+							className={({ isActive }: { isActive: boolean }) =>
+								clsx(styles.link, { [styles.active]: isActive })
+							}
+							onClick={handleLinkClick}
+						>
+							<li>
+								<HistoryIcon fontSize='small' />
+								<span>{t('sidebar.history')}</span>
+							</li>
+						</NavLink>
+					</>
 				)}
 			</ul>
 		</div>

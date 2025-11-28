@@ -17,6 +17,7 @@ import { useIsAdminWithLoading, userService } from '@/entities/user'
 import { AdminUsersPage } from '@/pages/admin-users'
 import { Auth } from '@/pages/auth'
 import { DictionaryPage } from '@/pages/dictionary'
+import { NodeHistoryPage } from '@/pages/node-history'
 import { ProfilePage } from '@/pages/profile'
 import { resetAuthState } from '@/shared/lib/auth-manager'
 import { getAccessToken, hasRefreshTokenCookie } from '@/shared/lib/auth-token'
@@ -139,6 +140,20 @@ export const Router = () => {
 						>
 							<AdminRoute>
 								<AdminUsersPage />
+							</AdminRoute>
+						</AppLayout>
+					}
+				/>
+				<Route
+					path='/node-history'
+					element={
+						<AppLayout
+							isSidebarOpen={isSidebarOpen}
+							toggleSidebar={toggleSidebar}
+							closeSidebar={closeSidebar}
+						>
+							<AdminRoute>
+								<NodeHistoryPage />
 							</AdminRoute>
 						</AppLayout>
 					}

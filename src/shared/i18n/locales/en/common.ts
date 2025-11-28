@@ -19,7 +19,8 @@ export default {
 	sidebar: {
 		home: 'Home',
 		dictionary: 'Reference Information',
-		users: 'User Management'
+		users: 'User Management',
+		history: 'Change History'
 	},
 	messages: {
 		loading: 'Loading...',

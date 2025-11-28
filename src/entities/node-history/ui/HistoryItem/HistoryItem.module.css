@@ -1,0 +1,59 @@
+.card {
+	margin-bottom: 12px;
+	transition: all 0.2s ease-in-out;
+}
+
+.content {
+	padding: 16px !important;
+}
+
+.header {
+	display: flex;
+	gap: 12px;
+	margin-bottom: 12px;
+}
+
+.iconContainer {
+	display: flex;
+	align-items: flex-start;
+	padding-top: 2px;
+	flex-shrink: 0;
+}
+
+.info {
+	flex: 1;
+	min-width: 0;
+}
+
+.topRow {
+	display: flex;
+	gap: 8px;
+	margin-bottom: 8px;
+	flex-wrap: wrap;
+}
+
+.description {
+	color: #475569;
+	font-size: 13px;
+	line-height: 1.5;
+	margin-top: 4px;
+}
+
+.footer {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding-top: 12px;
+	border-top: 1px solid #e2e8f0;
+}
+
+.user {
+	color: #64748b;
+	font-size: 12px;
+	font-weight: 500;
+}
+
+.time {
+	color: #94a3b8;
+	font-size: 11px;
+}

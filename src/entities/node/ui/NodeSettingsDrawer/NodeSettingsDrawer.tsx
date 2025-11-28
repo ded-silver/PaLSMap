@@ -1,10 +1,12 @@
 import CloseIcon from '@mui/icons-material/Close'
+import HistoryIcon from '@mui/icons-material/History'
 import LockIcon from '@mui/icons-material/Lock'
 import PaletteIcon from '@mui/icons-material/Palette'
 import SettingsIcon from '@mui/icons-material/Settings'
 import {
 	Box,
 	Button,
+	CircularProgress,
 	Divider,
 	Drawer,
 	FormControl,
@@ -19,10 +21,16 @@ import {
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
 import styles from './NodeSettingsDrawer.module.css'
 import type { VisualState } from '@/entities/node'
 import { STATUS_COLORS, getStatusBorderColor } from '@/entities/node'
+import {
+	HistoryDetails,
+	HistoryItem,
+	useNodeHistory
+} from '@/entities/node-history'
 
 interface NodeSettingsDrawerProps {
 	open: boolean
@@ -41,6 +49,7 @@ interface NodeSettingsDrawerProps {
 	onLockChange?: (locked: boolean) => void
 	visualState?: VisualState
 	onVisualStateChange?: (visualState: VisualState) => void
+	nodeId?: string
 }
 
 export const NodeSettingsDrawer = ({
@@ -55,9 +64,19 @@ export const NodeSettingsDrawer = ({
 	isLocked = false,
 	onLockChange,
 	visualState,
-	onVisualStateChange
+	onVisualStateChange,
+	nodeId
 }: NodeSettingsDrawerProps) => {
-	const { t } = useTranslation(['common', 'nodes'])
+	const { t } = useTranslation(['common', 'nodes', 'node-history'])
+	const navigate = useNavigate()
+	const { data: history, isLoading: isHistoryLoading } = useNodeHistory(
+		nodeId || ''
+	)
+	const [selectedHistory, setSelectedHistory] = useState<string | null>(null)
+
+	const historyItems = history?.slice(0, 2) || []
+	const selectedHistoryItem =
+		history?.find(h => h.id === selectedHistory) || null
 
 	const [editingLocked, setEditingLocked] = useState(isLocked)
 	const [editingVisualState, setEditingVisualState] = useState<VisualState>(
@@ -339,6 +358,73 @@ export const NodeSettingsDrawer = ({
 							</Box>
 						</>
 					) : null}
+
+					{isAdmin && nodeId ? (
+						<>
+							<Divider className={styles.sectionDivider} />
+							<Box className={styles.settingGroup}>
+								<Box className={styles.settingInfo}>
+									<HistoryIcon className={styles.settingIcon} />
+									<Box className={styles.settingText}>
+										<Typography
+											variant='body2'
+											className={styles.settingLabel}
+										>
+											{t('labels.history', { ns: 'node-history' })}
+										</Typography>
+										<Typography
+											variant='caption'
+											className={styles.settingHint}
+										>
+											{t('labels.recentChanges', { ns: 'node-history' })}
+										</Typography>
+									</Box>
+								</Box>
+
+								{isHistoryLoading ? (
+									<Box
+										sx={{
+											display: 'flex',
+											justifyContent: 'center',
+											py: 2
+										}}
+									>
+										<CircularProgress size={24} />
+									</Box>
+								) : historyItems.length > 0 ? (
+									<Box className={styles.historyList}>
+										{historyItems.map(item => (
+											<HistoryItem
+												key={item.id}
+												history={item}
+												onClick={() => setSelectedHistory(item.id)}
+											/>
+										))}
+										<Button
+											variant='outlined'
+											size='small'
+											fullWidth
+											onClick={() => {
+												navigate(`/node-history?nodeId=${nodeId}`)
+												onClose()
+											}}
+											sx={{ mt: 1 }}
+										>
+											{t('actions.showAll', { ns: 'node-history' })}
+										</Button>
+									</Box>
+								) : (
+									<Typography
+										variant='body2'
+										color='text.secondary'
+										sx={{ py: 2, textAlign: 'center' }}
+									>
+										{t('messages.noHistory', { ns: 'node-history' })}
+									</Typography>
+								)}
+							</Box>
+						</>
+					) : null}
 				</Box>
 
 				<Box className={styles.actions}>
@@ -368,6 +454,12 @@ export const NodeSettingsDrawer = ({
 					</Button>
 				</Box>
 			</Box>
+
+			<HistoryDetails
+				open={selectedHistory !== null}
+				history={selectedHistoryItem}
+				onClose={() => setSelectedHistory(null)}
+			/>
 		</Drawer>
 	)
 }

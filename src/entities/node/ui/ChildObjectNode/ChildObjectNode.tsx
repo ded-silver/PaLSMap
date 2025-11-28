@@ -155,6 +155,7 @@ export const ChildObjectNode = ({
 				isSaving={isSaving}
 				isLocked={isLocked}
 				onLockChange={handleLockChange}
+				nodeId={id}
 			/>
 		</div>
 	)

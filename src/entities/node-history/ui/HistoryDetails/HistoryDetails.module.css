@@ -1,0 +1,53 @@
+.titleContent {
+	display: flex;
+	align-items: center;
+}
+
+.content {
+	display: flex;
+	flex-direction: column;
+	gap: 0;
+}
+
+.section {
+	padding: 16px 0;
+}
+
+.sectionTitle {
+	font-weight: 600;
+	margin-bottom: 8px;
+	color: #1e293b;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	font-size: 12px;
+}
+
+.actionInfo {
+	display: flex;
+	align-items: center;
+}
+
+.entityId {
+	color: #64748b;
+	margin-top: 4px;
+	display: block;
+	font-family: monospace;
+}
+
+.relativeTime {
+	color: #94a3b8;
+	margin-top: 4px;
+	display: block;
+}
+
+.divider {
+	margin: 0;
+}
+
+.actions {
+	padding: 16px 24px;
+	border-top: 1px solid rgba(0, 0, 0, 0.08);
+	display: flex;
+	justify-content: flex-end;
+	background-color: #f8fafc;
+}

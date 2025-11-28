@@ -6,12 +6,14 @@ import adminEn from './locales/en/admin'
 import authEn from './locales/en/auth'
 import commonEn from './locales/en/common'
 import dictionaryEn from './locales/en/dictionary'
+import nodeHistoryEn from './locales/en/node-history'
 import nodesEn from './locales/en/nodes'
 import validationEn from './locales/en/validation'
 import adminRu from './locales/ru/admin'
 import authRu from './locales/ru/auth'
 import commonRu from './locales/ru/common'
 import dictionaryRu from './locales/ru/dictionary'
+import nodeHistoryRu from './locales/ru/node-history'
 import nodesRu from './locales/ru/nodes'
 import validationRu from './locales/ru/validation'
 
@@ -22,7 +24,8 @@ const resources = {
 		dictionary: dictionaryRu,
 		nodes: nodesRu,
 		validation: validationRu,
-		admin: adminRu
+		admin: adminRu,
+		'node-history': nodeHistoryRu
 	},
 	en: {
 		common: commonEn,
@@ -30,7 +33,8 @@ const resources = {
 		dictionary: dictionaryEn,
 		nodes: nodesEn,
 		validation: validationEn,
-		admin: adminEn
+		admin: adminEn,
+		'node-history': nodeHistoryEn
 	}
 }
 

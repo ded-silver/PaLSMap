@@ -178,6 +178,7 @@ export const River = ({ data, id }: NodeProps<CustomNode>) => {
 				isSaving={isSaving}
 				isLocked={isLocked}
 				onLockChange={handleLockChange}
+				nodeId={id}
 			/>
 		</div>
 	)

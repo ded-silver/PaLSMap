@@ -164,6 +164,7 @@ export const ObjectNode = ({ data, id, parentId }: NodeProps<CustomNode>) => {
 				isSaving={isSaving}
 				isLocked={isLocked}
 				onLockChange={handleLockChange}
+				nodeId={id}
 			/>
 		</div>
 	)

@@ -176,6 +176,7 @@ export const AccountingSystemNode = ({
 				isSaving={isSaving}
 				isLocked={isLocked}
 				onLockChange={handleLockChange}
+				nodeId={id}
 			/>
 		</div>
 	)
