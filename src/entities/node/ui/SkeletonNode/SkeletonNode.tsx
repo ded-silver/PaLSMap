@@ -95,7 +95,6 @@ export const SkeletonNode = ({
 }: Props) => {
 	const { t } = useTranslation(['common', 'nodes'])
 
-	// Создаем data объект для хука, если его нет
 	const dataForHook: CustomData = (
 		nodeData
 			? {

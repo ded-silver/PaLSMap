@@ -264,9 +264,7 @@ export function useNodeSettings({
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['currentNodeData'] })
 		},
-		onError: () => {
-			// Silent fail
-		}
+		onError: () => {}
 	})
 
 	const handleClose = () => {

@@ -17,7 +17,7 @@ import { SubmitHandler } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useParams, useSearchParams } from 'react-router-dom'
 
-import styles from './Main.module.css'
+import styles from './MapView.module.css'
 import { useDeleteEdge, useEdges, useEdgesByCountry } from '@/entities/edge'
 import type { NodeDto } from '@/entities/node'
 import { useNodes, useNodesByCountry } from '@/entities/node'
@@ -48,7 +48,7 @@ interface Props {
 	isSidebarOpen: boolean
 }
 
-const MMMain = ({ isSidebarOpen }: Props) => {
+const MapView = ({ isSidebarOpen }: Props) => {
 	const { t } = useTranslation(['common', 'nodes'])
 	const { countryId, areaId } = useParams<{
 		countryId?: string
@@ -212,7 +212,7 @@ const MMMain = ({ isSidebarOpen }: Props) => {
 export default ({ isSidebarOpen }: Props) => (
 	<ReactFlowProvider>
 		<DnDProvider>
-			<MMMain isSidebarOpen={isSidebarOpen} />
+			<MapView isSidebarOpen={isSidebarOpen} />
 		</DnDProvider>
 	</ReactFlowProvider>
 )

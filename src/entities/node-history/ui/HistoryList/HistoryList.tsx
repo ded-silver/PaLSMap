@@ -31,8 +31,6 @@ export const HistoryList = ({
 
 	const totalPages = Math.ceil(total / limit)
 
-	// Определяем, есть ли активные фильтры (кроме пагинации)
-	// Это нужно для различения "нет истории вообще" и "нет результатов по фильтрам"
 	const hasActiveFilters = total === 0 && histories.length === 0 && !isLoading
 
 	if (isLoading) {

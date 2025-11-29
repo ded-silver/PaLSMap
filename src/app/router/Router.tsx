@@ -12,7 +12,7 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 import { AppLayout } from '@/components/layouts/AppLayout'
-import Main from '@/components/layouts/Main/Main'
+import MapView from '@/components/layouts/Main/MapView'
 
 import { useIsAdminWithLoading, userService } from '@/entities/user'
 import { AdminUsersPage } from '@/pages/admin-users'
@@ -58,12 +58,10 @@ const MapCountryRoute = ({ isSidebarOpen }: { isSidebarOpen: boolean }) => {
 	const [searchParams] = useSearchParams()
 	const mode = searchParams.get('mode')
 
-	// Если режим карты, показываем Main компонент
 	if (mode === 'map') {
-		return <Main isSidebarOpen={isSidebarOpen} />
+		return <MapView isSidebarOpen={isSidebarOpen} />
 	}
 
-	// Иначе показываем список областей
 	return <PathAreasListPage />
 }
 
@@ -113,7 +111,10 @@ export const Router = () => {
 							toggleSidebar={toggleSidebar}
 							closeSidebar={closeSidebar}
 						>
-							<Main isSidebarOpen={isSidebarOpen} />
+							<Navigate
+								to='/map'
+								replace
+							/>
 						</AppLayout>
 					}
 				/>
@@ -149,7 +150,7 @@ export const Router = () => {
 							toggleSidebar={toggleSidebar}
 							closeSidebar={closeSidebar}
 						>
-							<Main isSidebarOpen={isSidebarOpen} />
+							<MapView isSidebarOpen={isSidebarOpen} />
 						</AppLayout>
 					}
 				/>
