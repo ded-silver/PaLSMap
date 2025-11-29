@@ -2,8 +2,15 @@ import type { CustomNode, NodeDto } from './types'
 import { axiosWithAuth } from '@/shared/api'
 
 export const NodeService = {
-	async getAll(): Promise<CustomNode[]> {
-		const response = await axiosWithAuth.get('/nodes')
+	async getAll(pathAreaId?: string): Promise<CustomNode[]> {
+		const response = await axiosWithAuth.get('/nodes', {
+			params: pathAreaId ? { pathAreaId } : undefined
+		})
+		return response.data
+	},
+
+	async getByCountry(countryId: string): Promise<CustomNode[]> {
+		const response = await axiosWithAuth.get(`/nodes/country/${countryId}`)
 		return response.data
 	},
 

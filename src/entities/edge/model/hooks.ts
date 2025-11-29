@@ -6,10 +6,25 @@ import { toast } from 'react-toastify'
 import { EdgeService } from './api'
 import type { EdgeDto } from './types'
 
-export function useEdges() {
+export function useEdges(pathAreaId?: string) {
 	const { data } = useQuery({
-		queryKey: ['edges'],
-		queryFn: () => EdgeService.getAll()
+		queryKey: ['edges', pathAreaId],
+		queryFn: () => EdgeService.getAll(pathAreaId)
+	})
+
+	const [items, setItems] = useState<EdgeDto[] | undefined>(data)
+
+	useEffect(() => {
+		setItems(data)
+	}, [data])
+	return { items, setItems }
+}
+
+export function useEdgesByCountry(countryId: string) {
+	const { data } = useQuery({
+		queryKey: ['edges', 'country', countryId],
+		queryFn: () => EdgeService.getByCountry(countryId),
+		enabled: !!countryId
 	})
 
 	const [items, setItems] = useState<EdgeDto[] | undefined>(data)

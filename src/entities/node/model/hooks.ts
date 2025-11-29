@@ -4,10 +4,25 @@ import { useEffect, useState } from 'react'
 import { NodeService } from './api'
 import type { CustomNode } from './types'
 
-export function useNodes() {
+export function useNodes(pathAreaId?: string) {
 	const { data } = useQuery({
-		queryKey: ['nodes'],
-		queryFn: () => NodeService.getAll()
+		queryKey: ['nodes', pathAreaId],
+		queryFn: () => NodeService.getAll(pathAreaId)
+	})
+
+	const [items, setItems] = useState<CustomNode[] | undefined>(data)
+
+	useEffect(() => {
+		setItems(data)
+	}, [data])
+	return { items, setItems }
+}
+
+export function useNodesByCountry(countryId: string) {
+	const { data } = useQuery({
+		queryKey: ['nodes', 'country', countryId],
+		queryFn: () => NodeService.getByCountry(countryId),
+		enabled: !!countryId
 	})
 
 	const [items, setItems] = useState<CustomNode[] | undefined>(data)

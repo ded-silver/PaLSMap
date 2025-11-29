@@ -11,8 +11,13 @@ export const useCreateNode = () => {
 	return useMutation({
 		mutationKey: ['node'],
 		mutationFn: (data: NodeDto) => NodeService.create(data),
-		onSuccess: () => {
+		onSuccess: (_, variables) => {
 			queryClient.invalidateQueries({ queryKey: ['nodes'] })
+			if (variables.pathAreaId) {
+				queryClient.invalidateQueries({
+					queryKey: ['nodes', variables.pathAreaId]
+				})
+			}
 			toast.success(i18n.t('messages.addSuccess', { ns: 'nodes' }))
 		},
 		onError: () => toast.error(i18n.t('messages.addError', { ns: 'nodes' }))

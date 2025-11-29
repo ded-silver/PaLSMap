@@ -15,11 +15,12 @@ import clsx from 'clsx'
 import React, { useCallback, useEffect, useRef } from 'react'
 import { SubmitHandler } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { useParams, useSearchParams } from 'react-router-dom'
 
 import styles from './Main.module.css'
-import { useDeleteEdge, useEdges } from '@/entities/edge'
+import { useDeleteEdge, useEdges, useEdgesByCountry } from '@/entities/edge'
 import type { NodeDto } from '@/entities/node'
-import { useNodes } from '@/entities/node'
+import { useNodes, useNodesByCountry } from '@/entities/node'
 import { CheckpointNode } from '@/entities/node/ui/CheckpointNode'
 import { OPSNode } from '@/entities/node/ui/OPSNode'
 import { River } from '@/entities/node/ui/River'
@@ -49,13 +50,39 @@ interface Props {
 
 const MMMain = ({ isSidebarOpen }: Props) => {
 	const { t } = useTranslation(['common', 'nodes'])
+	const { countryId, areaId } = useParams<{
+		countryId?: string
+		areaId?: string
+	}>()
+	const [searchParams] = useSearchParams()
+	const mode = searchParams.get('mode')
+
 	const reactFlowWrapper = useRef(null)
 	const edgeReconnectSuccessful = useRef(true)
-	const { items } = useNodes()
-	const { items: allEgdes } = useEdges()
+	const isAdmin = useIsAdmin()
+
+	const nodesByArea = useNodes(areaId)
+	const nodesByCountry = useNodesByCountry(countryId || '')
+	const nodesAll = useNodes()
+
+	const edgesByArea = useEdges(areaId)
+	const edgesByCountry = useEdgesByCountry(countryId || '')
+	const edgesAll = useEdges()
+
+	const { items } = areaId
+		? nodesByArea
+		: countryId && mode === 'map'
+			? nodesByCountry
+			: nodesAll
+
+	const { items: allEgdes } = areaId
+		? edgesByArea
+		: countryId && mode === 'map'
+			? edgesByCountry
+			: edgesAll
+
 	const [nodes, setNodes, onNodesChange] = useNodesState<Node>([])
 	const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([])
-	const isAdmin = useIsAdmin()
 
 	const { mutate: deleteEdge } = useDeleteEdge()
 	const { mutate: node } = useCreateNode()
@@ -103,7 +130,8 @@ const MMMain = ({ isSidebarOpen }: Props) => {
 	)
 
 	const { onDrop, onDragOver } = useNodeDrop({
-		onCreate: handleCreate
+		onCreate: handleCreate,
+		pathAreaId: areaId
 	})
 
 	const handleNodesDelete = useCallback((deletedNodes: Node[]) => {

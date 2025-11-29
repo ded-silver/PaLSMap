@@ -5,7 +5,8 @@ import {
 	Route,
 	Routes,
 	useLocation,
-	useNavigate
+	useNavigate,
+	useSearchParams
 } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -17,6 +18,7 @@ import { useIsAdminWithLoading, userService } from '@/entities/user'
 import { AdminUsersPage } from '@/pages/admin-users'
 import { Auth } from '@/pages/auth'
 import { DictionaryPage } from '@/pages/dictionary'
+import { CountriesListPage, PathAreasListPage } from '@/pages/map'
 import { NodeHistoryPage } from '@/pages/node-history'
 import { ProfilePage } from '@/pages/profile'
 import { resetAuthState } from '@/shared/lib/auth-manager'
@@ -50,6 +52,19 @@ const AdminRoute = ({ children }: { children: ReactNode }) => {
 	}
 
 	return <>{children}</>
+}
+
+const MapCountryRoute = ({ isSidebarOpen }: { isSidebarOpen: boolean }) => {
+	const [searchParams] = useSearchParams()
+	const mode = searchParams.get('mode')
+
+	// Если режим карты, показываем Main компонент
+	if (mode === 'map') {
+		return <Main isSidebarOpen={isSidebarOpen} />
+	}
+
+	// Иначе показываем список областей
+	return <PathAreasListPage />
 }
 
 export const Router = () => {
@@ -92,6 +107,42 @@ export const Router = () => {
 			<Routes>
 				<Route
 					path='/'
+					element={
+						<AppLayout
+							isSidebarOpen={isSidebarOpen}
+							toggleSidebar={toggleSidebar}
+							closeSidebar={closeSidebar}
+						>
+							<Main isSidebarOpen={isSidebarOpen} />
+						</AppLayout>
+					}
+				/>
+				<Route
+					path='/map'
+					element={
+						<AppLayout
+							isSidebarOpen={isSidebarOpen}
+							toggleSidebar={toggleSidebar}
+							closeSidebar={closeSidebar}
+						>
+							<CountriesListPage />
+						</AppLayout>
+					}
+				/>
+				<Route
+					path='/map/:countryId'
+					element={
+						<AppLayout
+							isSidebarOpen={isSidebarOpen}
+							toggleSidebar={toggleSidebar}
+							closeSidebar={closeSidebar}
+						>
+							<MapCountryRoute isSidebarOpen={isSidebarOpen} />
+						</AppLayout>
+					}
+				/>
+				<Route
+					path='/map/:countryId/:areaId'
 					element={
 						<AppLayout
 							isSidebarOpen={isSidebarOpen}

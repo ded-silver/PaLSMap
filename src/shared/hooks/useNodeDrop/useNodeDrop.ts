@@ -8,10 +8,15 @@ import { useDnD } from '@/shared/hooks/useDnD'
 
 interface UseNodeDropOptions {
 	parentId?: string
+	pathAreaId?: string
 	onCreate: SubmitHandler<NodeDto>
 }
 
-export const useNodeDrop = ({ parentId, onCreate }: UseNodeDropOptions) => {
+export const useNodeDrop = ({
+	parentId,
+	pathAreaId,
+	onCreate
+}: UseNodeDropOptions) => {
 	const { screenToFlowPosition } = useReactFlow()
 	const { type } = useDnD() as {
 		type: string | null
@@ -51,12 +56,14 @@ export const useNodeDrop = ({ parentId, onCreate }: UseNodeDropOptions) => {
 				}
 			}
 
-			const nodeData = parentId
-				? ({ ...newNode, parentId } as unknown as NodeDto)
-				: (newNode as unknown as NodeDto)
+			const nodeData = {
+				...newNode,
+				...(parentId && { parentId }),
+				...(pathAreaId && { pathAreaId })
+			} as unknown as NodeDto
 			onCreate(nodeData)
 		},
-		[screenToFlowPosition, type, parentId, onCreate]
+		[screenToFlowPosition, type, parentId, pathAreaId, onCreate]
 	)
 
 	const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {

@@ -8,6 +8,7 @@ import commonEn from './locales/en/common'
 import dictionaryEn from './locales/en/dictionary'
 import nodeHistoryEn from './locales/en/node-history'
 import nodesEn from './locales/en/nodes'
+import pathAreasEn from './locales/en/path-areas'
 import validationEn from './locales/en/validation'
 import adminRu from './locales/ru/admin'
 import authRu from './locales/ru/auth'
@@ -15,6 +16,7 @@ import commonRu from './locales/ru/common'
 import dictionaryRu from './locales/ru/dictionary'
 import nodeHistoryRu from './locales/ru/node-history'
 import nodesRu from './locales/ru/nodes'
+import pathAreasRu from './locales/ru/path-areas'
 import validationRu from './locales/ru/validation'
 
 const resources = {
@@ -25,7 +27,8 @@ const resources = {
 		nodes: nodesRu,
 		validation: validationRu,
 		admin: adminRu,
-		'node-history': nodeHistoryRu
+		'node-history': nodeHistoryRu,
+		'path-areas': pathAreasRu
 	},
 	en: {
 		common: commonEn,
@@ -34,7 +37,8 @@ const resources = {
 		nodes: nodesEn,
 		validation: validationEn,
 		admin: adminEn,
-		'node-history': nodeHistoryEn
+		'node-history': nodeHistoryEn,
+		'path-areas': pathAreasEn
 	}
 }
 

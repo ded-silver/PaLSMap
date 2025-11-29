@@ -32,6 +32,7 @@ export interface NodeDto {
 		  }
 		| undefined
 	parentId?: string
+	pathAreaId?: string
 	locked?: boolean
 	visualState?: VisualState
 }

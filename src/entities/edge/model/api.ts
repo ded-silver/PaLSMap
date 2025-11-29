@@ -2,8 +2,17 @@ import type { EdgeDto } from './types'
 import { axiosWithAuth } from '@/shared/api'
 
 export const EdgeService = {
-	async getAll(): Promise<EdgeDto[]> {
-		const { data } = await axiosWithAuth.get<EdgeDto[]>('/edges')
+	async getAll(pathAreaId?: string): Promise<EdgeDto[]> {
+		const { data } = await axiosWithAuth.get<EdgeDto[]>('/edges', {
+			params: pathAreaId ? { pathAreaId } : undefined
+		})
+		return data
+	},
+
+	async getByCountry(countryId: string): Promise<EdgeDto[]> {
+		const { data } = await axiosWithAuth.get<EdgeDto[]>(
+			`/edges/country/${countryId}`
+		)
 		return data
 	},
 
