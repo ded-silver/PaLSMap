@@ -1,19 +1,20 @@
 .card {
-	display: flex;
-	align-items: center;
-	gap: 16px;
-	padding: 20px;
+	background: white;
+	border: 1px solid #e5e7eb;
 	border-radius: 12px;
-	background-color: #ffffff;
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+	padding: 20px 24px;
+	cursor: pointer;
 	transition:
 		transform 0.2s ease,
 		box-shadow 0.2s ease;
-	cursor: pointer;
-}
-
-.card.hasActions {
-	padding-right: 12px;
+	display: flex;
+	align-items: center;
+	gap: 20px;
+	position: relative;
+	overflow: hidden;
+	width: 100%;
+	box-sizing: border-box;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
 
 .card:hover {
@@ -21,12 +22,36 @@
 	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
 }
 
-.icon {
-	color: #0073e6;
+.iconWrapper {
+	flex-shrink: 0;
+}
+
+.iconCircle {
+	width: 56px;
+	height: 56px;
+	border-radius: 12px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	transition: transform 0.2s ease;
 	flex-shrink: 0;
+}
+
+.card:hover .iconCircle {
+	transform: scale(1.05);
+}
+
+.iconCircle.country {
+	background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.iconCircle.area {
+	background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.icon {
+	color: white;
+	font-size: 28px;
 }
 
 .content {
@@ -35,16 +60,21 @@
 }
 
 .name {
+	font-size: 18px;
 	font-weight: 600;
-	font-size: 1.125rem;
 	color: #0f172a;
-	margin-bottom: 4px;
+	margin-bottom: 6px;
+	line-height: 1.5;
 	word-break: break-word;
+	overflow-wrap: break-word;
 }
 
 .code {
-	font-size: 0.875rem;
+	font-size: 14px;
+	font-weight: 500;
 	color: #64748b;
+	font-family: 'Roboto Mono', monospace;
+	letter-spacing: 0.5px;
 }
 
 .actions {
@@ -52,13 +82,24 @@
 	gap: 8px;
 	align-items: center;
 	flex-shrink: 0;
+	opacity: 0;
+	transform: translateX(4px);
+	transition:
+		opacity 0.2s ease,
+		transform 0.2s ease;
 }
 
-.editButton {
+.card:hover .actions {
+	opacity: 1;
+	transform: translateX(0);
+}
+
+.actionButton {
 	color: #0073e6;
+	transition: all 0.2s ease;
 }
 
-.editButton:hover {
+.actionButton:hover {
 	background-color: rgba(0, 115, 230, 0.1);
 }
 

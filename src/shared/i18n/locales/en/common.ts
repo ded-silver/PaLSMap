@@ -12,8 +12,7 @@ export default {
 		register: 'Register'
 	},
 	titles: {
-		main: 'GEOGRAPHICAL SCHEME OF TECHNOLOGICAL OBJECTS',
-		dictionary: 'REFERENCE INFORMATION',
+		dictionary: 'Reference Information',
 		profile: 'Profile'
 	},
 	sidebar: {

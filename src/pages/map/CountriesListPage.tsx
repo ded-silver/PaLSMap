@@ -1,3 +1,5 @@
+import AddIcon from '@mui/icons-material/Add'
+import PublicIcon from '@mui/icons-material/Public'
 import { Button, CircularProgress, Typography } from '@mui/material'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -95,76 +97,107 @@ export const CountriesListPage = () => {
 
 	if (error) {
 		return (
-			<div className={styles['main-content']}>
-				<Typography
-					sx={MUI_STYLES.typography.titleLarge}
-					className={styles.pageTitle}
-					gutterBottom
-				>
-					{t('labels.countries', { ns: 'path-areas' })}
-				</Typography>
-				<div className={styles.noResults}>
-					{t('errors.loadError', { ns: 'common' })}
+			<div className={styles.container}>
+				<div className={styles.contentWrapper}>
+					<div className={styles.header}>
+						<div className={styles.titleSection}>
+							<PublicIcon className={styles.headerIcon} />
+							<Typography
+								variant='h4'
+								component='h1'
+								className={styles.pageTitle}
+							>
+								{t('labels.countries', { ns: 'path-areas' })}
+							</Typography>
+						</div>
+					</div>
+					<div className={styles.errorState}>
+						<Typography variant='h6'>
+							{t('errors.loadError', { ns: 'common' })}
+						</Typography>
+					</div>
 				</div>
 			</div>
 		)
 	}
 
 	return (
-		<div className={styles['main-content']}>
-			<Typography
-				sx={MUI_STYLES.typography.titleLarge}
-				className={styles.pageTitle}
-				gutterBottom
-			>
-				{t('labels.countries', { ns: 'path-areas' })}
-			</Typography>
+		<div className={styles.container}>
+			<div className={styles.contentWrapper}>
+				<div className={styles.header}>
+					<div className={styles.titleSection}>
+						<PublicIcon className={styles.headerIcon} />
+						<Typography
+							variant='h4'
+							component='h1'
+							className={styles.pageTitle}
+						>
+							{t('labels.countries', { ns: 'path-areas' })}
+						</Typography>
+					</div>
 
-			<div className={styles.header}>
-				{isAdmin && (
-					<Button
-						variant='contained'
-						color='primary'
-						onClick={handleAdd}
-						className={styles.addButton}
-					>
-						{t('labels.createCountry', { ns: 'path-areas' })}
-					</Button>
+					<div className={styles.buttonGroup}>
+						{isAdmin && (
+							<Button
+								variant='contained'
+								color='primary'
+								onClick={handleAdd}
+								className={styles.createButton}
+								startIcon={<AddIcon />}
+							>
+								{t('labels.createCountry', { ns: 'path-areas' })}
+							</Button>
+						)}
+					</div>
+				</div>
+
+				{isLoading ? (
+					<div className={styles.loading}>
+						<CircularProgress />
+					</div>
+				) : countries && countries.length > 0 ? (
+					<div className={styles.grid}>
+						{countries.map(country => (
+							<PathCard
+								key={country.id}
+								type='country'
+								item={country}
+								onEdit={isAdmin ? handleEdit : undefined}
+								onDelete={isAdmin ? handleDelete : undefined}
+							/>
+						))}
+					</div>
+				) : (
+					<div className={styles.emptyState}>
+						<PublicIcon className={styles.emptyIcon} />
+						<Typography
+							variant='h6'
+							className={styles.emptyTitle}
+						>
+							{t('labels.noCountries', { ns: 'path-areas' })}
+						</Typography>
+						<Typography
+							variant='body2'
+							className={styles.emptyText}
+						>
+							{t('labels.createFirstCountry', { ns: 'path-areas' }) ||
+								'Create your first country to get started'}
+						</Typography>
+						{isAdmin && (
+							<Button
+								variant='contained'
+								color='primary'
+								onClick={handleAdd}
+								className={styles.createButton}
+								startIcon={<AddIcon />}
+								sx={{ mt: 2 }}
+							>
+								{t('labels.createCountry', { ns: 'path-areas' })}
+							</Button>
+						)}
+					</div>
 				)}
 			</div>
-
-			{isLoading ? (
-				<div className={styles.loading}>
-					<CircularProgress />
-				</div>
-			) : countries && countries.length > 0 ? (
-				<div className={styles.countriesList}>
-					{countries.map(country => (
-						<PathCard
-							key={country.id}
-							type='country'
-							item={country}
-							onEdit={isAdmin ? handleEdit : undefined}
-							onDelete={isAdmin ? handleDelete : undefined}
-						/>
-					))}
-				</div>
-			) : (
-				<div className={styles.noResults}>
-					{t('labels.noCountries', { ns: 'path-areas' })}
-					{isAdmin && (
-						<Button
-							variant='contained'
-							color='primary'
-							onClick={handleAdd}
-							className={styles.createButton}
-							sx={{ mt: 2 }}
-						>
-							{t('labels.createCountry', { ns: 'path-areas' })}
-						</Button>
-					)}
-				</div>
-			)}
 
 			<CreatePathModal
 				isOpen={isModalOpen}

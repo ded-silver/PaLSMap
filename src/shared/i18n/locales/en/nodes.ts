@@ -1,5 +1,4 @@
 export default {
-	title: 'GEOGRAPHICAL SCHEME OF TECHNOLOGICAL OBJECTS',
 	tableTitle: 'Table of protection settings of the technological object',
 	actions: {
 		edit: 'Edit',

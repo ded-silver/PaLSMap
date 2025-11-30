@@ -1,3 +1,5 @@
+import AddIcon from '@mui/icons-material/Add'
+import MapIcon from '@mui/icons-material/Map'
 import { Button, CircularProgress, Typography } from '@mui/material'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -6,6 +8,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { DeleteConfirmDialog } from './DeleteConfirmDialog'
 import styles from './PathAreasListPage.module.css'
 import type { Country } from '@/entities/country'
+import { useCountry } from '@/entities/country'
 import type { PathArea } from '@/entities/path-area'
 import {
 	useCreatePathArea,
@@ -17,7 +20,6 @@ import type { CreatePathAreaDto, UpdatePathAreaDto } from '@/entities/path-area'
 import { useIsAdmin } from '@/entities/user'
 import { MUI_STYLES } from '@/shared/styles/constants'
 import { CreatePathModal } from '@/widgets/create-path-modal'
-import { PathBreadcrumbs } from '@/widgets/path-breadcrumbs'
 import { PathCard } from '@/widgets/path-card'
 
 export const PathAreasListPage = () => {
@@ -34,6 +36,7 @@ export const PathAreasListPage = () => {
 
 	const isAdmin = useIsAdmin()
 
+	const { data: country } = useCountry(countryId || '')
 	const {
 		data: areas,
 		isLoading,
@@ -116,9 +119,11 @@ export const PathAreasListPage = () => {
 
 	if (!countryId) {
 		return (
-			<div className={styles['main-content']}>
-				<div className={styles.noResults}>
-					{t('errors.invalidCountry', { ns: 'path-areas' })}
+			<div className={styles.container}>
+				<div className={styles.contentWrapper}>
+					<div className={styles.noResults}>
+						{t('errors.invalidCountry', { ns: 'path-areas' })}
+					</div>
 				</div>
 			</div>
 		)
@@ -126,17 +131,27 @@ export const PathAreasListPage = () => {
 
 	if (error) {
 		return (
-			<div className={styles['main-content']}>
-				<PathBreadcrumbs />
-				<Typography
-					sx={MUI_STYLES.typography.titleLarge}
-					className={styles.pageTitle}
-					gutterBottom
-				>
-					{t('labels.pathAreas', { ns: 'path-areas' })}
-				</Typography>
-				<div className={styles.noResults}>
-					{t('errors.loadError', { ns: 'common' })}
+			<div className={styles.container}>
+				<div className={styles.contentWrapper}>
+					<div className={styles.header}>
+						<div className={styles.titleSection}>
+							<MapIcon className={styles.headerIcon} />
+							<div>
+								<Typography
+									variant='h4'
+									component='h1'
+									className={styles.pageTitle}
+								>
+									{t('labels.pathAreas', { ns: 'path-areas' })}
+								</Typography>
+							</div>
+						</div>
+					</div>
+					<div className={styles.errorState}>
+						<Typography variant='h6'>
+							{t('errors.loadError', { ns: 'common' })}
+						</Typography>
+					</div>
 				</div>
 			</div>
 		)
@@ -147,70 +162,102 @@ export const PathAreasListPage = () => {
 	}
 
 	return (
-		<div className={styles['main-content']}>
-			<PathBreadcrumbs />
+		<div className={styles.container}>
+			<div className={styles.contentWrapper}>
+				<div className={styles.header}>
+					<div className={styles.titleSection}>
+						<MapIcon className={styles.headerIcon} />
+						<div>
+							<Typography
+								variant='h4'
+								component='h1'
+								className={styles.pageTitle}
+							>
+								{t('labels.pathAreas', { ns: 'path-areas' })}
+							</Typography>
+							{country && (
+								<Typography
+									variant='body2'
+									className={styles.subtitle}
+								>
+									{country.name}
+									{country.code && ` (${country.code})`}
+								</Typography>
+							)}
+						</div>
+					</div>
 
-			<Typography
-				sx={MUI_STYLES.typography.titleLarge}
-				className={styles.pageTitle}
-				gutterBottom
-			>
-				{t('labels.pathAreas', { ns: 'path-areas' })}
-			</Typography>
+					<div className={styles.buttonGroup}>
+						<Button
+							variant='outlined'
+							color='primary'
+							onClick={handleOpenMap}
+							className={styles.mapButton}
+							startIcon={<MapIcon />}
+						>
+							{t('labels.openMap', { ns: 'path-areas' })}
+						</Button>
+						{isAdmin && (
+							<Button
+								variant='contained'
+								color='primary'
+								onClick={handleAdd}
+								className={styles.createButton}
+								startIcon={<AddIcon />}
+							>
+								{t('labels.createPathArea', { ns: 'path-areas' })}
+							</Button>
+						)}
+					</div>
+				</div>
 
-			<div className={styles.header}>
-				<Button
-					variant='outlined'
-					color='primary'
-					onClick={handleOpenMap}
-					className={styles.openMapButton}
-				>
-					{t('labels.openMap', { ns: 'path-areas' })}
-				</Button>
-				{isAdmin && (
-					<Button
-						variant='contained'
-						color='primary'
-						onClick={handleAdd}
-						className={styles.addButton}
-					>
-						{t('labels.createPathArea', { ns: 'path-areas' })}
-					</Button>
+				{isLoading ? (
+					<div className={styles.loading}>
+						<CircularProgress />
+					</div>
+				) : areas && areas.length > 0 ? (
+					<div className={styles.grid}>
+						{areas.map(area => (
+							<PathCard
+								key={area.id}
+								type='area'
+								item={area}
+								onEdit={isAdmin ? handleEdit : undefined}
+								onDelete={isAdmin ? handleDelete : undefined}
+							/>
+						))}
+					</div>
+				) : (
+					<div className={styles.emptyState}>
+						<MapIcon className={styles.emptyIcon} />
+						<Typography
+							variant='h6'
+							className={styles.emptyTitle}
+						>
+							{t('labels.noPathAreas', { ns: 'path-areas' })}
+						</Typography>
+						<Typography
+							variant='body2'
+							className={styles.emptyText}
+						>
+							{t('labels.createFirstPathArea', { ns: 'path-areas' }) ||
+								'Create your first path area to get started'}
+						</Typography>
+						{isAdmin && (
+							<Button
+								variant='contained'
+								color='primary'
+								onClick={handleAdd}
+								className={styles.createButton}
+								startIcon={<AddIcon />}
+								sx={{ mt: 2 }}
+							>
+								{t('labels.createPathArea', { ns: 'path-areas' })}
+							</Button>
+						)}
+					</div>
 				)}
 			</div>
-
-			{isLoading ? (
-				<div className={styles.loading}>
-					<CircularProgress />
-				</div>
-			) : areas && areas.length > 0 ? (
-				<div className={styles.areasList}>
-					{areas.map(area => (
-						<PathCard
-							key={area.id}
-							type='area'
-							item={area}
-							onEdit={isAdmin ? handleEdit : undefined}
-							onDelete={isAdmin ? handleDelete : undefined}
-						/>
-					))}
-				</div>
-			) : (
-				<div className={styles.noResults}>
-					{t('labels.noPathAreas', { ns: 'path-areas' })}
-					{isAdmin && (
-						<Button
-							variant='contained'
-							color='primary'
-							onClick={handleAdd}
-							className={styles.createButton}
-							sx={{ mt: 2 }}
-						>
-							{t('labels.createPathArea', { ns: 'path-areas' })}
-						</Button>
-					)}
-				</div>
-			)}
 
 			<CreatePathModal
 				isOpen={isModalOpen}

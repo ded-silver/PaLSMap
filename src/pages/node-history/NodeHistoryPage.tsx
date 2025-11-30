@@ -1,3 +1,4 @@
+import HistoryIcon from '@mui/icons-material/History'
 import { Box, Typography } from '@mui/material'
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -72,22 +73,20 @@ export const NodeHistoryPage = () => {
 	}, [])
 
 	return (
-		<Box
-			sx={{
-				height: '100%',
-				overflowY: 'auto',
-				backgroundColor: '#e6f0ff',
-				width: '100%'
-			}}
-		>
-			<div className={styles.container}>
-				<Typography
-					sx={MUI_STYLES.typography.titleLarge}
-					className={styles.title}
-					gutterBottom
-				>
-					{t('labels.history', { ns: 'node-history' })}
-				</Typography>
+		<div className={styles.container}>
+			<div className={styles.contentWrapper}>
+				<div className={styles.header}>
+					<div className={styles.titleSection}>
+						<HistoryIcon className={styles.headerIcon} />
+						<Typography
+							variant='h4'
+							component='h1'
+							className={styles.title}
+						>
+							{t('labels.history', { ns: 'node-history' })}
+						</Typography>
+					</div>
+				</div>
 
 				<Box className={styles.content}>
 					<HistoryFilters
@@ -114,6 +113,6 @@ export const NodeHistoryPage = () => {
 					onClose={handleCloseDetails}
 				/>
 			</div>
-		</Box>
+		</div>
 	)
 }

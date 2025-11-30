@@ -49,15 +49,17 @@ export const PathCard = ({ type, item, onEdit, onDelete }: PathCardProps) => {
 
 	return (
 		<div
-			className={`${styles.card} ${isAdmin && onEdit ? styles.hasActions : ''}`}
+			className={styles.card}
 			onClick={handleClick}
 		>
-			<div className={styles.icon}>
-				{type === 'country' ? (
-					<FolderIcon fontSize='large' />
-				) : (
-					<MapIcon fontSize='large' />
-				)}
+			<div className={styles.iconWrapper}>
+				<div className={`${styles.iconCircle} ${styles[type]}`}>
+					{type === 'country' ? (
+						<FolderIcon className={styles.icon} />
+					) : (
+						<MapIcon className={styles.icon} />
+					)}
+				</div>
 			</div>
 			<div className={styles.content}>
 				<div className={styles.name}>{item.name}</div>
@@ -66,13 +68,16 @@ export const PathCard = ({ type, item, onEdit, onDelete }: PathCardProps) => {
 				)}
 			</div>
 			{isAdmin && (onEdit || onDelete) && (
-				<div className={styles.actions}>
+				<div
+					className={styles.actions}
+					onClick={e => e.stopPropagation()}
+				>
 					{onEdit && (
 						<IconButton
 							size='small'
 							onClick={handleEdit}
 							aria-label={t('actions.edit')}
-							className={styles.editButton}
+							className={styles.actionButton}
 						>
 							<EditIcon fontSize='small' />
 						</IconButton>
@@ -82,7 +87,7 @@ export const PathCard = ({ type, item, onEdit, onDelete }: PathCardProps) => {
 							size='small'
 							onClick={handleDelete}
 							aria-label={t('actions.delete')}
-							className={styles.deleteButton}
+							className={`${styles.actionButton} ${styles.deleteButton}`}
 						>
 							<DeleteIcon fontSize='small' />
 						</IconButton>

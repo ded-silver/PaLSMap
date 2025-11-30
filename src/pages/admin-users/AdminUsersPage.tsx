@@ -1,5 +1,6 @@
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
+import PeopleIcon from '@mui/icons-material/People'
 import PersonIcon from '@mui/icons-material/Person'
 import SaveIcon from '@mui/icons-material/Save'
 import ShieldIcon from '@mui/icons-material/Shield'
@@ -126,13 +127,25 @@ export const AdminUsersPage = () => {
 	if (!isAdmin) {
 		return (
 			<div className={styles.container}>
-				<Typography
-					variant='h4'
-					className={styles.error}
-					sx={MUI_STYLES.typography.titleLarge}
-				>
-					{t('accessDenied', { ns: 'admin' })}
-				</Typography>
+				<div className={styles.contentWrapper}>
+					<div className={styles.header}>
+						<div className={styles.titleSection}>
+							<PeopleIcon className={styles.headerIcon} />
+							<Typography
+								variant='h4'
+								component='h1'
+								className={styles.title}
+							>
+								{t('title', { ns: 'admin' })}
+							</Typography>
+						</div>
+					</div>
+					<div className={styles.errorState}>
+						<Typography variant='h6'>
+							{t('accessDenied', { ns: 'admin' })}
+						</Typography>
+					</div>
+				</div>
 			</div>
 		)
 	}
@@ -140,13 +153,25 @@ export const AdminUsersPage = () => {
 	if (error) {
 		return (
 			<div className={styles.container}>
-				<Typography
-					variant='h4'
-					className={styles.error}
-					sx={MUI_STYLES.typography.titleLarge}
-				>
-					{t('errors.loadError', { ns: 'common' })}
-				</Typography>
+				<div className={styles.contentWrapper}>
+					<div className={styles.header}>
+						<div className={styles.titleSection}>
+							<PeopleIcon className={styles.headerIcon} />
+							<Typography
+								variant='h4'
+								component='h1'
+								className={styles.title}
+							>
+								{t('title', { ns: 'admin' })}
+							</Typography>
+						</div>
+					</div>
+					<div className={styles.errorState}>
+						<Typography variant='h6'>
+							{t('errors.loadError', { ns: 'common' })}
+						</Typography>
+					</div>
+				</div>
 			</div>
 		)
 	}
@@ -154,13 +179,38 @@ export const AdminUsersPage = () => {
 	return (
 		<div className={styles.container}>
 			<div className={styles.contentWrapper}>
-				<Typography
-					variant='h4'
-					className={styles.title}
-					sx={MUI_STYLES.typography.titleLarge}
-				>
-					{t('title', { ns: 'admin' })}
-				</Typography>
+				<div className={styles.header}>
+					<div className={styles.titleSection}>
+						<PeopleIcon className={styles.headerIcon} />
+						<Typography
+							variant='h4'
+							component='h1'
+							className={styles.title}
+						>
+							{t('title', { ns: 'admin' })}
+						</Typography>
+					</div>
+
+					<div className={styles.searchSection}>
+						<div className={styles.searchBarWrapper}>
+							<SearchBar
+								placeholder={t('search', { ns: 'admin' })}
+								onChange={e => setSearchTerm(e.target.value)}
+							/>
+						</div>
+						{searchTerm && (
+							<Typography
+								variant='body2'
+								className={styles.searchResults}
+							>
+								{t('searchResults', {
+									ns: 'admin',
+									count: filteredUsers.length
+								})}
+							</Typography>
+						)}
+					</div>
+				</div>
 
 				<div className={styles.statsContainer}>
 					<Paper className={styles.statCard}>
@@ -239,28 +289,6 @@ export const AdminUsersPage = () => {
 							</Typography>
 						</div>
 					</Paper>
-				</div>
-
-				<div className={styles.header}>
-					<div className={styles.headerContent}>
-						<div className={styles.searchBarWrapper}>
-							<SearchBar
-								placeholder={t('search', { ns: 'admin' })}
-								onChange={e => setSearchTerm(e.target.value)}
-							/>
-						</div>
-						{searchTerm && (
-							<Typography
-								variant='body2'
-								className={styles.searchResults}
-							>
-								{t('searchResults', {
-									ns: 'admin',
-									count: filteredUsers.length
-								})}
-							</Typography>
-						)}
-					</div>
 				</div>
 
 				{isLoading ? (

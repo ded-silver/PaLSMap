@@ -1,3 +1,54 @@
 .select {
 	min-width: 120px;
+	background-color: rgba(255, 255, 255, 0.1);
+	border-radius: 10px !important;
+	backdrop-filter: blur(8px);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	border: none;
+	height: 49px;
+	overflow: hidden;
+}
+
+.select :global(.MuiOutlinedInput-root) {
+	height: 100%;
+	border-radius: 10px !important;
+}
+
+.select :global(.MuiOutlinedInput-input) {
+	border-radius: 10px !important;
+}
+
+.select :global(.MuiOutlinedInput-notchedOutline) {
+	border: none !important;
+}
+
+.select :global(.MuiSelect-select) {
+	padding: 0 32px 0 16px !important;
+	height: 100% !important;
+	display: flex !important;
+	align-items: center !important;
+	color: rgba(255, 255, 255, 0.9) !important;
+	font-size: 0.875rem !important;
+	font-weight: 600 !important;
+	line-height: 1.5 !important;
+}
+
+.select :global(.MuiSvgIcon-root) {
+	color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.select:hover {
+	background-color: rgba(255, 255, 255, 0.15);
+}
+
+.select:hover :global(.MuiOutlinedInput-notchedOutline) {
+	border: none !important;
+}
+
+.select:global(.Mui-focused) {
+	background-color: rgba(255, 255, 255, 0.15);
+}
+
+.select:global(.Mui-focused) :global(.MuiOutlinedInput-notchedOutline) {
+	border: none !important;
 }

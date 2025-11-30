@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import styles from './Header.module.css'
 import { useUserProfile } from '@/entities/user'
 import { LanguageSwitcher } from '@/shared/ui'
+import { PathBreadcrumbs } from '@/widgets/path-breadcrumbs'
 
 interface Props {
 	toggleSidebar: () => void
@@ -21,11 +22,16 @@ export const Header = ({ toggleSidebar }: Props) => {
 	return (
 		<header className={styles.header}>
 			<button
+				data-sidebar-toggle
 				className={styles['toggle-sidebar']}
 				onClick={toggleSidebar}
 			>
 				<DensityMediumIcon />
 			</button>
+
+			<div className={styles['breadcrumbs-wrapper']}>
+				<PathBreadcrumbs />
+			</div>
 
 			<div className={styles['header-actions']}>
 				<LanguageSwitcher />
@@ -34,7 +40,7 @@ export const Header = ({ toggleSidebar }: Props) => {
 					className={styles['profile-button']}
 					onClick={() => navigate('/profile')}
 				>
-					<AccountCircleIcon style={{ marginRight: '8px' }} />
+					<AccountCircleIcon />
 					{userName ? userName : t('titles.profile')}
 				</button>
 			</div>

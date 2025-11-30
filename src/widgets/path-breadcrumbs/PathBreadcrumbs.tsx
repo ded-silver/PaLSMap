@@ -1,5 +1,6 @@
+import PublicIcon from '@mui/icons-material/Public'
 import { useTranslation } from 'react-i18next'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useLocation, useParams } from 'react-router-dom'
 
 import styles from './PathBreadcrumbs.module.css'
 import { useCountry } from '@/entities/country'
@@ -7,13 +8,21 @@ import { usePathArea } from '@/entities/path-area'
 
 export const PathBreadcrumbs = () => {
 	const { t } = useTranslation('path-areas')
+	const location = useLocation()
 	const { countryId, areaId } = useParams<{
 		countryId?: string
 		areaId?: string
 	}>()
 
-	const { data: country } = useCountry(countryId || '')
-	const { data: area } = usePathArea(areaId || '')
+	const isMapPage =
+		location.pathname.startsWith('/map') || location.pathname === '/'
+
+	const { data: country } = useCountry(isMapPage && countryId ? countryId : '')
+	const { data: area } = usePathArea(isMapPage && areaId ? areaId : '')
+
+	if (!isMapPage) {
+		return null
+	}
 
 	const breadcrumbs = []
 
@@ -49,14 +58,39 @@ export const PathBreadcrumbs = () => {
 					key={crumb.path}
 					className={styles.breadcrumbItem}
 				>
-					{index > 0 && <span className={styles.separator}> &gt; </span>}
+					{index > 0 && (
+						<span
+							className={styles.separator}
+							aria-hidden='true'
+						>
+							<svg
+								width='16'
+								height='16'
+								viewBox='0 0 16 16'
+								fill='none'
+								xmlns='http://www.w3.org/2000/svg'
+							>
+								<path
+									d='M6 12L10 8L6 4'
+									stroke='currentColor'
+									strokeWidth='1.5'
+									strokeLinecap='round'
+									strokeLinejoin='round'
+								/>
+							</svg>
+						</span>
+					)}
 					{crumb.isActive ? (
-						<span className={styles.active}>{crumb.label}</span>
+						<span className={styles.active}>
+							{index === 0 && <PublicIcon className={styles.breadcrumbIcon} />}
+							{crumb.label}
+						</span>
 					) : (
 						<Link
 							to={crumb.path}
 							className={styles.link}
 						>
+							{index === 0 && <PublicIcon className={styles.breadcrumbIcon} />}
 							{crumb.label}
 						</Link>
 					)}

@@ -1,5 +1,5 @@
 export default {
-	title: 'REFERENCE INFORMATION',
+	title: 'Reference Information',
 	buttons: {
 		add: 'Add record',
 		edit: 'Edit record'

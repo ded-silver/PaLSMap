@@ -1,3 +1,5 @@
+import AddIcon from '@mui/icons-material/Add'
+import BookIcon from '@mui/icons-material/Book'
 import { Button, CircularProgress, Typography } from '@mui/material'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -120,99 +122,151 @@ export const DictionaryPage = () => {
 
 	if (error) {
 		return (
-			<div className={styles['main-content']}>
-				<Typography
-					sx={MUI_STYLES.typography.titleLarge}
-					className={styles.pageTitle}
-					gutterBottom
-				>
-					{t('title', { ns: 'dictionary' })}
-				</Typography>
-				<div className={styles.noResults}>
-					{t('errors.loadError', { ns: 'common' })}
+			<div className={styles.container}>
+				<div className={styles.contentWrapper}>
+					<div className={styles.header}>
+						<div className={styles.titleSection}>
+							<BookIcon className={styles.headerIcon} />
+							<Typography
+								variant='h4'
+								component='h1'
+								className={styles.title}
+							>
+								{t('title', { ns: 'dictionary' })}
+							</Typography>
+						</div>
+					</div>
+					<div className={styles.errorState}>
+						<Typography variant='h6'>
+							{t('errors.loadError', { ns: 'common' })}
+						</Typography>
+					</div>
 				</div>
 			</div>
 		)
 	}
 
 	return (
-		<div className={styles['main-content']}>
-			<Typography
-				sx={MUI_STYLES.typography.titleLarge}
-				className={styles.pageTitle}
-				gutterBottom
-			>
-				{t('title', { ns: 'dictionary' })}
-			</Typography>
-
-			<div className={styles.header}>
-				<div className={styles.searchAndActions}>
-					<div className={styles.searchBarWrapper}>
-						<SearchBar
-							placeholder={t('placeholders.searchAbbreviations', {
-								ns: 'common'
-							})}
-							onChange={e => setSearchTerm(e.target.value)}
-						/>
+		<div className={styles.container}>
+			<div className={styles.contentWrapper}>
+				<div className={styles.header}>
+					<div className={styles.titleSection}>
+						<BookIcon className={styles.headerIcon} />
+						<Typography
+							variant='h4'
+							component='h1'
+							className={styles.title}
+						>
+							{t('title', { ns: 'dictionary' })}
+						</Typography>
 					</div>
 
-					{isAdmin && (
-						<Button
-							variant='contained'
-							color='primary'
-							onClick={handleAdd}
-							className={styles.addButton}
+					<div className={styles.buttonGroup}>
+						<div className={styles.searchBarWrapper}>
+							<SearchBar
+								placeholder={t('placeholders.searchAbbreviations', {
+									ns: 'common'
+								})}
+								onChange={e => setSearchTerm(e.target.value)}
+							/>
+						</div>
+						{isAdmin && (
+							<Button
+								variant='contained'
+								color='primary'
+								onClick={handleAdd}
+								className={styles.createButton}
+								startIcon={<AddIcon />}
+							>
+								{t('buttons.add', { ns: 'dictionary' })}
+							</Button>
+						)}
+					</div>
+				</div>
+
+				{isLoading ? (
+					<div className={styles.loading}>
+						<CircularProgress />
+					</div>
+				) : filteredDictionaries.length > 0 ? (
+					<div className={styles.grid}>
+						{filteredDictionaries.map(item => (
+							<DictionaryItem
+								key={item.id}
+								item={item}
+								isAdmin={isAdmin}
+								onEdit={handleEdit}
+								onDelete={handleDelete}
+							/>
+						))}
+					</div>
+				) : dictionaries.length === 0 ? (
+					<div className={styles.emptyState}>
+						<BookIcon className={styles.emptyIcon} />
+						<Typography
+							variant='h6'
+							className={styles.emptyTitle}
 						>
-							{t('buttons.add', { ns: 'dictionary' })}
-						</Button>
-					)}
-				</div>
-			</div>
+							{t('messages.empty', { ns: 'dictionary' })}
+						</Typography>
+						<Typography
+							variant='body2'
+							className={styles.emptyText}
+						>
+							{t('messages.createFirst', { ns: 'dictionary' }) ||
+								'Create your first dictionary entry to get started'}
+						</Typography>
+						{isAdmin && (
+							<Button
+								variant='contained'
+								color='primary'
+								onClick={handleAdd}
+								className={styles.createButton}
+								startIcon={<AddIcon />}
+								sx={{ mt: 2 }}
+							>
+								{t('buttons.add', { ns: 'dictionary' })}
+							</Button>
+						)}
+					</div>
+				) : (
+					<div className={styles.emptyState}>
+						<BookIcon className={styles.emptyIcon} />
+						<Typography
+							variant='h6'
+							className={styles.emptyTitle}
+						>
+							{t('messages.noResults', { ns: 'dictionary' })}
+						</Typography>
+						<Typography
+							variant='body2'
+							className={styles.emptyText}
+						>
+							{t('messages.tryDifferentSearch', { ns: 'dictionary' }) ||
+								'Try a different search term'}
+						</Typography>
+					</div>
+				)}
 
-			{isLoading ? (
-				<div className={styles.loading}>
-					<CircularProgress />
-				</div>
-			) : filteredDictionaries.length > 0 ? (
-				<div className={styles.abbreviationList}>
-					{filteredDictionaries.map(item => (
-						<DictionaryItem
-							key={item.id}
-							item={item}
-							isAdmin={isAdmin}
-							onEdit={handleEdit}
-							onDelete={handleDelete}
-						/>
-					))}
-				</div>
-			) : dictionaries.length === 0 ? (
-				<div className={styles.noResults}>
-					{t('messages.empty', { ns: 'dictionary' })}
-				</div>
-			) : (
-				<div className={styles.noResults}>
-					{t('messages.noResults', { ns: 'dictionary' })}
-				</div>
-			)}
-
-			<DictionaryModal
-				isOpen={isModalOpen}
-				mode={modalMode}
-				item={selectedItem || undefined}
-				onClose={handleModalClose}
-				onSubmit={handleModalSubmit}
-				isLoading={isCreating || isUpdating}
-			/>
-
-			{selectedItem && (
-				<DeleteConfirmDialog
-					isOpen={isDeleteDialogOpen}
-					item={selectedItem}
-					onClose={handleDeleteDialogClose}
-					onConfirm={handleDeleteConfirm}
-					isLoading={isDeleting}
+				<DictionaryModal
+					isOpen={isModalOpen}
+					mode={modalMode}
+					item={selectedItem || undefined}
+					onClose={handleModalClose}
+					onSubmit={handleModalSubmit}
+					isLoading={isCreating || isUpdating}
 				/>
-			)}
+
+				{selectedItem && (
+					<DeleteConfirmDialog
+						isOpen={isDeleteDialogOpen}
+						item={selectedItem}
+						onClose={handleDeleteDialogClose}
+						onConfirm={handleDeleteConfirm}
+						isLoading={isDeleting}
+					/>
+				)}
+			</div>
 		</div>
 	)
 }

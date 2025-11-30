@@ -165,12 +165,6 @@ const MapView = ({ isSidebarOpen }: Props) => {
 				ref={reactFlowWrapper}
 				sx={{ backgroundColor: COLORS.background }}
 			>
-				<Typography
-					variant='h4'
-					className={clsx(styles.pageTitle, { [styles.open]: isSidebarOpen })}
-				>
-					{t('titles.main')}
-				</Typography>
 				<ReactFlow
 					nodes={nodes}
 					edges={edges}
