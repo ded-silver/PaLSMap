@@ -1,11 +1,3 @@
-import CloseIcon from '@mui/icons-material/Close'
-import {
-	Dialog,
-	DialogContent,
-	DialogTitle,
-	IconButton,
-	Typography
-} from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import type {
@@ -15,7 +7,7 @@ import type {
 } from '../../model/types'
 import { DictionaryForm } from '../DictionaryForm'
 
-import { MUI_STYLES } from '@/shared/styles/constants'
+import { AppModal } from '@/shared/ui'
 
 interface DictionaryModalProps {
 	isOpen: boolean
@@ -45,37 +37,19 @@ export const DictionaryModal = ({
 	}
 
 	return (
-		<Dialog
+		<AppModal
 			open={isOpen}
 			onClose={onClose}
-			maxWidth='sm'
-			fullWidth
-			PaperProps={{
-				sx: MUI_STYLES.dialogPaper
-			}}
+			title={mode === 'create' ? t('buttons.add') : t('buttons.edit')}
+			variant='primary'
 		>
-			<DialogTitle sx={MUI_STYLES.dialogTitlePrimary}>
-				<Typography sx={MUI_STYLES.typography.titleMedium}>
-					{mode === 'create' ? t('buttons.add') : t('buttons.edit')}
-				</Typography>
-				<IconButton
-					aria-label='close'
-					onClick={onClose}
-					sx={MUI_STYLES.iconButtonClosePrimary}
-				>
-					<CloseIcon />
-				</IconButton>
-			</DialogTitle>
-
-			<DialogContent sx={MUI_STYLES.dialogContent}>
-				<DictionaryForm
-					key={item?.id || 'create'}
-					initialData={item}
-					onSubmit={handleSubmit}
-					onCancel={handleCancel}
-					isLoading={isLoading}
-				/>
-			</DialogContent>
-		</Dialog>
+			<DictionaryForm
+				key={item?.id || 'create'}
+				initialData={item}
+				onSubmit={handleSubmit}
+				onCancel={handleCancel}
+				isLoading={isLoading}
+			/>
+		</AppModal>
 	)
 }

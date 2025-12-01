@@ -1,6 +1,6 @@
 import AddIcon from '@mui/icons-material/Add'
 import PublicIcon from '@mui/icons-material/Public'
-import { Button, CircularProgress, Typography } from '@mui/material'
+import { CircularProgress, Typography } from '@mui/material'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -15,7 +15,7 @@ import {
 } from '@/entities/country'
 import type { CreateCountryDto, UpdateCountryDto } from '@/entities/country'
 import { useIsAdmin } from '@/entities/user'
-import { MUI_STYLES } from '@/shared/styles/constants'
+import { AppButton } from '@/shared/ui'
 import { CreatePathModal } from '@/widgets/create-path-modal'
 import { PathCard } from '@/widgets/path-card'
 
@@ -138,15 +138,13 @@ export const CountriesListPage = () => {
 
 					<div className={styles.buttonGroup}>
 						{isAdmin && (
-							<Button
-								variant='contained'
-								color='primary'
+							<AppButton
+								variant='primary'
 								onClick={handleAdd}
-								className={styles.createButton}
 								startIcon={<AddIcon />}
 							>
 								{t('labels.createCountry', { ns: 'path-areas' })}
-							</Button>
+							</AppButton>
 						)}
 					</div>
 				</div>
@@ -184,16 +182,14 @@ export const CountriesListPage = () => {
 								'Create your first country to get started'}
 						</Typography>
 						{isAdmin && (
-							<Button
-								variant='contained'
-								color='primary'
+							<AppButton
+								variant='primary'
 								onClick={handleAdd}
-								className={styles.createButton}
 								startIcon={<AddIcon />}
 								sx={{ mt: 2 }}
 							>
 								{t('labels.createCountry', { ns: 'path-areas' })}
-							</Button>
+							</AppButton>
 						)}
 					</div>
 				)}

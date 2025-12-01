@@ -5,7 +5,6 @@ import {
 	Select,
 	TextField
 } from '@mui/material'
-import { Button } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
@@ -13,6 +12,7 @@ import styles from './CreatePathForm.module.css'
 import type { CreateCountryDto, UpdateCountryDto } from '@/entities/country'
 import type { Country } from '@/entities/country'
 import type { CreatePathAreaDto, UpdatePathAreaDto } from '@/entities/path-area'
+import { AppButton } from '@/shared/ui'
 
 interface CreatePathFormProps {
 	type: 'country' | 'area'
@@ -150,24 +150,24 @@ export const CreatePathForm = ({
 			)}
 
 			<div className={styles.actions}>
-				<Button
+				<AppButton
 					type='button'
-					variant='outlined'
+					variant='secondary'
 					onClick={onCancel}
 					disabled={isLoading}
 				>
 					{t('buttons.cancel', { ns: 'common' })}
-				</Button>
-				<Button
+				</AppButton>
+				<AppButton
 					type='submit'
-					variant='contained'
+					variant='primary'
+					loading={isLoading}
 					disabled={isLoading}
-					color='primary'
 				>
 					{isLoading
 						? t('messages.saving', { ns: 'common' })
 						: t('buttons.save', { ns: 'common' })}
-				</Button>
+				</AppButton>
 			</div>
 		</form>
 	)

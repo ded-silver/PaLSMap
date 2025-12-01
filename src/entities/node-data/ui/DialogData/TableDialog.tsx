@@ -19,7 +19,8 @@ import { toast } from 'react-toastify'
 
 import { NodeDataService } from '@/entities/node-data'
 import type { NodeData, NodeDataPayload } from '@/entities/node-data'
-import { MUI_STYLES, SIZES } from '@/shared/styles/constants'
+import { SIZES } from '@/shared/styles/tokens'
+import { MUI_STYLES } from '@/shared/styles/mui-styles'
 
 const initialValues = {
 	protectionName: '',

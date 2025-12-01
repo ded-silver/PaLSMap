@@ -1,6 +1,6 @@
 import AddIcon from '@mui/icons-material/Add'
 import BookIcon from '@mui/icons-material/Book'
-import { Button, CircularProgress, Typography } from '@mui/material'
+import { CircularProgress, Typography } from '@mui/material'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -20,8 +20,7 @@ import {
 	useUpdateDictionary
 } from '@/entities/dictionary'
 import { useIsAdmin } from '@/entities/user'
-import { MUI_STYLES } from '@/shared/styles/constants'
-import { SearchBar } from '@/shared/ui'
+import { AppButton, SearchBar } from '@/shared/ui'
 
 export const DictionaryPage = () => {
 	const { t } = useTranslation(['common', 'dictionary'])
@@ -171,15 +170,14 @@ export const DictionaryPage = () => {
 							/>
 						</div>
 						{isAdmin && (
-							<Button
-								variant='contained'
-								color='primary'
+							<AppButton
+								variant='primary'
 								onClick={handleAdd}
 								className={styles.createButton}
 								startIcon={<AddIcon />}
 							>
 								{t('buttons.add', { ns: 'dictionary' })}
-							</Button>
+							</AppButton>
 						)}
 					</div>
 				</div>
@@ -217,16 +215,15 @@ export const DictionaryPage = () => {
 								'Create your first dictionary entry to get started'}
 						</Typography>
 						{isAdmin && (
-							<Button
-								variant='contained'
-								color='primary'
+							<AppButton
+								variant='primary'
 								onClick={handleAdd}
 								className={styles.createButton}
 								startIcon={<AddIcon />}
 								sx={{ mt: 2 }}
 							>
 								{t('buttons.add', { ns: 'dictionary' })}
-							</Button>
+							</AppButton>
 						)}
 					</div>
 				) : (

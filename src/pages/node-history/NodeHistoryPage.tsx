@@ -12,7 +12,7 @@ import {
 	HistoryList,
 	useHistory
 } from '@/entities/node-history'
-import { MUI_STYLES } from '@/shared/styles/constants'
+import { MUI_STYLES } from '@/shared/styles/mui-styles'
 
 export const NodeHistoryPage = () => {
 	const { t } = useTranslation(['node-history', 'common'])

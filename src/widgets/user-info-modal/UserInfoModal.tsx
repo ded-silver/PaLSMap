@@ -1,6 +1,5 @@
-import CloseIcon from '@mui/icons-material/Close'
 import LogoutIcon from '@mui/icons-material/Logout'
-import { Button, IconButton, TextField } from '@mui/material'
+import { TextField } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -8,6 +7,7 @@ import { toast } from 'react-toastify'
 
 import styles from './UserInfoModal.module.css'
 import { type IUser, userService } from '@/entities/user'
+import { AppButton, AppModal } from '@/shared/ui'
 
 interface Props {
 	onClose: () => void
@@ -58,73 +58,68 @@ export const UserInfoModal = ({
 	}
 
 	return (
-		<div className={styles.overlay}>
-			<div className={styles.modalContainer}>
-				<div className={styles.topButtons}>
-					<IconButton
-						onClick={onClose}
-						className={styles.closeButton}
-						aria-label={t('buttons.close')}
-						size='small'
+		<AppModal
+			open={true}
+			onClose={onClose}
+			title={t('profile.title')}
+			variant='primary'
+		>
+			<form
+				onSubmit={handleSubmit(onSubmit)}
+				className={styles.form}
+			>
+				<TextField
+					label={nameValue ? '' : t('labels.name')}
+					fullWidth
+					{...register('name')}
+					placeholder={t('placeholders.fullName')}
+					margin='normal'
+				/>
+				<TextField
+					label={emailValue ? '' : t('labels.email')}
+					type='email'
+					fullWidth
+					{...register('email')}
+					placeholder={t('placeholders.email')}
+					disabled
+					margin='normal'
+				/>
+				<TextField
+					label={t('labels.password')}
+					type='password'
+					fullWidth
+					{...register('password')}
+					placeholder={t('placeholders.password')}
+					margin='normal'
+				/>
+
+				<div className={styles.actions}>
+					<AppButton
+						type='button'
+						variant='secondary'
+						onClick={handleRequestRights}
+						disabled={requestSent}
 					>
-						<CloseIcon />
-					</IconButton>
+						{t('profile.requestRights')}
+					</AppButton>
+					<AppButton
+						type='submit'
+						variant='primary'
+					>
+						{t('buttons.save')}
+					</AppButton>
 				</div>
 
-				<form
-					onSubmit={handleSubmit(onSubmit)}
-					className={styles.form}
+				<AppButton
+					startIcon={<LogoutIcon />}
+					variant='danger'
+					onClick={onLogout}
+					fullWidth
+					sx={{ mt: 2 }}
 				>
-					<TextField
-						label={nameValue ? '' : t('labels.name')}
-						fullWidth
-						{...register('name')}
-						placeholder={t('placeholders.fullName')}
-					/>
-					<TextField
-						label={emailValue ? '' : t('labels.email')}
-						type='email'
-						fullWidth
-						{...register('email')}
-						placeholder={t('placeholders.email')}
-						disabled
-					/>
-					<TextField
-						label={t('labels.password')}
-						type='password'
-						fullWidth
-						{...register('password')}
-						placeholder={t('placeholders.password')}
-					/>
-
-					<div className={styles.actions}>
-						<Button
-							variant='outlined'
-							type='button'
-							onClick={handleRequestRights}
-							disabled={requestSent}
-						>
-							{t('profile.requestRights')}
-						</Button>
-						<Button
-							variant='contained'
-							type='submit'
-						>
-							{t('buttons.save')}
-						</Button>
-					</div>
-
-					<Button
-						startIcon={<LogoutIcon />}
-						variant='text'
-						color='error'
-						onClick={onLogout}
-						className={styles.logoutButton}
-					>
-						{t('buttons.logout')}
-					</Button>
-				</form>
-			</div>
-		</div>
+					{t('buttons.logout')}
+				</AppButton>
+			</form>
+		</AppModal>
 	)
 }

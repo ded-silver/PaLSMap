@@ -1,4 +1,4 @@
-import { Button, TextField } from '@mui/material'
+import { TextField } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
@@ -9,6 +9,7 @@ import type {
 } from '../../model/types'
 
 import styles from './DictionaryForm.module.css'
+import { AppButton } from '@/shared/ui'
 
 interface DictionaryFormProps {
 	initialData?: IDictionary
@@ -96,24 +97,24 @@ export const DictionaryForm = ({
 			/>
 
 			<div className={styles.actions}>
-				<Button
+				<AppButton
 					type='button'
-					variant='outlined'
+					variant='secondary'
 					onClick={onCancel}
 					disabled={isLoading}
 				>
 					{t('buttons.cancel', { ns: 'common' })}
-				</Button>
-				<Button
+				</AppButton>
+				<AppButton
 					type='submit'
-					variant='contained'
+					variant='primary'
+					loading={isLoading}
 					disabled={isLoading}
-					color='primary'
 				>
 					{isLoading
 						? t('messages.saving', { ns: 'common' })
 						: t('buttons.save', { ns: 'common' })}
-				</Button>
+				</AppButton>
 			</div>
 		</form>
 	)

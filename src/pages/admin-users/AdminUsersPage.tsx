@@ -27,7 +27,7 @@ import styles from './AdminUsersPage.module.css'
 import { useAllUsers, useIsAdmin, useUpdateUserByAdmin } from '@/entities/user'
 import type { IUpdateUserByAdminDto, IUserForAdmin } from '@/entities/user'
 import { normalizeAvatarUrl } from '@/shared/lib'
-import { MUI_STYLES } from '@/shared/styles/constants'
+import { MUI_STYLES } from '@/shared/styles/mui-styles'
 import { SearchBar } from '@/shared/ui'
 
 export const AdminUsersPage = () => {

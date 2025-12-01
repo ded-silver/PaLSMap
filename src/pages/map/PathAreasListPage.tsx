@@ -1,6 +1,6 @@
 import AddIcon from '@mui/icons-material/Add'
 import MapIcon from '@mui/icons-material/Map'
-import { Button, CircularProgress, Typography } from '@mui/material'
+import { CircularProgress, Typography } from '@mui/material'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
@@ -18,7 +18,7 @@ import {
 } from '@/entities/path-area'
 import type { CreatePathAreaDto, UpdatePathAreaDto } from '@/entities/path-area'
 import { useIsAdmin } from '@/entities/user'
-import { MUI_STYLES } from '@/shared/styles/constants'
+import { AppButton } from '@/shared/ui'
 import { CreatePathModal } from '@/widgets/create-path-modal'
 import { PathCard } from '@/widgets/path-card'
 
@@ -188,25 +188,21 @@ export const PathAreasListPage = () => {
 					</div>
 
 					<div className={styles.buttonGroup}>
-						<Button
-							variant='outlined'
-							color='primary'
+						<AppButton
+							variant='secondary'
 							onClick={handleOpenMap}
-							className={styles.mapButton}
 							startIcon={<MapIcon />}
 						>
 							{t('labels.openMap', { ns: 'path-areas' })}
-						</Button>
+						</AppButton>
 						{isAdmin && (
-							<Button
-								variant='contained'
-								color='primary'
+							<AppButton
+								variant='primary'
 								onClick={handleAdd}
-								className={styles.createButton}
 								startIcon={<AddIcon />}
 							>
 								{t('labels.createPathArea', { ns: 'path-areas' })}
-							</Button>
+							</AppButton>
 						)}
 					</div>
 				</div>
@@ -244,16 +240,14 @@ export const PathAreasListPage = () => {
 								'Create your first path area to get started'}
 						</Typography>
 						{isAdmin && (
-							<Button
-								variant='contained'
-								color='primary'
+							<AppButton
+								variant='primary'
 								onClick={handleAdd}
-								className={styles.createButton}
 								startIcon={<AddIcon />}
 								sx={{ mt: 2 }}
 							>
 								{t('labels.createPathArea', { ns: 'path-areas' })}
-							</Button>
+							</AppButton>
 						)}
 					</div>
 				)}

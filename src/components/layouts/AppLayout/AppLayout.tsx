@@ -1,7 +1,7 @@
 import { Box } from '@mui/material'
 import { ReactNode, useEffect, useRef } from 'react'
 
-import { MUI_STYLES } from '@/shared/styles/constants'
+import { MUI_STYLES } from '@/shared/styles/mui-styles'
 import { Header } from '@/widgets/header'
 import { Sidebar } from '@/widgets/sidebar'
 

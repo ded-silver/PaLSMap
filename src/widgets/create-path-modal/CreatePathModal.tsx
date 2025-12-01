@@ -1,11 +1,3 @@
-import CloseIcon from '@mui/icons-material/Close'
-import {
-	Dialog,
-	DialogContent,
-	DialogTitle,
-	IconButton,
-	Typography
-} from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import { CreatePathForm } from './CreatePathForm'
@@ -13,7 +5,7 @@ import type { CreateCountryDto, UpdateCountryDto } from '@/entities/country'
 import type { Country } from '@/entities/country'
 import { useCountries } from '@/entities/country'
 import type { CreatePathAreaDto, UpdatePathAreaDto } from '@/entities/path-area'
-import { MUI_STYLES } from '@/shared/styles/constants'
+import { AppModal } from '@/shared/ui'
 
 interface CreatePathModalProps {
 	isOpen: boolean
@@ -55,40 +47,22 @@ export const CreatePathModal = ({
 	}
 
 	return (
-		<Dialog
+		<AppModal
 			open={isOpen}
 			onClose={onClose}
-			maxWidth='sm'
-			fullWidth
-			PaperProps={{
-				sx: MUI_STYLES.dialogPaper
-			}}
+			title={getTitle()}
+			variant='primary'
 		>
-			<DialogTitle sx={MUI_STYLES.dialogTitlePrimary}>
-				<Typography sx={MUI_STYLES.typography.titleMedium}>
-					{getTitle()}
-				</Typography>
-				<IconButton
-					aria-label='close'
-					onClick={onClose}
-					sx={MUI_STYLES.iconButtonClosePrimary}
-				>
-					<CloseIcon />
-				</IconButton>
-			</DialogTitle>
-
-			<DialogContent sx={MUI_STYLES.dialogContent}>
-				<CreatePathForm
-					key={item?.id || 'create'}
-					type={type}
-					initialData={item}
-					countryId={countryId}
-					countries={countries || []}
-					onSubmit={onSubmit}
-					onCancel={onClose}
-					isLoading={isLoading}
-				/>
-			</DialogContent>
-		</Dialog>
+			<CreatePathForm
+				key={item?.id || 'create'}
+				type={type}
+				initialData={item}
+				countryId={countryId}
+				countries={countries || []}
+				onSubmit={onSubmit}
+				onCancel={onClose}
+				isLoading={isLoading}
+			/>
+		</AppModal>
 	)
 }

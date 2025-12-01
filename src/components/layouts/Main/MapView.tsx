@@ -34,7 +34,7 @@ import {
 	useNodeDrop,
 	useNodePositionUpdate
 } from '@/shared/hooks'
-import { COLORS, SIZES } from '@/shared/styles/constants'
+import { COLORS, SIZES } from '@/shared/styles/tokens'
 import { DnDSidebar } from '@/widgets/dnd-sidebar'
 
 const nodeTypes = {

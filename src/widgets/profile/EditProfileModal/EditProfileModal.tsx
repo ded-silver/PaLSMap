@@ -1,14 +1,5 @@
-import CloseIcon from '@mui/icons-material/Close'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
-import {
-	Button,
-	Dialog,
-	DialogContent,
-	DialogTitle,
-	IconButton,
-	TextField,
-	Typography
-} from '@mui/material'
+import { TextField } from '@mui/material'
 import { useRef } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -17,7 +8,7 @@ import { toast } from 'react-toastify'
 import styles from './EditProfileModal.module.css'
 import { useUploadAvatar } from '@/entities/user'
 import type { IProfileResponse, IUser } from '@/entities/user'
-import { MUI_STYLES } from '@/shared/styles/constants'
+import { AppButton, AppModal } from '@/shared/ui'
 
 interface EditProfileModalProps {
 	open: boolean
@@ -122,123 +113,104 @@ export const EditProfileModal = ({
 	}
 
 	return (
-		<Dialog
+		<AppModal
 			open={open}
 			onClose={handleClose}
-			maxWidth='sm'
-			fullWidth
-			PaperProps={{
-				sx: MUI_STYLES.dialogPaper
-			}}
+			title={t('profile.edit')}
+			variant='primary'
 		>
-			<DialogTitle sx={MUI_STYLES.dialogTitlePrimary}>
-				<Typography sx={MUI_STYLES.typography.titleMedium}>
-					{t('profile.edit')}
-				</Typography>
-				<IconButton
-					aria-label='close'
-					onClick={handleClose}
-					sx={MUI_STYLES.iconButtonClosePrimary}
-				>
-					<CloseIcon />
-				</IconButton>
-			</DialogTitle>
+			<form
+				onSubmit={handleSubmit(handleFormSubmit)}
+				className={styles.form}
+			>
+				<div className={styles.uploadSection}>
+					<input
+						ref={fileInputRef}
+						type='file'
+						accept='image/jpeg,image/png,image/gif,image/webp'
+						style={{ display: 'none' }}
+						onChange={handleFileSelect}
+						disabled={isUploading || isUpdating}
+					/>
+					<AppButton
+						variant='secondary'
+						startIcon={<CloudUploadIcon />}
+						onClick={handleUploadClick}
+						disabled={isUploading || isUpdating}
+						fullWidth
+					>
+						{isUploading
+							? t('messages.uploading')
+							: t('profile.avatar.uploadFromDevice')}
+					</AppButton>
+				</div>
 
-			<DialogContent sx={MUI_STYLES.dialogContent}>
-				<form
-					onSubmit={handleSubmit(handleFormSubmit)}
-					className={styles.form}
-				>
-					<div className={styles.uploadSection}>
-						<input
-							ref={fileInputRef}
-							type='file'
-							accept='image/jpeg,image/png,image/gif,image/webp'
-							style={{ display: 'none' }}
-							onChange={handleFileSelect}
-							disabled={isUploading || isUpdating}
-						/>
-						<Button
+				<Controller
+					name='avatar'
+					control={control}
+					render={({ field }) => (
+						<TextField
+							{...field}
+							label={t('profile.avatar.url')}
 							variant='outlined'
-							startIcon={<CloudUploadIcon />}
-							onClick={handleUploadClick}
-							disabled={isUploading || isUpdating}
 							fullWidth
-						>
-							{isUploading
-								? t('messages.uploading')
-								: t('profile.avatar.uploadFromDevice')}
-						</Button>
-					</div>
+							disabled={isUpdating}
+							margin='normal'
+							placeholder='https://example.com/avatar.jpg'
+							helperText={t('profile.avatar.urlHint')}
+						/>
+					)}
+				/>
 
-					<Controller
-						name='avatar'
-						control={control}
-						render={({ field }) => (
-							<TextField
-								{...field}
-								label={t('profile.avatar.url')}
-								variant='outlined'
-								fullWidth
-								disabled={isUpdating}
-								margin='normal'
-								placeholder='https://example.com/avatar.jpg'
-								helperText={t('profile.avatar.urlHint')}
-							/>
-						)}
-					/>
-
-					<Controller
-						name='name'
-						control={control}
-						render={({ field }) => (
-							<TextField
-								{...field}
-								label={t('labels.name')}
-								variant='outlined'
-								fullWidth
-								disabled={isUpdating}
-								margin='normal'
-							/>
-						)}
-					/>
-
-					<Controller
-						name='position'
-						control={control}
-						render={({ field }) => (
-							<TextField
-								{...field}
-								label={t('profile.position')}
-								variant='outlined'
-								fullWidth
-								disabled={isUpdating || !profile.isAdmin}
-								margin='normal'
-								placeholder={t('placeholders.position')}
-							/>
-						)}
-					/>
-
-					<div className={styles.actions}>
-						<Button
-							type='button'
-							onClick={handleClose}
+				<Controller
+					name='name'
+					control={control}
+					render={({ field }) => (
+						<TextField
+							{...field}
+							label={t('labels.name')}
 							variant='outlined'
-							disabled={isUpdating || isUploading}
-						>
-							{t('buttons.cancel')}
-						</Button>
-						<Button
-							type='submit'
-							variant='contained'
-							disabled={isUpdating || isUploading}
-							color='primary'
-						>
-							{isUpdating ? t('messages.saving') : t('buttons.save')}
-						</Button>
-					</div>
-				</form>
-			</DialogContent>
-		</Dialog>
+							fullWidth
+							disabled={isUpdating}
+							margin='normal'
+						/>
+					)}
+				/>
+
+				<Controller
+					name='position'
+					control={control}
+					render={({ field }) => (
+						<TextField
+							{...field}
+							label={t('profile.position')}
+							variant='outlined'
+							fullWidth
+							disabled={isUpdating || !profile.isAdmin}
+							margin='normal'
+							placeholder={t('placeholders.position')}
+						/>
+					)}
+				/>
+
+				<div className={styles.actions}>
+					<AppButton
+						type='button'
+						onClick={handleClose}
+						variant='secondary'
+						disabled={isUpdating || isUploading}
+					>
+						{t('buttons.cancel')}
+					</AppButton>
+					<AppButton
+						type='submit'
+						variant='primary'
+						disabled={isUpdating || isUploading}
+					>
+						{isUpdating ? t('messages.saving') : t('buttons.save')}
+					</AppButton>
+				</div>
+			</form>
+		</AppModal>
 	)
 }

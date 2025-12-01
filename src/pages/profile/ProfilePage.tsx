@@ -8,7 +8,7 @@ import {
 	useUpdateProfile,
 	useUserProfile
 } from '@/entities/user'
-import { MUI_STYLES } from '@/shared/styles/constants'
+import { MUI_STYLES } from '@/shared/styles/mui-styles'
 import { ChangePasswordModal } from '@/widgets/profile/ChangePasswordModal'
 import { EditProfileModal } from '@/widgets/profile/EditProfileModal'
 import { ProfileActions } from '@/widgets/profile/ProfileActions'

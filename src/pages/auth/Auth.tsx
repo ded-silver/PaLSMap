@@ -1,4 +1,4 @@
-import { Button, Tab, Tabs, TextField, Typography } from '@mui/material'
+import { Tab, Tabs, TextField, Typography } from '@mui/material'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -13,6 +13,7 @@ import {
 	authService
 } from '@/entities/user'
 import { resetAuthState } from '@/shared/lib/auth-manager'
+import { AppButton } from '@/shared/ui'
 
 export function Auth() {
 	const { t } = useTranslation(['common', 'auth'])
@@ -104,14 +105,15 @@ export function Auth() {
 					/>
 				)}
 
-				<Button
+				<AppButton
 					type='submit'
-					variant='contained'
+					variant='primary'
+					fullWidth
 				>
 					{tab === 'login'
 						? t('buttons.login', { ns: 'auth' })
 						: t('buttons.register', { ns: 'auth' })}
-				</Button>
+				</AppButton>
 			</form>
 		</div>
 	)

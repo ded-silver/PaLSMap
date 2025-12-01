@@ -1,3 +1,4 @@
+import CloseIcon from '@mui/icons-material/Close'
 import LogoutIcon from '@mui/icons-material/Logout'
 import {
 	Button,
@@ -6,6 +7,7 @@ import {
 	DialogContent,
 	DialogContentText,
 	DialogTitle,
+	IconButton,
 	Typography
 } from '@mui/material'
 import { useState } from 'react'
@@ -15,7 +17,8 @@ import { toast } from 'react-toastify'
 
 import styles from './ProfileActions.module.css'
 import { authService, userService } from '@/entities/user'
-import { MUI_STYLES } from '@/shared/styles/constants'
+import { MUI_STYLES } from '@/shared/styles/mui-styles'
+import { AppButton } from '@/shared/ui'
 
 interface ProfileActionsProps {
 	isAdmin: boolean
@@ -85,33 +88,39 @@ export const ProfileActions = ({ isAdmin }: ProfileActionsProps) => {
 					sx: MUI_STYLES.dialogPaper
 				}}
 			>
-				<DialogTitle>
-					<Typography sx={MUI_STYLES.typography.titleSmall}>
+				<DialogTitle sx={MUI_STYLES.dialogTitleError}>
+					<Typography sx={MUI_STYLES.typography.titleMedium}>
 						{t('profile.actions.logoutConfirmTitle')}
 					</Typography>
+					<IconButton
+						aria-label='close'
+						onClick={() => setIsLogoutDialogOpen(false)}
+						sx={MUI_STYLES.iconButtonClosePrimary}
+					>
+						<CloseIcon />
+					</IconButton>
 				</DialogTitle>
 
-				<DialogContent>
-					<DialogContentText>
+				<DialogContent sx={MUI_STYLES.dialogContent}>
+					<DialogContentText sx={{ marginTop: '16px' }}>
 						{t('profile.actions.logoutConfirmMessage')}
 					</DialogContentText>
 				</DialogContent>
 
 				<DialogActions sx={MUI_STYLES.dialogActions}>
-					<Button
+					<AppButton
 						onClick={() => setIsLogoutDialogOpen(false)}
-						variant='outlined'
+						variant='secondary'
 					>
 						{t('buttons.cancel')}
-					</Button>
-					<Button
+					</AppButton>
+					<AppButton
 						onClick={handleLogout}
-						variant='contained'
-						color='error'
+						variant='danger'
 						startIcon={<LogoutIcon />}
 					>
 						{t('profile.actions.logout')}
-					</Button>
+					</AppButton>
 				</DialogActions>
 			</Dialog>
 		</div>

@@ -20,7 +20,7 @@ import { formatRelativeTime } from '../utils/formatRelativeTime'
 import { getActionIcon } from '../utils/getActionIcon'
 
 import styles from './HistoryDetails.module.css'
-import { MUI_STYLES } from '@/shared/styles/constants'
+import { MUI_STYLES } from '@/shared/styles/mui-styles'
 
 interface HistoryDetailsProps {
 	open: boolean

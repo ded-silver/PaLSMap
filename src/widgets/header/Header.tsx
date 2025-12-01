@@ -1,10 +1,12 @@
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import DensityMediumIcon from '@mui/icons-material/DensityMedium'
+import { Button, IconButton } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import styles from './Header.module.css'
 import { useUserProfile } from '@/entities/user'
+import { BUTTON_STYLES } from '@/shared/styles/tokens'
 import { LanguageSwitcher } from '@/shared/ui'
 import { PathBreadcrumbs } from '@/widgets/path-breadcrumbs'
 
@@ -21,13 +23,28 @@ export const Header = ({ toggleSidebar }: Props) => {
 
 	return (
 		<header className={styles.header}>
-			<button
+			<IconButton
 				data-sidebar-toggle
-				className={styles['toggle-sidebar']}
 				onClick={toggleSidebar}
+				sx={{
+					width: 49,
+					height: 49,
+					background: BUTTON_STYLES.glass.dark.background,
+					backdropFilter: BUTTON_STYLES.effects.blur,
+					boxShadow: BUTTON_STYLES.effects.shadow,
+					color: BUTTON_STYLES.glass.dark.text,
+					'&:hover': {
+						background: BUTTON_STYLES.glass.dark.hover,
+						color: BUTTON_STYLES.glass.dark.textHover
+					},
+					'& svg': {
+						fontSize: '24px',
+						opacity: 0.9
+					}
+				}}
 			>
 				<DensityMediumIcon />
-			</button>
+			</IconButton>
 
 			<div className={styles['breadcrumbs-wrapper']}>
 				<PathBreadcrumbs />
@@ -36,13 +53,31 @@ export const Header = ({ toggleSidebar }: Props) => {
 			<div className={styles['header-actions']}>
 				<LanguageSwitcher />
 
-				<button
-					className={styles['profile-button']}
+				<Button
 					onClick={() => navigate('/profile')}
+					startIcon={<AccountCircleIcon />}
+					sx={{
+						height: 49,
+						padding: '8px 16px',
+						gap: '6px',
+						background: BUTTON_STYLES.glass.dark.background,
+						backdropFilter: BUTTON_STYLES.effects.blur,
+						boxShadow: BUTTON_STYLES.effects.shadow,
+						color: BUTTON_STYLES.glass.dark.text,
+						fontSize: '0.875rem',
+						lineHeight: 1.5,
+						'&:hover': {
+							background: BUTTON_STYLES.glass.dark.hover,
+							color: BUTTON_STYLES.glass.dark.textHover
+						},
+						'& svg': {
+							fontSize: '16px',
+							opacity: 0.9
+						}
+					}}
 				>
-					<AccountCircleIcon />
 					{userName ? userName : t('titles.profile')}
-				</button>
+				</Button>
 			</div>
 		</header>
 	)

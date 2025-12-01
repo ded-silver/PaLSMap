@@ -1,21 +1,11 @@
-import CloseIcon from '@mui/icons-material/Close'
-import {
-	Button,
-	Dialog,
-	DialogActions,
-	DialogContent,
-	DialogContentText,
-	DialogTitle,
-	IconButton,
-	Typography
-} from '@mui/material'
-import { CircularProgress } from '@mui/material'
+import { DialogContentText, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import type { IDictionary } from '../../model/types'
 
 import styles from './DeleteConfirmDialog.module.css'
-import { MUI_STYLES } from '@/shared/styles/constants'
+import { MUI_STYLES } from '@/shared/styles/mui-styles'
+import { AppButton, AppModal } from '@/shared/ui'
 
 interface DeleteConfirmDialogProps {
 	isOpen: boolean
@@ -35,81 +25,63 @@ export const DeleteConfirmDialog = ({
 	const { t } = useTranslation(['common', 'dictionary'])
 
 	return (
-		<Dialog
+		<AppModal
 			open={isOpen}
 			onClose={onClose}
-			maxWidth='sm'
-			fullWidth
-			PaperProps={{
-				sx: MUI_STYLES.dialogPaper
-			}}
+			title={t('messages.deleteTitle', { ns: 'dictionary' })}
+			variant='error'
+			actions={
+				<>
+					<AppButton
+						onClick={onClose}
+						disabled={isLoading}
+						variant='secondary'
+					>
+						{t('buttons.cancel', { ns: 'common' })}
+					</AppButton>
+					<AppButton
+						onClick={onConfirm}
+						loading={isLoading}
+						disabled={isLoading}
+						variant='danger'
+					>
+						{isLoading
+							? t('messages.deleting', { ns: 'common' })
+							: t('buttons.delete', { ns: 'common' })}
+					</AppButton>
+				</>
+			}
 		>
-			<DialogTitle sx={MUI_STYLES.dialogTitleError}>
-				<Typography sx={MUI_STYLES.typography.titleMedium}>
-					{t('messages.deleteTitle', { ns: 'dictionary' })}
+			<DialogContentText sx={{ marginTop: '16px' }}>
+				{t('messages.deleteConfirm', { ns: 'dictionary' })}
+			</DialogContentText>
+			<div className={styles.itemInfo}>
+				<Typography
+					variant='body2'
+					sx={{
+						...MUI_STYLES.typography.bodyBold,
+						...MUI_STYLES.spacing.mb1
+					}}
+				>
+					{t('messages.abbreviation', { ns: 'dictionary' })}
 				</Typography>
-				<IconButton
-					aria-label='close'
-					onClick={onClose}
-					sx={MUI_STYLES.iconButtonClosePrimary}
+				<Typography
+					variant='body1'
+					sx={MUI_STYLES.spacing.mb2px}
 				>
-					<CloseIcon />
-				</IconButton>
-			</DialogTitle>
-
-			<DialogContent sx={MUI_STYLES.dialogContent}>
-				<DialogContentText sx={{ marginTop: '16px' }}>
-					{t('messages.deleteConfirm', { ns: 'dictionary' })}
-				</DialogContentText>
-				<div className={styles.itemInfo}>
-					<Typography
-						variant='body2'
-						sx={{
-							...MUI_STYLES.typography.bodyBold,
-							...MUI_STYLES.spacing.mb1
-						}}
-					>
-						{t('messages.abbreviation', { ns: 'dictionary' })}
-					</Typography>
-					<Typography
-						variant='body1'
-						sx={MUI_STYLES.spacing.mb2px}
-					>
-						{item.short}
-					</Typography>
-					<Typography
-						variant='body2'
-						sx={{
-							...MUI_STYLES.typography.bodyBold,
-							...MUI_STYLES.spacing.mb1
-						}}
-					>
-						{t('messages.fullName', { ns: 'dictionary' })}
-					</Typography>
-					<Typography variant='body1'>{item.full}</Typography>
-				</div>
-			</DialogContent>
-
-			<DialogActions sx={MUI_STYLES.dialogActions}>
-				<Button
-					onClick={onClose}
-					disabled={isLoading}
-					variant='outlined'
+					{item.short}
+				</Typography>
+				<Typography
+					variant='body2'
+					sx={{
+						...MUI_STYLES.typography.bodyBold,
+						...MUI_STYLES.spacing.mb1
+					}}
 				>
-					{t('buttons.cancel', { ns: 'common' })}
-				</Button>
-				<Button
-					onClick={onConfirm}
-					disabled={isLoading}
-					variant='contained'
-					color='error'
-					startIcon={isLoading ? <CircularProgress size={16} /> : null}
-				>
-					{isLoading
-						? t('messages.deleting', { ns: 'common' })
-						: t('buttons.delete', { ns: 'common' })}
-				</Button>
-			</DialogActions>
-		</Dialog>
+					{t('messages.fullName', { ns: 'dictionary' })}
+				</Typography>
+				<Typography variant='body1'>{item.full}</Typography>
+			</div>
+		</AppModal>
 	)
 }
