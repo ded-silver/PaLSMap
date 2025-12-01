@@ -9,6 +9,7 @@ import type {
 	IUpdateDictionaryDto
 } from './types'
 import {
+	type ErrorResponse,
 	handleMutationError,
 	handleMutationSuccess
 } from '@/shared/lib/error-handler'
@@ -41,7 +42,7 @@ export const useCreateDictionary = () => {
 				namespace: 'dictionary'
 			})
 		},
-		onError: (error: any) => {
+		onError: (error: ErrorResponse) => {
 			handleMutationError(error, {
 				defaultErrorKey: 'messages.createError',
 				namespace: 'dictionary'
@@ -66,7 +67,7 @@ export const useUpdateDictionary = () => {
 				namespace: 'dictionary'
 			})
 		},
-		onError: (error: any) => {
+		onError: (error: ErrorResponse) => {
 			handleMutationError(error, {
 				defaultErrorKey: 'messages.updateError',
 				namespace: 'dictionary'
@@ -87,7 +88,7 @@ export const useDeleteDictionary = () => {
 				namespace: 'dictionary'
 			})
 		},
-		onError: (error: any) => {
+		onError: (error: ErrorResponse) => {
 			handleMutationError(error, {
 				defaultErrorKey: 'messages.deleteError',
 				namespace: 'dictionary'

@@ -1,7 +1,7 @@
 import i18n from 'i18next'
 import { toast } from 'react-toastify'
 
-interface ErrorResponse {
+export interface ErrorResponse {
 	response?: {
 		status?: number
 		data?: {

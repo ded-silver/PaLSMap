@@ -11,6 +11,7 @@ import type {
 	IUser
 } from './types'
 import { getAccessToken } from '@/shared/lib/auth-token'
+import type { ErrorResponse } from '@/shared/lib/error-handler'
 
 export const USER_PROFILE_QUERY_KEY = ['user', 'profile'] as const
 
@@ -81,7 +82,7 @@ export const useUpdateProfile = () => {
 			queryClient.invalidateQueries({ queryKey: USER_PROFILE_QUERY_KEY })
 			toast.success(t('profile.saveSuccess'))
 		},
-		onError: (error: any) => {
+		onError: (error: ErrorResponse) => {
 			const message =
 				error?.response?.data?.message || t('errors.profileUpdateError')
 			toast.error(message)
@@ -99,7 +100,7 @@ export const useChangePassword = () => {
 			queryClient.invalidateQueries({ queryKey: USER_PROFILE_QUERY_KEY })
 			toast.success(t('profile.passwordChangedSuccess'))
 		},
-		onError: (error: any) => {
+		onError: (error: ErrorResponse) => {
 			const message =
 				error?.response?.data?.message || t('errors.passwordChangeError')
 			toast.error(message)
@@ -117,7 +118,7 @@ export const useUploadAvatar = () => {
 			queryClient.setQueryData<IProfileResponse>(USER_PROFILE_QUERY_KEY, data)
 			toast.success(t('profile.avatar.uploadSuccess'))
 		},
-		onError: (error: any) => {
+		onError: (error: ErrorResponse) => {
 			const message =
 				error?.response?.data?.message || t('profile.avatar.uploadError')
 			toast.error(message)
@@ -144,7 +145,7 @@ export const useUpdateUserByAdmin = () => {
 			queryClient.invalidateQueries({ queryKey: ['users', 'all'] })
 			toast.success(t('saved'))
 		},
-		onError: (error: any) => {
+		onError: (error: ErrorResponse) => {
 			const message = error?.response?.data?.message || t('error')
 			toast.error(message)
 		}

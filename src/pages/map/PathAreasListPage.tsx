@@ -1,7 +1,7 @@
 import AddIcon from '@mui/icons-material/Add'
 import MapIcon from '@mui/icons-material/Map'
 import { CircularProgress, Typography } from '@mui/material'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
@@ -46,54 +46,60 @@ export const PathAreasListPage = () => {
 	const { mutate: updatePathArea, isPending: isUpdating } = useUpdatePathArea()
 	const { mutate: deletePathArea, isPending: isDeleting } = useDeletePathArea()
 
-	const handleAdd = () => {
+	const handleAdd = useCallback(() => {
 		setModalMode('create')
 		setSelectedItem(null)
 		setIsModalOpen(true)
-	}
+	}, [])
 
-	const handleEdit = (item: PathArea | Country) => {
+	const handleEdit = useCallback((item: PathArea | Country) => {
 		setModalMode('edit')
 		setSelectedItem(item as PathArea)
 		setIsModalOpen(true)
-	}
+	}, [])
 
-	const handleDelete = (id: string, countryId?: string) => {
-		const item = areas?.find(a => a.id === id)
-		if (item) {
-			setSelectedItem(item)
-			setIsDeleteDialogOpen(true)
-		}
-	}
+	const handleDelete = useCallback(
+		(id: string, countryId?: string) => {
+			const item = areas?.find(a => a.id === id)
+			if (item) {
+				setSelectedItem(item)
+				setIsDeleteDialogOpen(true)
+			}
+		},
+		[areas]
+	)
 
-	const handleOpenMap = () => {
+	const handleOpenMap = useCallback(() => {
 		if (countryId) {
 			navigate(`/map/${countryId}?mode=map`)
 		}
-	}
+	}, [countryId, navigate])
 
-	const handleModalSubmit = (data: CreatePathAreaDto | UpdatePathAreaDto) => {
-		if (modalMode === 'create') {
-			createPathArea(data as CreatePathAreaDto, {
-				onSuccess: () => {
-					setIsModalOpen(false)
-					setSelectedItem(null)
-				}
-			})
-		} else if (selectedItem) {
-			updatePathArea(
-				{ id: selectedItem.id, dto: data as UpdatePathAreaDto },
-				{
+	const handleModalSubmit = useCallback(
+		(data: CreatePathAreaDto | UpdatePathAreaDto) => {
+			if (modalMode === 'create') {
+				createPathArea(data as CreatePathAreaDto, {
 					onSuccess: () => {
 						setIsModalOpen(false)
 						setSelectedItem(null)
 					}
-				}
-			)
-		}
-	}
+				})
+			} else if (selectedItem) {
+				updatePathArea(
+					{ id: selectedItem.id, dto: data as UpdatePathAreaDto },
+					{
+						onSuccess: () => {
+							setIsModalOpen(false)
+							setSelectedItem(null)
+						}
+					}
+				)
+			}
+		},
+		[modalMode, selectedItem, createPathArea, updatePathArea]
+	)
 
-	const handleDeleteConfirm = () => {
+	const handleDeleteConfirm = useCallback(() => {
 		if (selectedItem) {
 			deletePathArea(
 				{ id: selectedItem.id, countryId: selectedItem.countryId },
@@ -105,17 +111,17 @@ export const PathAreasListPage = () => {
 				}
 			)
 		}
-	}
+	}, [selectedItem, deletePathArea])
 
-	const handleModalClose = () => {
+	const handleModalClose = useCallback(() => {
 		setIsModalOpen(false)
 		setSelectedItem(null)
-	}
+	}, [])
 
-	const handleDeleteDialogClose = () => {
+	const handleDeleteDialogClose = useCallback(() => {
 		setIsDeleteDialogOpen(false)
 		setSelectedItem(null)
-	}
+	}, [])
 
 	if (!countryId) {
 		return (

@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { countryApi } from './api'
 import type { CreateCountryDto, UpdateCountryDto } from './types'
 import {
+	type ErrorResponse,
 	handleMutationError,
 	handleMutationSuccess
 } from '@/shared/lib/error-handler'
@@ -35,7 +36,7 @@ export const useCreateCountry = () => {
 				namespace: 'path-areas'
 			})
 		},
-		onError: (error: any) => {
+		onError: (error: ErrorResponse) => {
 			handleMutationError(error, {
 				defaultErrorKey: 'messages.createError',
 				namespace: 'path-areas'
@@ -60,7 +61,7 @@ export const useUpdateCountry = () => {
 				namespace: 'path-areas'
 			})
 		},
-		onError: (error: any) => {
+		onError: (error: ErrorResponse) => {
 			handleMutationError(error, {
 				defaultErrorKey: 'messages.updateError',
 				namespace: 'path-areas'
@@ -81,7 +82,7 @@ export const useDeleteCountry = () => {
 				namespace: 'path-areas'
 			})
 		},
-		onError: (error: any) => {
+		onError: (error: ErrorResponse) => {
 			handleMutationError(error, {
 				defaultErrorKey: 'messages.deleteError',
 				namespace: 'path-areas'

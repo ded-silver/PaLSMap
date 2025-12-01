@@ -88,9 +88,12 @@ const MapView = ({ isSidebarOpen }: Props) => {
 	const { mutate: node } = useCreateNode()
 	const { mutate: deleteNode } = useDeleteNode()
 
-	const handleCreate: SubmitHandler<NodeDto> = data => {
-		node(data)
-	}
+	const handleCreate = useCallback<SubmitHandler<NodeDto>>(
+		data => {
+			node(data)
+		},
+		[node]
+	)
 
 	const { onConnect } = useEdgeConnection({ setEdges })
 

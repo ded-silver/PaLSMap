@@ -77,9 +77,12 @@ export const Provider = ({ id, currentNodeType }: Props) => {
 	const { mutate: node } = useCreateNode()
 	const { mutate: deleteNode } = useDeleteNode(['childNodes'])
 
-	const handleCreate: SubmitHandler<NodeDto> = data => {
-		node(data)
-	}
+	const handleCreate = useCallback<SubmitHandler<NodeDto>>(
+		data => {
+			node(data)
+		},
+		[node]
+	)
 
 	const handleNodesDelete = useCallback(
 		(deletedNodes: Node[]) => {

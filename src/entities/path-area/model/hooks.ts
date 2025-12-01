@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { pathAreaApi } from './api'
 import type { CreatePathAreaDto, UpdatePathAreaDto } from './types'
 import {
+	type ErrorResponse,
 	handleMutationError,
 	handleMutationSuccess
 } from '@/shared/lib/error-handler'
@@ -39,7 +40,7 @@ export const useCreatePathArea = () => {
 				namespace: 'path-areas'
 			})
 		},
-		onError: (error: any) => {
+		onError: (error: ErrorResponse) => {
 			handleMutationError(error, {
 				defaultErrorKey: 'messages.createError',
 				namespace: 'path-areas'
@@ -67,7 +68,7 @@ export const useUpdatePathArea = () => {
 				namespace: 'path-areas'
 			})
 		},
-		onError: (error: any) => {
+		onError: (error: ErrorResponse) => {
 			handleMutationError(error, {
 				defaultErrorKey: 'messages.updateError',
 				namespace: 'path-areas'
@@ -93,7 +94,7 @@ export const useDeletePathArea = () => {
 				namespace: 'path-areas'
 			})
 		},
-		onError: (error: any) => {
+		onError: (error: ErrorResponse) => {
 			handleMutationError(error, {
 				defaultErrorKey: 'messages.deleteError',
 				namespace: 'path-areas'

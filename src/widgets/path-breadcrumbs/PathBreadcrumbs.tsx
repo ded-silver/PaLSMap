@@ -1,4 +1,5 @@
 import PublicIcon from '@mui/icons-material/Public'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useLocation, useParams } from 'react-router-dom'
 
@@ -20,32 +21,40 @@ export const PathBreadcrumbs = () => {
 	const { data: country } = useCountry(isMapPage && countryId ? countryId : '')
 	const { data: area } = usePathArea(isMapPage && areaId ? areaId : '')
 
+	const breadcrumbs = useMemo(() => {
+		if (!isMapPage) {
+			return []
+		}
+
+		const crumbs = []
+
+		crumbs.push({
+			label: t('labels.countries'),
+			path: '/map',
+			isActive: !countryId && !areaId
+		})
+
+		if (countryId && country) {
+			crumbs.push({
+				label: country.name,
+				path: `/map/${countryId}`,
+				isActive: !areaId && !!countryId
+			})
+		}
+
+		if (areaId && area) {
+			crumbs.push({
+				label: area.name,
+				path: `/map/${countryId}/${areaId}`,
+				isActive: true
+			})
+		}
+
+		return crumbs
+	}, [isMapPage, countryId, areaId, country, area, t])
+
 	if (!isMapPage) {
 		return null
-	}
-
-	const breadcrumbs = []
-
-	breadcrumbs.push({
-		label: t('labels.countries'),
-		path: '/map',
-		isActive: !countryId && !areaId
-	})
-
-	if (countryId && country) {
-		breadcrumbs.push({
-			label: country.name,
-			path: `/map/${countryId}`,
-			isActive: !areaId && !!countryId
-		})
-	}
-
-	if (areaId && area) {
-		breadcrumbs.push({
-			label: area.name,
-			path: `/map/${countryId}/${areaId}`,
-			isActive: true
-		})
 	}
 
 	return (

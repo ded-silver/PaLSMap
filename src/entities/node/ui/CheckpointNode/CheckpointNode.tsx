@@ -5,7 +5,7 @@ import SettingsIcon from '@mui/icons-material/Settings'
 import { IconButton, Typography } from '@mui/material'
 import { Handle, NodeProps, Position } from '@xyflow/react'
 import { nanoid } from 'nanoid'
-import { CSSProperties, useState } from 'react'
+import { CSSProperties, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { DeleteNodeConfirmDialog } from '../DeleteNodeConfirmDialog'
@@ -136,15 +136,21 @@ export const CheckpointNode = ({ data, id }: NodeProps<CustomNode>) => {
 							: undefined
 					}
 				/>
-				{data.handlers.map((h: NodeHandlers) => (
-					<div key={nanoid()}>
-						<Handle
-							type={h.type}
-							id={h.id}
-							position={h.type === 'source' ? Position.Right : Position.Left}
-						/>
-					</div>
-				))}
+				{useMemo(
+					() =>
+						data.handlers.map((h: NodeHandlers) => (
+							<div key={h.id}>
+								<Handle
+									type={h.type}
+									id={h.id}
+									position={
+										h.type === 'source' ? Position.Right : Position.Left
+									}
+								/>
+							</div>
+						)),
+					[data.handlers]
+				)}
 			</div>
 			{open ? (
 				<DialogData

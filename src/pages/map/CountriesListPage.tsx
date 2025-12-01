@@ -1,7 +1,7 @@
 import AddIcon from '@mui/icons-material/Add'
 import PublicIcon from '@mui/icons-material/Public'
 import { CircularProgress, Typography } from '@mui/material'
-import { useState } from 'react'
+import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import styles from './CountriesListPage.module.css'
@@ -15,16 +15,13 @@ import {
 } from '@/entities/country'
 import type { CreateCountryDto, UpdateCountryDto } from '@/entities/country'
 import { useIsAdmin } from '@/entities/user'
+import { useListPage } from '@/shared/hooks'
 import { AppButton } from '@/shared/ui'
 import { CreatePathModal } from '@/widgets/create-path-modal'
 import { PathCard } from '@/widgets/path-card'
 
 export const CountriesListPage = () => {
 	const { t } = useTranslation(['common', 'path-areas'])
-	const [isModalOpen, setIsModalOpen] = useState(false)
-	const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
-	const [selectedItem, setSelectedItem] = useState<Country | null>(null)
-	const [modalMode, setModalMode] = useState<'create' | 'edit'>('create')
 
 	const isAdmin = useIsAdmin()
 
@@ -33,67 +30,30 @@ export const CountriesListPage = () => {
 	const { mutate: updateCountry, isPending: isUpdating } = useUpdateCountry()
 	const { mutate: deleteCountry, isPending: isDeleting } = useDeleteCountry()
 
-	const handleAdd = () => {
-		setModalMode('create')
-		setSelectedItem(null)
-		setIsModalOpen(true)
-	}
+	const {
+		isModalOpen,
+		isDeleteDialogOpen,
+		selectedItem,
+		modalMode,
+		handleAdd,
+		handleEdit,
+		handleDelete: handleDeleteBase,
+		handleModalSubmit,
+		handleDeleteConfirm,
+		handleModalClose,
+		handleDeleteDialogClose
+	} = useListPage<Country, CreateCountryDto, UpdateCountryDto>({
+		onCreate: createCountry,
+		onUpdate: updateCountry,
+		onDelete: deleteCountry
+	})
 
-	const handleEdit = (item: Country) => {
-		setModalMode('edit')
-		setSelectedItem(item)
-		setIsModalOpen(true)
-	}
-
-	const handleDelete = (id: string) => {
-		const item = countries?.find(c => c.id === id)
-		if (item) {
-			setSelectedItem(item)
-			setIsDeleteDialogOpen(true)
-		}
-	}
-
-	const handleModalSubmit = (data: CreateCountryDto | UpdateCountryDto) => {
-		if (modalMode === 'create') {
-			createCountry(data as CreateCountryDto, {
-				onSuccess: () => {
-					setIsModalOpen(false)
-					setSelectedItem(null)
-				}
-			})
-		} else if (selectedItem) {
-			updateCountry(
-				{ id: selectedItem.id, dto: data as UpdateCountryDto },
-				{
-					onSuccess: () => {
-						setIsModalOpen(false)
-						setSelectedItem(null)
-					}
-				}
-			)
-		}
-	}
-
-	const handleDeleteConfirm = () => {
-		if (selectedItem) {
-			deleteCountry(selectedItem.id, {
-				onSuccess: () => {
-					setIsDeleteDialogOpen(false)
-					setSelectedItem(null)
-				}
-			})
-		}
-	}
-
-	const handleModalClose = () => {
-		setIsModalOpen(false)
-		setSelectedItem(null)
-	}
-
-	const handleDeleteDialogClose = () => {
-		setIsDeleteDialogOpen(false)
-		setSelectedItem(null)
-	}
+	const handleDelete = useCallback(
+		(id: string) => {
+			handleDeleteBase(id, (id: string) => countries?.find(c => c.id === id))
+		},
+		[countries, handleDeleteBase]
+	)
 
 	if (error) {
 		return (

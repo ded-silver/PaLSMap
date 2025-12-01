@@ -20,7 +20,7 @@ import {
 	TextField,
 	Typography
 } from '@mui/material'
-import { memo, useMemo, useState } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import styles from './AdminUsersPage.module.css'
@@ -104,14 +104,14 @@ export const AdminUsersPage = () => {
 		)
 	}
 
-	const formatDate = (dateString: string) => {
+	const formatDate = useCallback((dateString: string) => {
 		const date = new Date(dateString)
 		return date.toLocaleDateString('ru-RU', {
 			year: 'numeric',
 			month: 'long',
 			day: 'numeric'
 		})
-	}
+	}, [])
 
 	const hasChanges = useMemo(() => {
 		const changesMap = new Set<string>()
