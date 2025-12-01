@@ -1,30 +1,30 @@
 .container {
-	background-color: #ffffff;
-	border-radius: 20px;
-	padding: 32px;
+	background-color: var(--color-white);
+	border-radius: var(--border-radius-xxxl);
+	padding: var(--spacing-xxxxxl);
 	margin-bottom: 0;
-	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+	box-shadow: var(--effect-shadow-lg);
 }
 
 .title {
-	margin-bottom: 24px;
-	color: #1e293b;
-	font-weight: 600;
+	margin-bottom: var(--margin-xxxl);
+	color: var(--color-text-primary);
+	font-weight: var(--font-weight-semibold);
 	font-size: 1.125rem;
 }
 
 .actions {
 	display: flex;
 	flex-direction: column;
-	gap: 12px;
+	gap: var(--spacing-lg);
 }
 
 .actionButton {
 	text-transform: none;
 	justify-content: flex-start;
-	padding: 14px 20px;
-	border-radius: 12px;
-	font-weight: 500;
+	padding: 14px var(--spacing-xxl);
+	border-radius: var(--border-radius-xl);
+	font-weight: var(--font-weight-medium);
 	font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
 	font-size: 0.875rem;
 }

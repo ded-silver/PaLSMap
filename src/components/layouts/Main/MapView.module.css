@@ -3,7 +3,7 @@
 	overflow: hidden;
 	flex-grow: 1;
 	/* padding: 1rem; */
-	background-color: #fff;
+	background-color: var(--color-white);
 	transition: margin-left 0.3s ease;
 	margin-left: 0;
 	position: relative;
@@ -16,10 +16,10 @@
 .pageTitle {
 	/* margin-bottom: 16px; */
 	position: absolute;
-	background-color: rgb(230, 240, 255);
+	background-color: var(--color-background);
 	top: 0;
 	left: 0;
-	padding: 8px;
+	padding: var(--spacing-md);
 	text-align: left;
 	border-bottom: 1px solid lightgray;
 	border-right: 1px solid lightgray;
@@ -38,10 +38,14 @@
 	right: 8px;
 	width: 90px;
 	height: 90px;
-	border: 2px solid #cbd5e1;
+	border: 2px solid var(--color-border-dashed);
 	border-radius: 50%;
-	background: radial-gradient(circle at center, #f9fafb 60%, #e2e8f0 100%);
-	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+	background: radial-gradient(
+		circle at center,
+		var(--color-background-light) 60%,
+		var(--color-border-divider) 100%
+	);
+	box-shadow: var(--effect-shadow);
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -67,9 +71,9 @@
 .labelEast,
 .labelWest {
 	position: absolute;
-	font-size: 12px;
-	font-weight: 600;
-	color: #1e293b;
+	font-size: var(--font-size-sm);
+	font-weight: var(--font-weight-semibold);
+	color: var(--color-text-primary);
 	user-select: none;
 	transition: color 0.2s;
 }

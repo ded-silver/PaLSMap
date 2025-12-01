@@ -1,21 +1,21 @@
 .select {
 	min-width: 120px;
-	background-color: rgba(255, 255, 255, 0.1);
-	border-radius: 10px !important;
-	backdrop-filter: blur(8px);
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	background-color: var(--glass-dark-bg);
+	border-radius: var(--border-radius-lg) !important;
+	backdrop-filter: var(--effect-blur);
+	box-shadow: var(--effect-shadow);
 	border: none;
-	height: 49px;
+	height: var(--button-height-md);
 	overflow: hidden;
 }
 
 .select :global(.MuiOutlinedInput-root) {
 	height: 100%;
-	border-radius: 10px !important;
+	border-radius: var(--border-radius-lg) !important;
 }
 
 .select :global(.MuiOutlinedInput-input) {
-	border-radius: 10px !important;
+	border-radius: var(--border-radius-lg) !important;
 }
 
 .select :global(.MuiOutlinedInput-notchedOutline) {
@@ -23,22 +23,22 @@
 }
 
 .select :global(.MuiSelect-select) {
-	padding: 0 32px 0 16px !important;
+	padding: 0 var(--spacing-xxxxxl) 0 var(--spacing-xl) !important;
 	height: 100% !important;
 	display: flex !important;
 	align-items: center !important;
-	color: rgba(255, 255, 255, 0.9) !important;
+	color: var(--glass-dark-text) !important;
 	font-size: 0.875rem !important;
-	font-weight: 600 !important;
-	line-height: 1.5 !important;
+	font-weight: var(--font-weight-semibold) !important;
+	line-height: var(--line-height-normal) !important;
 }
 
 .select :global(.MuiSvgIcon-root) {
-	color: rgba(255, 255, 255, 0.9) !important;
+	color: var(--glass-dark-text) !important;
 }
 
 .select:hover {
-	background-color: rgba(255, 255, 255, 0.15);
+	background-color: var(--glass-dark-bg-hover);
 }
 
 .select:hover :global(.MuiOutlinedInput-notchedOutline) {
@@ -46,7 +46,7 @@
 }
 
 .select:global(.Mui-focused) {
-	background-color: rgba(255, 255, 255, 0.15);
+	background-color: var(--glass-dark-bg-hover);
 }
 
 .select:global(.Mui-focused) :global(.MuiOutlinedInput-notchedOutline) {

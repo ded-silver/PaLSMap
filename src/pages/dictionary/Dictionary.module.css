@@ -1,13 +1,13 @@
 .container {
 	padding: 0;
 	min-height: calc(100vh - 64px);
-	background-color: #e6f0ff;
+	background-color: var(--color-background);
 	width: 100%;
 }
 
 .contentWrapper {
-	padding: 40px;
-	max-width: 1400px;
+	padding: var(--spacing-xxxxl);
+	max-width: var(--max-width-content);
 	margin: 0 auto;
 }
 
@@ -15,64 +15,64 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	margin-bottom: 40px;
-	gap: 24px;
+	margin-bottom: var(--margin-section);
+	gap: var(--spacing-xxxl);
 	flex-wrap: wrap;
 }
 
 .titleSection {
 	display: flex;
 	align-items: center;
-	gap: 16px;
+	gap: var(--spacing-xl);
 }
 
 .headerIcon {
-	font-size: 40px !important;
-	color: #0073e6;
+	font-size: var(--font-size-display-lg) !important;
+	color: var(--color-primary);
 }
 
 .title {
-	font-size: 36px !important;
-	font-weight: 700 !important;
-	color: #0f172a !important;
+	font-size: var(--font-size-display-md) !important;
+	font-weight: var(--font-weight-bold) !important;
+	color: var(--color-text-primary) !important;
 	margin: 0 !important;
 }
 
 .buttonGroup {
 	display: flex;
-	gap: 12px;
+	gap: var(--spacing-lg);
 	align-items: center;
 	flex-wrap: wrap;
 }
 
 .searchBarWrapper {
-	max-width: 400px;
+	max-width: var(--max-width-form);
 	display: flex;
 }
 
 .createButton {
-	background: #0073e6 !important;
-	color: white !important;
-	font-weight: 500 !important;
+	background: var(--color-primary) !important;
+	color: var(--color-white) !important;
+	font-weight: var(--font-weight-medium) !important;
 	text-transform: none !important;
-	padding: 10px 24px !important;
-	font-size: 15px !important;
-	border-radius: 8px !important;
-	box-shadow: 0 4px 12px rgba(0, 115, 230, 0.2) !important;
-	transition: all 0.2s ease !important;
+	padding: var(--spacing-md-plus) var(--spacing-xxxl) !important;
+	font-size: var(--font-size-lg) !important;
+	border-radius: var(--border-radius-md) !important;
+	box-shadow: var(--effect-shadow-blue) !important;
+	transition: var(--effect-transition-ease) !important;
 }
 
 .createButton:hover {
-	background: #005bb5 !important;
-	box-shadow: 0 6px 16px rgba(0, 115, 230, 0.3) !important;
+	background: var(--color-primary-hover) !important;
+	box-shadow: var(--effect-shadow-blue-lg) !important;
 	transform: translateY(-1px);
 }
 
 .grid {
 	display: flex;
 	flex-direction: column;
-	gap: 18px;
-	max-width: 1400px;
+	gap: var(--spacing-xl-plus);
+	max-width: var(--max-width-content);
 	margin: 0 auto;
 	animation: fadeIn 0.4s ease;
 }
@@ -92,7 +92,7 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	min-height: 400px;
+	min-height: var(--min-height-empty-state);
 }
 
 .emptyState {
@@ -100,38 +100,38 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	min-height: 400px;
+	min-height: var(--min-height-empty-state);
 	text-align: center;
-	padding: 40px;
-	background: white;
-	border-radius: 16px;
-	border: 2px dashed #cbd5e1;
+	padding: var(--spacing-xxxxl);
+	background: var(--color-white);
+	border-radius: var(--border-radius-xxl);
+	border: 2px dashed var(--color-border-dashed);
 }
 
 .emptyIcon {
-	font-size: 80px !important;
-	color: #cbd5e1;
-	margin-bottom: 24px;
+	font-size: var(--font-size-display-xxl) !important;
+	color: var(--color-border-dashed);
+	margin-bottom: var(--margin-xxxl);
 }
 
 .emptyTitle {
-	font-weight: 600 !important;
-	color: #1e293b !important;
-	margin-bottom: 8px !important;
+	font-weight: var(--font-weight-semibold) !important;
+	color: var(--color-text-primary) !important;
+	margin-bottom: var(--margin-md) !important;
 }
 
 .emptyText {
-	color: #64748b !important;
-	font-size: 15px !important;
+	color: var(--color-text-secondary) !important;
+	font-size: var(--font-size-lg) !important;
 }
 
 .errorState {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	min-height: 400px;
+	min-height: var(--min-height-empty-state);
 	text-align: center;
-	background: white;
-	border-radius: 16px;
-	padding: 40px;
+	background: var(--color-white);
+	border-radius: var(--border-radius-xxl);
+	padding: var(--spacing-xxxxl);
 }

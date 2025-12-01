@@ -14,12 +14,12 @@
 
 .container {
 	position: relative;
-	width: 150px;
-	height: 150px;
+	width: var(--size-node-medium);
+	height: var(--size-node-medium);
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	background-color: #bbf7d0;
 	border: 1px solid #22c55e;
-	border-radius: 8px;
+	border-radius: var(--border-radius-md);
 } */

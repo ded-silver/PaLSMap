@@ -41,15 +41,15 @@
 /* River */
 .river-container {
 	position: relative;
-	width: 250px;
+	width: var(--size-avatar-lg);
 	height: 8px;
 	display: flex;
 	align-items: center;
 	justify-content: flex-start;
-	padding-left: 8px;
-	background-color: #93c5fd;
+	padding-left: var(--spacing-md);
+	background-color: var(--color-node-capacity-bg-top);
 	border: 1px solid #1e3a8a;
-	border-radius: 20px;
+	border-radius: var(--border-radius-xxxl);
 	transform: rotate(60deg);
 	transform-origin: center;
 	cursor: pointer;

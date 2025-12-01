@@ -34,8 +34,8 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background-color: #f3f4f6;
-	border: 1px solid #d1d5db;
+	background-color: var(--color-bg-gray-lighter);
+	border: 1px solid var(--color-border-gray);
 	mix-blend-mode: multiply;
-	border-radius: 8px;
+	border-radius: var(--border-radius-md);
 }

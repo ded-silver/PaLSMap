@@ -28,12 +28,12 @@
 
 .container {
 	position: relative;
-	width: 150px;
-	height: 150px;
+	width: var(--size-node-medium);
+	height: var(--size-node-medium);
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	background-color: white;
 	border: 1px solid black;
-	border-radius: 8px;
+	border-radius: var(--border-radius-md);
 }

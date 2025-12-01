@@ -14,12 +14,12 @@
 
 .container {
 	position: relative;
-	width: 600px;
-	height: 250px;
+	width: var(--max-width-info);
+	height: var(--size-avatar-lg);
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	background-color: #fbcfe8;
 	border: 1px solid #ec4899;
-	border-radius: 8px;
+	border-radius: var(--border-radius-md);
 }

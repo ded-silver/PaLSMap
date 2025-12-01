@@ -1,13 +1,13 @@
 .container {
 	display: flex;
 	flex-direction: column;
-	gap: 16px;
+	gap: var(--spacing-xl);
 }
 
 .info {
 	display: flex;
 	justify-content: flex-end;
-	padding: 8px 0;
+	padding: var(--spacing-md) 0;
 }
 
 .list {
@@ -23,17 +23,17 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	padding: 40px 20px;
-	gap: 16px;
+	padding: var(--spacing-xxxxl) var(--spacing-xxl);
+	gap: var(--spacing-xl);
 }
 
 .loadingText {
-	color: #64748b;
-	margin-top: 8px;
+	color: var(--color-text-secondary);
+	margin-top: var(--margin-md);
 }
 
 .pagination {
 	display: flex;
 	justify-content: center;
-	padding: 20px 0;
+	padding: var(--spacing-xxl) 0;
 }

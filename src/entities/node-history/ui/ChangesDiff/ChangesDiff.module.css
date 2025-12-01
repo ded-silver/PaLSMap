@@ -1,34 +1,34 @@
 .container {
 	display: flex;
 	flex-direction: column;
-	gap: 16px;
-	margin-top: 8px;
+	gap: var(--spacing-xl);
+	margin-top: var(--margin-md);
 }
 
 .field {
 	display: flex;
 	flex-direction: column;
-	gap: 8px;
+	gap: var(--spacing-md);
 }
 
 .fieldName {
-	font-weight: 600;
-	color: #1e293b;
-	font-size: 13px;
+	font-weight: var(--font-weight-semibold);
+	color: var(--color-text-primary);
+	font-size: var(--font-size-md);
 	text-transform: capitalize;
 }
 
 .values {
 	display: flex;
 	flex-direction: column;
-	gap: 8px;
+	gap: var(--spacing-md);
 }
 
 .value {
-	padding: 12px;
-	border-radius: 6px;
-	border: 1px solid #e2e8f0;
-	background-color: #f8fafc;
+	padding: var(--spacing-lg);
+	border-radius: var(--border-radius-md-plus);
+	border: 1px solid var(--color-border-divider);
+	background-color: var(--color-bg-table-header);
 }
 
 .value.before {
@@ -54,25 +54,25 @@
 }
 
 .label {
-	font-weight: 600;
-	margin-bottom: 6px;
+	font-weight: var(--font-weight-semibold);
+	margin-bottom: var(--margin-sm);
 	display: block;
-	font-size: 11px;
+	font-size: var(--font-size-xs);
 	text-transform: uppercase;
 	letter-spacing: 0.5px;
 }
 
 .valueContent {
 	margin: 0;
-	font-size: 12px;
+	font-size: var(--font-size-sm);
 	font-family: 'Courier New', monospace;
-	color: #1e293b;
+	color: var(--color-text-primary);
 	white-space: pre-wrap;
 	word-break: break-word;
-	line-height: 1.5;
+	line-height: var(--line-height-normal);
 }
 
 .noChanges {
-	color: #94a3b8;
+	color: var(--color-icon-muted);
 	font-style: italic;
 }

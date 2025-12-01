@@ -17,7 +17,7 @@
 		transition: background-color 200ms ease-in-out;
 
 		&:hover {
-			background-color: #ffffff;
+			background-color: var(--color-white);
 		}
 	}
 	.search-input {
@@ -25,13 +25,13 @@
 		width: 0;
 		opacity: 0;
 		border: none;
-		border-bottom: 1px solid #ffffff;
+		border-bottom: 1px solid var(--color-white);
 		height: 40px;
-		background: #ffffff;
+		background: var(--color-white);
 		outline: none;
 		padding: 0px;
-		color: #343743;
-		font-weight: 700;
+		color: var(--color-text-primary);
+		font-weight: var(--font-weight-bold);
 	}
 	&.expanded {
 		& {

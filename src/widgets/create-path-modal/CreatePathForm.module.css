@@ -1,12 +1,12 @@
 .form {
 	display: flex;
 	flex-direction: column;
-	gap: 16px;
+	gap: var(--spacing-xl);
 }
 
 .actions {
 	display: flex;
 	justify-content: flex-end;
-	gap: 12px;
-	margin-top: 24px;
+	gap: var(--spacing-lg);
+	margin-top: var(--margin-xxxl);
 }

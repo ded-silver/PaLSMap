@@ -2,11 +2,11 @@
 	display: grid;
 	grid-template-columns: 120px 1fr;
 	align-items: center;
-	gap: 20px;
-	padding: 16px 20px;
-	border-radius: 12px;
-	background-color: #ffffff;
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+	gap: var(--spacing-xxl);
+	padding: var(--spacing-xl) var(--spacing-xxl);
+	border-radius: var(--border-radius-xl);
+	background-color: var(--color-white);
+	box-shadow: var(--effect-shadow-md);
 	transition:
 		transform 0.2s ease,
 		box-shadow 0.2s ease;
@@ -18,40 +18,40 @@
 
 .item:hover {
 	transform: translateY(-2px);
-	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+	box-shadow: var(--effect-shadow-hover);
 }
 
 .short {
-	font-weight: 700;
+	font-weight: var(--font-weight-bold);
 	font-size: 1.25rem;
 	text-align: center;
-	color: #0f172a;
+	color: var(--color-text-primary);
 }
 
 .full {
 	font-size: 1rem;
-	color: #475569;
-	line-height: 1.5;
+	color: var(--color-text-tertiary);
+	line-height: var(--line-height-normal);
 }
 
 .actions {
 	display: flex;
-	gap: 8px;
+	gap: var(--spacing-md);
 	align-items: center;
 }
 
 .editButton {
-	color: #0073e6;
+	color: var(--color-primary);
 }
 
 .editButton:hover {
-	background-color: rgba(0, 115, 230, 0.1);
+	background-color: var(--color-primary-light);
 }
 
 .deleteButton {
-	color: #dc2626;
+	color: var(--color-danger);
 }
 
 .deleteButton:hover {
-	background-color: rgba(220, 38, 38, 0.1);
+	background-color: var(--color-danger-light);
 }

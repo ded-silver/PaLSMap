@@ -1,36 +1,36 @@
 .container {
-	background-color: #ffffff;
-	border-radius: 12px;
-	padding: 24px;
-	margin-bottom: 24px;
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+	background-color: var(--color-white);
+	border-radius: var(--border-radius-xl);
+	padding: var(--spacing-xxxl);
+	margin-bottom: var(--margin-xxxl);
+	box-shadow: var(--effect-shadow-md);
 }
 
 .avatarSection {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	gap: 16px;
-	margin-bottom: 24px;
+	gap: var(--spacing-xl);
+	margin-bottom: var(--margin-xxxl);
 }
 
 .avatar {
-	width: 120px;
-	height: 120px;
-	font-size: 60px;
+	width: var(--size-avatar-md-lg);
+	height: var(--size-avatar-md-lg);
+	font-size: var(--font-size-display-xl);
 }
 
 .avatarControls {
 	display: flex;
 	flex-direction: column;
-	gap: 8px;
+	gap: var(--spacing-md);
 	align-items: center;
 }
 
 .form {
 	display: flex;
 	flex-direction: column;
-	gap: 8px;
+	gap: var(--spacing-md);
 }
 
 .formRow {
@@ -40,36 +40,36 @@
 .roleSection {
 	display: flex;
 	justify-content: center;
-	margin: 16px 0;
+	margin: var(--margin-xl) 0;
 }
 
 .roleChip {
 	font-size: 0.875rem;
-	padding: 8px 16px;
+	padding: var(--spacing-md) var(--spacing-xl);
 }
 
 .datesSection {
 	display: flex;
 	flex-direction: column;
-	gap: 8px;
-	margin: 16px 0;
-	padding: 16px;
-	background-color: #f7f9fb;
-	border-radius: 8px;
+	gap: var(--spacing-md);
+	margin: var(--margin-xl) 0;
+	padding: var(--spacing-xl);
+	background-color: var(--color-background-light);
+	border-radius: var(--border-radius-md);
 }
 
 .dateLabel {
-	color: #64748b;
+	color: var(--color-text-secondary);
 	font-size: 0.875rem;
 }
 
 .dateValue {
-	color: #1e293b;
-	font-weight: 500;
+	color: var(--color-text-primary);
+	font-weight: var(--font-weight-medium);
 }
 
 .actions {
 	display: flex;
 	justify-content: flex-end;
-	margin-top: 16px;
+	margin-top: var(--margin-xl);
 }

@@ -1,14 +1,14 @@
 header {
-	background-color: #0073e6;
-	color: white;
+	background-color: var(--color-primary);
+	color: var(--color-white);
 	padding: 1rem;
 	text-align: center;
 	position: relative;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	min-height: 60px;
-	gap: 16px;
+	min-height: var(--min-height-header);
+	gap: var(--spacing-xl);
 }
 
 .breadcrumbs-wrapper {
@@ -22,7 +22,7 @@ header {
 .header-actions {
 	display: flex;
 	align-items: center;
-	gap: 16px;
+	gap: var(--spacing-xl);
 	flex-shrink: 0;
 }
 
@@ -30,22 +30,22 @@ header {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background: rgba(255, 255, 255, 0.1);
+	background: var(--glass-dark-bg);
 	border: none;
 	cursor: pointer;
-	color: rgba(255, 255, 255, 0.9);
+	color: var(--glass-dark-text);
 	padding: 0;
-	width: 49px;
-	height: 49px;
-	border-radius: 10px;
-	backdrop-filter: blur(8px);
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-	transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+	width: var(--button-height-md);
+	height: var(--button-height-md);
+	border-radius: var(--border-radius-lg);
+	backdrop-filter: var(--effect-blur);
+	box-shadow: var(--effect-shadow);
+	transition: var(--effect-transition);
 }
 
 .toggle-sidebar:hover {
-	background-color: rgba(255, 255, 255, 0.15);
-	color: rgba(255, 255, 255, 1);
+	background-color: var(--glass-dark-bg-hover);
+	color: var(--glass-dark-text-hover);
 }
 
 .toggle-sidebar:active {
@@ -54,32 +54,32 @@ header {
 }
 
 .toggle-sidebar svg {
-	font-size: 24px !important;
+	font-size: var(--font-size-xxxxl) !important;
 	opacity: 0.9;
 }
 
 .profile-button {
 	display: flex;
 	align-items: center;
-	gap: 6px;
-	background: rgba(255, 255, 255, 0.1);
-	color: rgba(255, 255, 255, 0.9);
+	gap: var(--spacing-sm);
+	background: var(--glass-dark-bg);
+	color: var(--glass-dark-text);
 	border: none;
-	padding: 8px 16px;
-	border-radius: 10px;
+	padding: var(--spacing-md) var(--spacing-xl);
+	border-radius: var(--border-radius-lg);
 	cursor: pointer;
-	font-weight: 600;
+	font-weight: var(--font-weight-semibold);
 	font-size: 0.875rem;
-	line-height: 1.5;
-	height: 49px;
-	backdrop-filter: blur(8px);
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-	transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+	line-height: var(--line-height-normal);
+	height: var(--button-height-md);
+	backdrop-filter: var(--effect-blur);
+	box-shadow: var(--effect-shadow);
+	transition: var(--effect-transition);
 }
 
 .profile-button:hover {
-	background-color: rgba(255, 255, 255, 0.15);
-	color: rgba(255, 255, 255, 1);
+	background-color: var(--glass-dark-bg-hover);
+	color: var(--glass-dark-text-hover);
 }
 
 .profile-button:active {
@@ -88,6 +88,6 @@ header {
 }
 
 .profile-button svg {
-	font-size: 16px !important;
+	font-size: var(--font-size-xl) !important;
 	opacity: 0.9;
 }

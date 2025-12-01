@@ -1,16 +1,16 @@
 .card {
-	margin-bottom: 12px;
+	margin-bottom: var(--margin-lg);
 	transition: all 0.2s ease-in-out;
 }
 
 .content {
-	padding: 16px !important;
+	padding: var(--spacing-xl) !important;
 }
 
 .header {
 	display: flex;
-	gap: 12px;
-	margin-bottom: 12px;
+	gap: var(--spacing-lg);
+	margin-bottom: var(--margin-lg);
 }
 
 .iconContainer {
@@ -27,33 +27,33 @@
 
 .topRow {
 	display: flex;
-	gap: 8px;
-	margin-bottom: 8px;
+	gap: var(--spacing-md);
+	margin-bottom: var(--margin-md);
 	flex-wrap: wrap;
 }
 
 .description {
-	color: #475569;
-	font-size: 13px;
-	line-height: 1.5;
-	margin-top: 4px;
+	color: var(--color-text-tertiary);
+	font-size: var(--font-size-md);
+	line-height: var(--line-height-normal);
+	margin-top: var(--margin-xs);
 }
 
 .footer {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding-top: 12px;
-	border-top: 1px solid #e2e8f0;
+	padding-top: var(--spacing-lg);
+	border-top: 1px solid var(--color-border-divider);
 }
 
 .user {
-	color: #64748b;
-	font-size: 12px;
-	font-weight: 500;
+	color: var(--color-text-secondary);
+	font-size: var(--font-size-sm);
+	font-weight: var(--font-weight-medium);
 }
 
 .time {
-	color: #94a3b8;
-	font-size: 11px;
+	color: var(--color-icon-muted);
+	font-size: var(--font-size-xs);
 }

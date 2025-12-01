@@ -37,8 +37,8 @@
 
 .circle-container {
 	position: relative;
-	width: 50px;
-	height: 100px;
+	width: var(--size-node-icon);
+	height: var(--size-cylinder-height);
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -47,11 +47,11 @@
 }
 
 .chart-cylinder {
-	width: 50px;
-	height: 100px;
+	width: var(--size-node-icon);
+	height: var(--size-cylinder-height);
 	border-radius: 50% / 23px;
-	border: 1px solid #64748b;
-	background-color: #bfdbfe;
+	border: 1px solid var(--color-text-secondary);
+	background-color: var(--color-node-capacity-bg);
 	position: relative;
 	overflow: hidden;
 }
@@ -62,8 +62,8 @@
 	top: -2px;
 	left: 0;
 	right: 0;
-	height: 40px;
+	height: var(--size-cylinder-top-height);
 	border-radius: 50%;
-	border: 1px solid #64748b;
-	background-color: #93c5fd;
+	border: 1px solid var(--color-text-secondary);
+	background-color: var(--color-node-capacity-bg-top);
 }

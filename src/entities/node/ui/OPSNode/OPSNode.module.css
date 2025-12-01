@@ -1,7 +1,7 @@
 .nodeWrapper {
 	position: relative;
-	width: 100px;
-	height: 100px;
+	width: var(--size-node-small);
+	height: var(--size-node-small);
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -24,7 +24,7 @@
 	left: 50%;
 	transform: translateX(-50%);
 	width: max-content;
-	min-width: 100px;
+	min-width: var(--size-node-small);
 	text-align: center;
 	color: inherit;
 	font-size: 30px !important;
@@ -66,8 +66,8 @@
 
 .circle-container {
 	position: relative;
-	width: 100px;
-	height: 100px;
+	width: var(--size-node-small);
+	height: var(--size-node-small);
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -75,43 +75,13 @@
 }
 
 .circle {
-	width: 100px;
-	height: 100px;
+	width: var(--size-node-small);
+	height: var(--size-node-small);
 	border-radius: 50%;
-	border: 1px solid #15803d;
+	border: 1px solid var(--color-node-ops-border);
 	position: relative;
 	transform: rotate(135deg);
 	transition:
 		border-color 0.3s ease,
 		background 0.3s ease;
 }
-
-/* Крестик "×" в центре круга
-.cross {
-	position: absolute;
-	width: 60px;
-	height: 70px;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-}
-
-.cross::before,
-.cross::after {
-	content: '';
-	position: absolute;
-	left: 50%;
-	top: 0;
-	width: 1px;
-	height: 100%;
-	background-color: #1e293b;
-	transform-origin: center;
-}
-
-.cross::before {
-	transform: translateX(-50%) rotate(45deg);
-}
-
-.cross::after {
-	transform: translateX(-50%) rotate(-45deg);
-} */

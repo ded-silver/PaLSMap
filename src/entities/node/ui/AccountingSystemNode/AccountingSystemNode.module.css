@@ -40,8 +40,8 @@
 
 .container {
 	position: relative;
-	width: 50px;
-	height: 50px;
+	width: var(--size-node-icon);
+	height: var(--size-node-icon);
 	background-color: #a5f3fc;
 	border: 1px solid #06b6d4;
 	border-radius: 50%;
