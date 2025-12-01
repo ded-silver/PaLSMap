@@ -11,9 +11,6 @@ import {
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
-import { AppLayout } from '@/components/layouts/AppLayout'
-import MapView from '@/components/layouts/Main/MapView'
-
 import { useIsAdminWithLoading, userService } from '@/entities/user'
 import { AdminUsersPage } from '@/pages/admin-users'
 import { Auth } from '@/pages/auth'
@@ -23,6 +20,8 @@ import { NodeHistoryPage } from '@/pages/node-history'
 import { ProfilePage } from '@/pages/profile'
 import { resetAuthState } from '@/shared/lib/auth-manager'
 import { getAccessToken, hasRefreshTokenCookie } from '@/shared/lib/auth-token'
+import { AppLayout } from '@/shared/ui/layouts/AppLayout'
+import { MapView } from '@/widgets/map-view'
 
 const AdminRoute = ({ children }: { children: ReactNode }) => {
 	const { isAdmin, isLoading } = useIsAdminWithLoading()

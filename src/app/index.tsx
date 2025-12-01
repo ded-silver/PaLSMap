@@ -1,9 +1,8 @@
 import { ThemeProvider } from '@mui/material/styles'
 
-import '../App.css'
-
 import { QueryProvider } from './providers'
 import { Router } from './router'
+import '@/shared/styles/global.css'
 import { appTheme } from '@/shared/styles/theme'
 
 export const App = () => {

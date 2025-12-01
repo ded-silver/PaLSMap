@@ -2,7 +2,6 @@
 	height: 100%;
 	overflow: hidden;
 	flex-grow: 1;
-	/* padding: 1rem; */
 	background-color: var(--color-white);
 	transition: margin-left 0.3s ease;
 	margin-left: 0;
@@ -14,7 +13,6 @@
 }
 
 .pageTitle {
-	/* margin-bottom: 16px; */
 	position: absolute;
 	background-color: var(--color-background);
 	top: 0;
@@ -101,14 +99,3 @@
 	top: 50%;
 	transform: translateY(-50%);
 }
-
-/* .compass:hover {
-	transform: scale(1.05);
-}
-
-.labelNorth:hover,
-.labelSouth:hover,
-.labelEast:hover,
-.labelWest:hover {
-	color: #ef4444;
-} */

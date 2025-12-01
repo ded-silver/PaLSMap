@@ -1,5 +1,5 @@
 .provider-content {
-	height: 100%; /* 1rem сверху и снизу */
+	height: 100%;
 	overflow: hidden;
 	flex-grow: 1;
 	padding: 1rem;

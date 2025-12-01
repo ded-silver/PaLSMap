@@ -40,8 +40,8 @@ import {
 	useNodeDrop,
 	useNodePositionUpdate
 } from '@/shared/hooks'
-import { COLORS, SIZES } from '@/shared/styles/tokens'
 import { MUI_STYLES } from '@/shared/styles/mui-styles'
+import { COLORS, SIZES } from '@/shared/styles/tokens'
 import { DnDSidebar } from '@/widgets/dnd-sidebar'
 
 const nodeTypes = {

@@ -23,11 +23,11 @@ import { useIsAdmin } from '@/entities/user'
 import { useDialog } from '@/shared/hooks'
 import { useDataGridLocaleText } from '@/shared/i18n/useDataGridLocaleText'
 import { exportToExcel } from '@/shared/lib/excel-export'
-import { COLORS, SIZES } from '@/shared/styles/tokens'
 import { MUI_STYLES } from '@/shared/styles/mui-styles'
+import { COLORS, SIZES } from '@/shared/styles/tokens'
 
 const Provider = lazy(() =>
-	import('@/components/Provider/Provider').then(module => ({
+	import('@/widgets/node-provider/Provider').then(module => ({
 		default: module.default
 	}))
 )
