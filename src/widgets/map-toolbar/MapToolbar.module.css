@@ -1,0 +1,77 @@
+.wrapper {
+	position: fixed;
+	top: var(--map-toolbar-top);
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: var(--z-index-map-toolbar);
+}
+
+.toolbar {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: var(--spacing-md);
+}
+
+.toolbar-content {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--spacing-lg);
+	padding: var(--spacing-lg) var(--spacing-xxxl);
+	background: var(--glass-blue-bg);
+	backdrop-filter: var(--effect-blur);
+	border: var(--border-width-xs) solid var(--glass-dark-border);
+	border-radius: var(--border-radius-lg);
+	box-shadow: var(--effect-shadow), var(--effect-shadow-blue);
+	transition: var(--effect-transition);
+}
+
+.toolbar-button {
+	background: var(--glass-blue-bg) !important;
+	backdrop-filter: var(--effect-blur);
+	border: var(--border-width-xs) solid var(--glass-dark-border);
+	color: var(--glass-blue-text) !important;
+	width: var(--map-toolbar-button-size);
+	height: var(--map-toolbar-button-size);
+	border-radius: var(--border-radius-md);
+	box-shadow: var(--effect-shadow-blue);
+	transition: var(--effect-transition);
+}
+
+.toolbar-button:hover {
+	background: var(--glass-blue-bg-hover) !important;
+	color: var(--glass-blue-text-hover) !important;
+	box-shadow: var(--effect-shadow-blue-md);
+	transform: translateY(var(--map-toolbar-hover-translate));
+}
+
+.toolbar-button:disabled {
+	opacity: var(--opacity-disabled);
+	cursor: not-allowed;
+}
+
+.toolbar-button svg {
+	font-size: var(--map-toolbar-icon-size);
+}
+
+.version-indicator {
+	margin-top: var(--spacing-md);
+	padding: var(--spacing-sm) var(--spacing-lg);
+	background: var(--glass-blue-bg);
+	backdrop-filter: var(--effect-blur);
+	border: var(--border-width-xs) solid var(--glass-dark-border);
+	border-radius: var(--border-radius-md);
+	font-size: var(--font-size-xs);
+	color: var(--glass-blue-text);
+	text-align: center;
+	box-shadow: var(--effect-shadow-blue-sm);
+}
+
+.select-loading {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: var(--map-toolbar-button-size);
+	padding: 0 var(--map-toolbar-select-padding);
+}

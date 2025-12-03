@@ -66,7 +66,7 @@ export const NodeSettingsDrawer = ({
 }: NodeSettingsDrawerProps) => {
 	const { t } = useTranslation(['common', 'nodes', 'node-history'])
 	const { data: history, isLoading: isHistoryLoading } = useNodeHistory(
-		nodeId || ''
+		open && nodeId ? nodeId : ''
 	)
 	const [selectedHistory, setSelectedHistory] = useState<string | null>(null)
 	const [isHistoryDrawerOpen, setIsHistoryDrawerOpen] = useState(false)

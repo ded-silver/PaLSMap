@@ -100,28 +100,55 @@
 	/* ============================================
 	   COMMON SIZES - Часто используемые размеры
 	   ============================================ */
-	--size-node-icon: 50px;
-	--size-node-icon-small: 25px;
-	--size-node-icon-medium: 30px;
-	--size-node-icon-large: 90px;
-	--size-icon-sm: 40px;
-	--size-icon-md: 48px;
-	--size-avatar-sm: 40px;
-	--size-avatar-md: 48px;
-	--size-cylinder-height: 100px;
-	--size-cylinder-top-height: 40px;
-	--size-cylinder-top-height-small: 20px;
-	--max-width-content: 1400px;
-	--max-width-form: 400px;
-	--max-width-profile: 900px;
-	--max-width-info: 600px;
-	--min-height-empty-state: 400px;
-	--min-height-header: 60px;
-	--height-header: 81px;
-	--size-avatar-lg: 250px;
-	--size-node-medium: 150px;
-	--size-node-small: 100px;
+	/* Base size values - базовые размеры для переиспользования */
+	--size-base-20: 20px;
+	--size-base-25: 25px;
+	--size-base-30: 30px;
+	--size-base-40: 40px;
+	--size-base-48: 48px;
+	--size-base-50: 50px;
+	--size-base-60: 60px;
+	--size-base-90: 90px;
+	--size-base-100: 100px;
+	--size-base-150: 150px;
+	--size-base-200: 200px;
+	--size-base-250: 250px;
+	--size-base-400: 400px;
+	--size-base-600: 600px;
+
+	/* Node sizes */
+	--size-node-icon: var(--size-base-50);
+	--size-node-icon-small: var(--size-base-25);
+	--size-node-icon-medium: var(--size-base-30);
+	--size-node-icon-large: var(--size-base-90);
+	--size-node-medium: var(--size-base-150);
+	--size-node-small: var(--size-base-100);
+
+	/* Icon sizes */
+	--size-icon-sm: var(--size-base-40);
+	--size-icon-md: var(--size-base-48);
+
+	/* Avatar sizes */
+	--size-avatar-sm: var(--size-base-40);
+	--size-avatar-md: var(--size-base-48);
+	--size-avatar-lg: var(--size-base-250);
 	--size-avatar-md-lg: 120px;
+
+	/* Cylinder sizes */
+	--size-cylinder-height: var(--size-base-100);
+	--size-cylinder-top-height: var(--size-base-40);
+	--size-cylinder-top-height-small: var(--size-base-20);
+
+	/* Max widths */
+	--max-width-content: 1400px;
+	--max-width-form: var(--size-base-400);
+	--max-width-profile: 900px;
+	--max-width-info: var(--size-base-600);
+
+	/* Min heights */
+	--min-height-empty-state: var(--size-base-400);
+	--min-height-header: var(--size-base-60);
+	--height-header: 81px;
 
 	/* Border widths */
 	--border-width-xs: 1px;
@@ -256,7 +283,7 @@
 	/* ============================================
 	   NOT FOUND PAGE - Specific variables
 	   ============================================ */
-	--not-found-content-radius: 24px;
+	--not-found-content-radius: var(--spacing-xxxl);
 	--not-found-shadow: 0 8px 32px rgba(0, 115, 230, 0.1);
 	--not-found-text-shadow-primary: 0 4px 12px rgba(0, 115, 230, 0.3);
 	--not-found-text-shadow-dark: 0 4px 12px rgba(68, 114, 196, 0.3);
@@ -265,16 +292,16 @@
 	--not-found-circle-gradient-start: rgba(0, 115, 230, 0.1);
 	--not-found-circle-gradient-end: rgba(68, 114, 196, 0.05);
 	--not-found-circle-size-lg: 300px;
-	--not-found-circle-size-md: 200px;
-	--not-found-circle-size-sm: 150px;
-	--not-found-circle-offset-lg: -100px;
-	--not-found-circle-offset-md: -50px;
-	--not-found-animation-translate-y: -20px;
-	--not-found-animation-translate-x: 30px;
+	--not-found-circle-size-md: var(--size-base-200);
+	--not-found-circle-size-sm: var(--size-base-150);
+	--not-found-circle-offset-lg: calc(-1 * var(--size-base-100));
+	--not-found-circle-offset-md: calc(-1 * var(--size-base-50));
+	--not-found-animation-translate-y: calc(-1 * var(--size-base-20));
+	--not-found-animation-translate-x: var(--size-base-30);
 	--not-found-animation-scale-up: 1.1;
 	--not-found-animation-scale-down: 0.9;
 	--not-found-blur: blur(12px);
-	--not-found-max-width: 600px;
+	--not-found-max-width: var(--size-base-600);
 
 	/* ============================================
 	   Z-INDEX - Порядок наложения элементов
@@ -282,4 +309,59 @@
 	--z-index-drawer-settings: 1300;
 	--z-index-drawer-history: 1400;
 	--z-index-dialog-history-details: 1500;
+	--z-index-page-title: 5;
+	--z-index-compass: 15;
+	--z-index-compass-needle: 2;
+	--z-index-version-loading: 1000;
+	--z-index-map-toolbar: 10;
+
+	/* ============================================
+	   MAP VIEW - Специфичные размеры для карты
+	   ============================================ */
+	--map-compass-size: var(--size-base-90);
+	--map-compass-offset: var(--spacing-md);
+	--map-compass-needle-size: var(--spacing-sm);
+	--map-compass-needle-height: var(--size-base-20);
+	--map-compass-needle-top: var(--size-base-25);
+	--map-compass-label-offset: var(--spacing-sm);
+	--map-sidebar-width: var(--size-base-250);
+	--map-compass-needle-color: #ef4444;
+	--map-transition-duration: 0.3s;
+
+	/* ============================================
+	   MAP TOOLBAR - Размеры для тулбара карты
+	   ============================================ */
+	--map-toolbar-top: var(--height-header);
+	--map-toolbar-button-size: var(--button-height-sm);
+	--map-toolbar-icon-size: var(--size-base-20);
+	--map-toolbar-select-padding: var(--spacing-lg);
+	--map-toolbar-hover-translate: -1px;
+
+	/* ============================================
+	   CARD HOVER - Эффекты наведения для карточек
+	   ============================================ */
+	--card-hover-translate: -2px;
+	--card-hover-shadow:
+		0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+	/* ============================================
+	   MODAL - Размеры для модальных окон
+	   ============================================ */
+	--modal-text-margin-top: var(--spacing-xl);
+
+	/* ============================================
+	   LIST STATES - Состояния списков
+	   ============================================ */
+	--list-empty-min-height: var(--size-base-200);
+
+	/* ============================================
+	   UI STATES - Состояния UI элементов
+	   ============================================ */
+	--opacity-disabled: 0.5;
+
+	/* ============================================
+	   CHIP SIZES - Размеры для Chip компонентов
+	   ============================================ */
+	--chip-small-font-size: var(--font-size-xs);
+	--chip-small-height: 22px;
 }

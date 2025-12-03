@@ -18,6 +18,7 @@ import { AdminUsersPage } from '@/pages/admin-users'
 import { Auth } from '@/pages/auth'
 import { DictionaryPage } from '@/pages/dictionary'
 import { CountriesListPage, PathAreasListPage } from '@/pages/map'
+import { MapVersionsPage } from '@/pages/map-versions'
 import { NodeHistoryPage } from '@/pages/node-history'
 import { NotFoundPage } from '@/pages/not-found'
 import { ProfilePage } from '@/pages/profile'
@@ -153,6 +154,22 @@ export const Router = () => {
 									closeSidebar={closeSidebar}
 								>
 									<MapCountryRoute isSidebarOpen={isSidebarOpen} />
+								</AppLayout>
+							</ValidatedMapRoute>
+						</ProtectedRoute>
+					}
+				/>
+				<Route
+					path='/map/:countryId/:areaId/versions'
+					element={
+						<ProtectedRoute>
+							<ValidatedMapRoute requiredParams={['countryId', 'areaId']}>
+								<AppLayout
+									isSidebarOpen={isSidebarOpen}
+									toggleSidebar={toggleSidebar}
+									closeSidebar={closeSidebar}
+								>
+									<MapVersionsPage />
 								</AppLayout>
 							</ValidatedMapRoute>
 						</ProtectedRoute>

@@ -1,15 +1,18 @@
+import BookmarkIcon from '@mui/icons-material/Bookmark'
 import PublicIcon from '@mui/icons-material/Public'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link, useLocation, useParams } from 'react-router-dom'
+import { Link, useLocation, useParams, useSearchParams } from 'react-router-dom'
 
 import styles from './PathBreadcrumbs.module.css'
 import { useCountry } from '@/entities/country'
+import { useVersion, useVersionsByPathArea } from '@/entities/map-version'
 import { usePathArea } from '@/entities/path-area'
 
 export const PathBreadcrumbs = () => {
-	const { t } = useTranslation('path-areas')
+	const { t } = useTranslation(['path-areas', 'map-versions'])
 	const location = useLocation()
+	const [searchParams] = useSearchParams()
 	const { countryId, areaId } = useParams<{
 		countryId?: string
 		areaId?: string
@@ -17,9 +20,17 @@ export const PathBreadcrumbs = () => {
 
 	const isMapPage =
 		location.pathname.startsWith('/map') || location.pathname === '/'
+	const isVersionsPage = location.pathname.endsWith('/versions')
+	const versionId = searchParams.get('version')
 
 	const { data: country } = useCountry(isMapPage && countryId ? countryId : '')
 	const { data: area } = usePathArea(isMapPage && areaId ? areaId : '')
+	const { data: versions } = useVersionsByPathArea(
+		isMapPage && areaId ? areaId : undefined
+	)
+	const { data: version } = useVersion(
+		isMapPage && versionId ? versionId : undefined
+	)
 
 	const breadcrumbs = useMemo(() => {
 		if (!isMapPage) {
@@ -29,7 +40,7 @@ export const PathBreadcrumbs = () => {
 		const crumbs = []
 
 		crumbs.push({
-			label: t('labels.countries'),
+			label: t('labels.countries', { ns: 'path-areas' }),
 			path: '/map',
 			isActive: !countryId && !areaId
 		})
@@ -38,7 +49,7 @@ export const PathBreadcrumbs = () => {
 			crumbs.push({
 				label: country.name,
 				path: `/map/${countryId}`,
-				isActive: !areaId && !!countryId
+				isActive: !areaId && !!countryId && !isVersionsPage
 			})
 		}
 
@@ -46,12 +57,38 @@ export const PathBreadcrumbs = () => {
 			crumbs.push({
 				label: area.name,
 				path: `/map/${countryId}/${areaId}`,
+				isActive: !isVersionsPage && !versionId
+			})
+		}
+
+		if (isVersionsPage && areaId) {
+			crumbs.push({
+				label: t('labels.versions', { ns: 'map-versions' }),
+				path: `/map/${countryId}/${areaId}/versions`,
+				isActive: true
+			})
+		}
+
+		if (versionId && version && !isVersionsPage) {
+			crumbs.push({
+				label: version.name,
+				path: `/map/${countryId}/${areaId}?version=${versionId}`,
 				isActive: true
 			})
 		}
 
 		return crumbs
-	}, [isMapPage, countryId, areaId, country, area, t])
+	}, [
+		isMapPage,
+		isVersionsPage,
+		countryId,
+		areaId,
+		country,
+		area,
+		versionId,
+		version,
+		t
+	])
 
 	if (!isMapPage) {
 		return null
@@ -92,6 +129,10 @@ export const PathBreadcrumbs = () => {
 					{crumb.isActive ? (
 						<span className={styles.active}>
 							{index === 0 && <PublicIcon className={styles.breadcrumbIcon} />}
+							{(isVersionsPage || (versionId && !isVersionsPage)) &&
+								index === breadcrumbs.length - 1 && (
+									<BookmarkIcon className={styles.breadcrumbIcon} />
+								)}
 							{crumb.label}
 						</span>
 					) : (

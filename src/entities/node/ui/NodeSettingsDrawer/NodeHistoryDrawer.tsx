@@ -24,7 +24,9 @@ export const NodeHistoryDrawer = ({
 	nodeName
 }: NodeHistoryDrawerProps) => {
 	const { t } = useTranslation(['common', 'node-history'])
-	const { data: history, isLoading: isHistoryLoading } = useNodeHistory(nodeId)
+	const { data: history, isLoading: isHistoryLoading } = useNodeHistory(
+		open && nodeId ? nodeId : ''
+	)
 	const [selectedHistory, setSelectedHistory] = useState<string | null>(null)
 
 	const selectedHistoryItem =

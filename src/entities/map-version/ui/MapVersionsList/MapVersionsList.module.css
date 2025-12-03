@@ -1,0 +1,32 @@
+.container {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-xl);
+}
+
+.loading,
+.error,
+.empty {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: var(--spacing-xxxxl);
+	gap: var(--spacing-lg);
+	min-height: var(--list-empty-min-height);
+}
+
+.loadingText {
+	margin-top: var(--spacing-md);
+	color: var(--color-text-secondary);
+}
+
+.info {
+	margin-bottom: var(--spacing-md);
+}
+
+.list {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-lg);
+}

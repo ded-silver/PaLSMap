@@ -6,6 +6,7 @@ import adminEn from './locales/en/admin'
 import authEn from './locales/en/auth'
 import commonEn from './locales/en/common'
 import dictionaryEn from './locales/en/dictionary'
+import mapVersionsEn from './locales/en/map-versions'
 import nodeHistoryEn from './locales/en/node-history'
 import nodesEn from './locales/en/nodes'
 import notFoundEn from './locales/en/not-found'
@@ -15,6 +16,7 @@ import adminRu from './locales/ru/admin'
 import authRu from './locales/ru/auth'
 import commonRu from './locales/ru/common'
 import dictionaryRu from './locales/ru/dictionary'
+import mapVersionsRu from './locales/ru/map-versions'
 import nodeHistoryRu from './locales/ru/node-history'
 import nodesRu from './locales/ru/nodes'
 import notFoundRu from './locales/ru/not-found'
@@ -31,7 +33,8 @@ const resources = {
 		admin: adminRu,
 		'node-history': nodeHistoryRu,
 		'path-areas': pathAreasRu,
-		'not-found': notFoundRu
+		'not-found': notFoundRu,
+		'map-versions': mapVersionsRu
 	},
 	en: {
 		common: commonEn,
@@ -42,7 +45,8 @@ const resources = {
 		admin: adminEn,
 		'node-history': nodeHistoryEn,
 		'path-areas': pathAreasEn,
-		'not-found': notFoundEn
+		'not-found': notFoundEn,
+		'map-versions': mapVersionsEn
 	}
 }
 

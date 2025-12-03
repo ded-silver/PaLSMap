@@ -3,13 +3,13 @@
 	overflow: hidden;
 	flex-grow: 1;
 	background-color: var(--color-white);
-	transition: margin-left 0.3s ease;
+	transition: margin-left var(--map-transition-duration) ease;
 	margin-left: 0;
 	position: relative;
 }
 
 .main-content.shifted {
-	margin-left: 250px;
+	margin-left: var(--map-sidebar-width);
 }
 
 .pageTitle {
@@ -19,25 +19,25 @@
 	left: 0;
 	padding: var(--spacing-md);
 	text-align: left;
-	border-bottom: 1px solid lightgray;
-	border-right: 1px solid lightgray;
-	border-bottom-right-radius: 8px;
-	transition: left 0.3s ease;
-	z-index: 5;
+	border-bottom: var(--border-width-xs) solid var(--color-border-light);
+	border-right: var(--border-width-xs) solid var(--color-border-light);
+	border-bottom-right-radius: var(--border-radius-md);
+	transition: left var(--map-transition-duration) ease;
+	z-index: var(--z-index-page-title);
 }
 
 .open {
-	left: 250px;
+	left: var(--map-sidebar-width);
 }
 
 .compass {
 	position: absolute;
-	bottom: 8px;
-	right: 8px;
-	width: 90px;
-	height: 90px;
-	border: 2px solid var(--color-border-dashed);
-	border-radius: 50%;
+	bottom: var(--map-compass-offset);
+	right: var(--map-compass-offset);
+	width: var(--map-compass-size);
+	height: var(--map-compass-size);
+	border: var(--border-width-sm) solid var(--color-border-dashed);
+	border-radius: var(--border-radius-round);
 	background: radial-gradient(
 		circle at center,
 		var(--color-background-light) 60%,
@@ -47,21 +47,22 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	z-index: 15;
-	transition: transform 0.3s ease;
+	z-index: var(--z-index-compass);
+	transition: transform var(--map-transition-duration) ease;
 }
 
 .needle {
 	position: absolute;
 	width: 0;
 	height: 0;
-	border-left: 6px solid transparent;
-	border-right: 6px solid transparent;
-	border-bottom: 20px solid #ef4444;
-	top: 25px;
+	border-left: var(--map-compass-needle-size) solid transparent;
+	border-right: var(--map-compass-needle-size) solid transparent;
+	border-bottom: var(--map-compass-needle-height) solid
+		var(--map-compass-needle-color);
+	top: var(--map-compass-needle-top);
 	left: 50%;
 	transform: translateX(-50%);
-	z-index: 2;
+	z-index: var(--z-index-compass-needle);
 }
 
 .labelNorth,
@@ -77,25 +78,37 @@
 }
 
 .labelNorth {
-	top: 6px;
+	top: var(--map-compass-label-offset);
 	left: 50%;
 	transform: translateX(-50%);
 }
 
 .labelSouth {
-	bottom: 6px;
+	bottom: var(--map-compass-label-offset);
 	left: 50%;
 	transform: translateX(-50%);
 }
 
 .labelWest {
-	left: 6px;
+	left: var(--map-compass-label-offset);
 	top: 50%;
 	transform: translateY(-50%);
 }
 
 .labelEast {
-	right: 6px;
+	right: var(--map-compass-label-offset);
 	top: 50%;
 	transform: translateY(-50%);
+}
+
+.version-loading {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: var(--z-index-version-loading);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: var(--spacing-md);
 }
