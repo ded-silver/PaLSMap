@@ -1,50 +1,45 @@
-# React + TypeScript + Vite
+# MOPS Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend приложение для системы управления картой объектов и путей (MOPS / PaLSMap).
 
-Currently, two official plugins are available:
+## Технологии
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+React, TypeScript, React Router, React Query, Material-UI, React Flow, i18n, Redux Toolkit, Vite
 
-## Expanding the ESLint configuration
+## Быстрый старт
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+```bash
+# Установка зависимостей
+npm install
 
-- Configure the top-level `parserOptions` property like this:
+# Настройка .env
+VITE_API_BASE_URL="http://localhost:4201"
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+# Запуск
+npm run dev
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Роли пользователей
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+- **user** - просмотр карт
+- **admin** - редактирование, история
+- **superAdmin** - управление пользователями
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+## Основные страницы
+
+- `/auth` - аутентификация
+- `/map` - список стран и карты
+- `/map/:countryId/:areaId` - интерактивная карта с нодами
+- `/dictionary` - словарь терминов
+- `/profile` - профиль пользователя
+- `/admin/users` - управление пользователями (только для superAdmin)
+- `/node-history` - история изменений (только для админов)
+
+## Скрипты
+
+```bash
+npm run dev       # Разработка
+npm run build     # Сборка
+npm run preview   # Preview production build
+npm run lint      # Линтинг
 ```
