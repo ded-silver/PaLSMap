@@ -244,4 +244,34 @@
 	   ============================================ */
 	--glass-blue-bg-active: rgba(0, 115, 230, 0.6);
 	--glass-dark-text-muted: rgba(255, 255, 255, 0.5);
+
+	/* ============================================
+	   GLASS EFFECTS - White/Transparent Theme
+	   ============================================ */
+	--glass-white-bg: rgba(255, 255, 255, 0.7);
+	--glass-white-border: rgba(255, 255, 255, 0.5);
+	--glass-white-bg-hover: rgba(255, 255, 255, 0.8);
+
+	/* ============================================
+	   NOT FOUND PAGE - Specific variables
+	   ============================================ */
+	--not-found-content-radius: 24px;
+	--not-found-shadow: 0 8px 32px rgba(0, 115, 230, 0.1);
+	--not-found-text-shadow-primary: 0 4px 12px rgba(0, 115, 230, 0.3);
+	--not-found-text-shadow-dark: 0 4px 12px rgba(68, 114, 196, 0.3);
+	--not-found-text-muted: rgba(0, 115, 230, 0.3);
+	--not-found-text-secondary: rgba(0, 0, 0, 0.7);
+	--not-found-circle-gradient-start: rgba(0, 115, 230, 0.1);
+	--not-found-circle-gradient-end: rgba(68, 114, 196, 0.05);
+	--not-found-circle-size-lg: 300px;
+	--not-found-circle-size-md: 200px;
+	--not-found-circle-size-sm: 150px;
+	--not-found-circle-offset-lg: -100px;
+	--not-found-circle-offset-md: -50px;
+	--not-found-animation-translate-y: -20px;
+	--not-found-animation-translate-x: 30px;
+	--not-found-animation-scale-up: 1.1;
+	--not-found-animation-scale-down: 0.9;
+	--not-found-blur: blur(12px);
+	--not-found-max-width: 600px;
 }

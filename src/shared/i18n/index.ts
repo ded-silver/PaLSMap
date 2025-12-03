@@ -8,6 +8,7 @@ import commonEn from './locales/en/common'
 import dictionaryEn from './locales/en/dictionary'
 import nodeHistoryEn from './locales/en/node-history'
 import nodesEn from './locales/en/nodes'
+import notFoundEn from './locales/en/not-found'
 import pathAreasEn from './locales/en/path-areas'
 import validationEn from './locales/en/validation'
 import adminRu from './locales/ru/admin'
@@ -16,6 +17,7 @@ import commonRu from './locales/ru/common'
 import dictionaryRu from './locales/ru/dictionary'
 import nodeHistoryRu from './locales/ru/node-history'
 import nodesRu from './locales/ru/nodes'
+import notFoundRu from './locales/ru/not-found'
 import pathAreasRu from './locales/ru/path-areas'
 import validationRu from './locales/ru/validation'
 
@@ -28,7 +30,8 @@ const resources = {
 		validation: validationRu,
 		admin: adminRu,
 		'node-history': nodeHistoryRu,
-		'path-areas': pathAreasRu
+		'path-areas': pathAreasRu,
+		'not-found': notFoundRu
 	},
 	en: {
 		common: commonEn,
@@ -38,7 +41,8 @@ const resources = {
 		validation: validationEn,
 		admin: adminEn,
 		'node-history': nodeHistoryEn,
-		'path-areas': pathAreasEn
+		'path-areas': pathAreasEn,
+		'not-found': notFoundEn
 	}
 }
 

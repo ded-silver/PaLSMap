@@ -11,12 +11,15 @@ import {
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
+import { ProtectedRoute } from './ProtectedRoute'
+import { ValidatedMapRoute } from './ValidatedMapRoute'
 import { useIsAdminWithLoading, userService } from '@/entities/user'
 import { AdminUsersPage } from '@/pages/admin-users'
 import { Auth } from '@/pages/auth'
 import { DictionaryPage } from '@/pages/dictionary'
 import { CountriesListPage, PathAreasListPage } from '@/pages/map'
 import { NodeHistoryPage } from '@/pages/node-history'
+import { NotFoundPage } from '@/pages/not-found'
 import { ProfilePage } from '@/pages/profile'
 import { resetAuthState } from '@/shared/lib/auth-manager'
 import { getAccessToken, hasRefreshTokenCookie } from '@/shared/lib/auth-token'
@@ -90,124 +93,150 @@ export const Router = () => {
 
 			try {
 				await userService.getProfile()
-			} catch {
+			} catch (error: any) {
 				resetAuthState()
-				navigate('/auth', { replace: true })
+				if (location.pathname !== '/auth') {
+					navigate('/auth', { replace: true })
+				}
 			}
 		}
 
 		void bootstrapAuth()
-	}, [navigate])
+	}, [navigate, location.pathname])
 
 	return (
 		<>
 			<Routes>
 				<Route
+					path='/auth'
+					element={<Auth />}
+				/>
+				<Route
 					path='/'
 					element={
-						<AppLayout
-							isSidebarOpen={isSidebarOpen}
-							toggleSidebar={toggleSidebar}
-							closeSidebar={closeSidebar}
-						>
-							<Navigate
-								to='/map'
-								replace
-							/>
-						</AppLayout>
+						<ProtectedRoute>
+							<AppLayout
+								isSidebarOpen={isSidebarOpen}
+								toggleSidebar={toggleSidebar}
+								closeSidebar={closeSidebar}
+							>
+								<Navigate
+									to='/map'
+									replace
+								/>
+							</AppLayout>
+						</ProtectedRoute>
 					}
 				/>
 				<Route
 					path='/map'
 					element={
-						<AppLayout
-							isSidebarOpen={isSidebarOpen}
-							toggleSidebar={toggleSidebar}
-							closeSidebar={closeSidebar}
-						>
-							<CountriesListPage />
-						</AppLayout>
+						<ProtectedRoute>
+							<AppLayout
+								isSidebarOpen={isSidebarOpen}
+								toggleSidebar={toggleSidebar}
+								closeSidebar={closeSidebar}
+							>
+								<CountriesListPage />
+							</AppLayout>
+						</ProtectedRoute>
 					}
 				/>
 				<Route
 					path='/map/:countryId'
 					element={
-						<AppLayout
-							isSidebarOpen={isSidebarOpen}
-							toggleSidebar={toggleSidebar}
-							closeSidebar={closeSidebar}
-						>
-							<MapCountryRoute isSidebarOpen={isSidebarOpen} />
-						</AppLayout>
+						<ProtectedRoute>
+							<ValidatedMapRoute requiredParams={['countryId']}>
+								<AppLayout
+									isSidebarOpen={isSidebarOpen}
+									toggleSidebar={toggleSidebar}
+									closeSidebar={closeSidebar}
+								>
+									<MapCountryRoute isSidebarOpen={isSidebarOpen} />
+								</AppLayout>
+							</ValidatedMapRoute>
+						</ProtectedRoute>
 					}
 				/>
 				<Route
 					path='/map/:countryId/:areaId'
 					element={
-						<AppLayout
-							isSidebarOpen={isSidebarOpen}
-							toggleSidebar={toggleSidebar}
-							closeSidebar={closeSidebar}
-						>
-							<MapView isSidebarOpen={isSidebarOpen} />
-						</AppLayout>
+						<ProtectedRoute>
+							<ValidatedMapRoute requiredParams={['countryId', 'areaId']}>
+								<AppLayout
+									isSidebarOpen={isSidebarOpen}
+									toggleSidebar={toggleSidebar}
+									closeSidebar={closeSidebar}
+								>
+									<MapView isSidebarOpen={isSidebarOpen} />
+								</AppLayout>
+							</ValidatedMapRoute>
+						</ProtectedRoute>
 					}
-				/>
-				<Route
-					path='/auth'
-					element={<Auth />}
 				/>
 				<Route
 					path='/dictionary'
 					element={
-						<AppLayout
-							isSidebarOpen={isSidebarOpen}
-							toggleSidebar={toggleSidebar}
-							closeSidebar={closeSidebar}
-						>
-							<DictionaryPage />
-						</AppLayout>
+						<ProtectedRoute>
+							<AppLayout
+								isSidebarOpen={isSidebarOpen}
+								toggleSidebar={toggleSidebar}
+								closeSidebar={closeSidebar}
+							>
+								<DictionaryPage />
+							</AppLayout>
+						</ProtectedRoute>
 					}
 				/>
 				<Route
 					path='/profile'
 					element={
-						<AppLayout
-							isSidebarOpen={isSidebarOpen}
-							toggleSidebar={toggleSidebar}
-							closeSidebar={closeSidebar}
-						>
-							<ProfilePage />
-						</AppLayout>
+						<ProtectedRoute>
+							<AppLayout
+								isSidebarOpen={isSidebarOpen}
+								toggleSidebar={toggleSidebar}
+								closeSidebar={closeSidebar}
+							>
+								<ProfilePage />
+							</AppLayout>
+						</ProtectedRoute>
 					}
 				/>
 				<Route
 					path='/admin/users'
 					element={
-						<AppLayout
-							isSidebarOpen={isSidebarOpen}
-							toggleSidebar={toggleSidebar}
-							closeSidebar={closeSidebar}
-						>
-							<AdminRoute>
-								<AdminUsersPage />
-							</AdminRoute>
-						</AppLayout>
+						<ProtectedRoute>
+							<AppLayout
+								isSidebarOpen={isSidebarOpen}
+								toggleSidebar={toggleSidebar}
+								closeSidebar={closeSidebar}
+							>
+								<AdminRoute>
+									<AdminUsersPage />
+								</AdminRoute>
+							</AppLayout>
+						</ProtectedRoute>
 					}
 				/>
 				<Route
 					path='/node-history'
 					element={
-						<AppLayout
-							isSidebarOpen={isSidebarOpen}
-							toggleSidebar={toggleSidebar}
-							closeSidebar={closeSidebar}
-						>
-							<AdminRoute>
-								<NodeHistoryPage />
-							</AdminRoute>
-						</AppLayout>
+						<ProtectedRoute>
+							<AppLayout
+								isSidebarOpen={isSidebarOpen}
+								toggleSidebar={toggleSidebar}
+								closeSidebar={closeSidebar}
+							>
+								<AdminRoute>
+									<NodeHistoryPage />
+								</AdminRoute>
+							</AppLayout>
+						</ProtectedRoute>
 					}
+				/>
+				<Route
+					path='*'
+					element={<NotFoundPage />}
 				/>
 			</Routes>
 			<ToastContainer aria-label='asd' />
