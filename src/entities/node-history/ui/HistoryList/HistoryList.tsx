@@ -21,7 +21,7 @@ export const HistoryList = ({
 	histories,
 	isLoading = false,
 	error = null,
-	total = 0,
+	total,
 	page = 1,
 	limit = 20,
 	onPageChange,
@@ -29,9 +29,11 @@ export const HistoryList = ({
 }: HistoryListProps) => {
 	const { t } = useTranslation(['node-history', 'common'])
 
-	const totalPages = Math.ceil(total / limit)
+	const actualTotal = total ?? histories.length
+	const totalPages = Math.ceil(actualTotal / limit)
 
-	const hasActiveFilters = total === 0 && histories.length === 0 && !isLoading
+	const hasActiveFilters =
+		actualTotal === 0 && histories.length === 0 && !isLoading
 
 	if (isLoading) {
 		return (
@@ -74,12 +76,17 @@ export const HistoryList = ({
 						variant='caption'
 						color='text.secondary'
 					>
-						{t('info.showingResults', {
-							ns: 'node-history',
-							from: (page - 1) * limit + 1,
-							to: Math.min(page * limit, total),
-							total
-						})}
+						{total !== undefined
+							? t('info.showingResults', {
+									ns: 'node-history',
+									from: (page - 1) * limit + 1,
+									to: Math.min(page * limit, actualTotal),
+									total: actualTotal
+								})
+							: t('info.totalResults', {
+									ns: 'node-history',
+									total: actualTotal
+								})}
 					</Typography>
 				</Box>
 			)}

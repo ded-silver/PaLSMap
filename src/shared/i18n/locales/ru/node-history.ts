@@ -29,6 +29,7 @@ export default {
 	},
 	info: {
 		showingResults: 'Показано {{from}}–{{to}} из {{total}}',
+		totalResults: 'Всего записей: {{total}}',
 		copyId: 'Скопировать ID',
 		idCopied: 'ID скопирован'
 	},

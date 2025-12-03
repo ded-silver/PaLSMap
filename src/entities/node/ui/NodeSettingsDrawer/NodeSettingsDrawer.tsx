@@ -1,4 +1,3 @@
-import CloseIcon from '@mui/icons-material/Close'
 import HistoryIcon from '@mui/icons-material/History'
 import LockIcon from '@mui/icons-material/Lock'
 import PaletteIcon from '@mui/icons-material/Palette'
@@ -8,21 +7,18 @@ import {
 	Button,
 	CircularProgress,
 	Divider,
-	Drawer,
 	FormControl,
-	IconButton,
 	InputLabel,
 	MenuItem,
 	Select,
-	Slider,
 	Switch,
 	TextField,
 	Typography
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
 
+import { NodeHistoryDrawer } from './NodeHistoryDrawer'
 import styles from './NodeSettingsDrawer.module.css'
 import type { VisualState } from '@/entities/node'
 import { STATUS_COLORS, getStatusBorderColor } from '@/entities/node'
@@ -31,6 +27,7 @@ import {
 	HistoryItem,
 	useNodeHistory
 } from '@/entities/node-history'
+import { AppDrawer } from '@/shared/ui'
 
 interface NodeSettingsDrawerProps {
 	open: boolean
@@ -68,11 +65,11 @@ export const NodeSettingsDrawer = ({
 	nodeId
 }: NodeSettingsDrawerProps) => {
 	const { t } = useTranslation(['common', 'nodes', 'node-history'])
-	const navigate = useNavigate()
 	const { data: history, isLoading: isHistoryLoading } = useNodeHistory(
 		nodeId || ''
 	)
 	const [selectedHistory, setSelectedHistory] = useState<string | null>(null)
+	const [isHistoryDrawerOpen, setIsHistoryDrawerOpen] = useState(false)
 
 	const historyItems = history?.slice(0, 2) || []
 	const selectedHistoryItem =
@@ -125,341 +122,314 @@ export const NodeSettingsDrawer = ({
 	}
 
 	return (
-		<Drawer
-			anchor='right'
-			open={open}
-			onClose={handleCloseDrawer}
-			PaperProps={{
-				sx: {
-					zIndex: 1300,
-					top: 0,
-					height: '100vh',
-					margin: 0,
-					padding: 0
-				}
-			}}
-			ModalProps={{
-				style: {
-					zIndex: 1300
-				}
-			}}
-		>
-			<Box className={styles.container}>
-				<Box className={styles.header}>
-					<Box className={styles.headerTitle}>
-						<SettingsIcon className={styles.headerIcon} />
-						<Typography
-							variant='h6'
-							component='h2'
-							className={styles.headerText}
+		<>
+			<AppDrawer
+				open={open}
+				onClose={handleCloseDrawer}
+				title={t('labels.settings', { ns: 'nodes' })}
+				icon={<SettingsIcon />}
+				zIndex='settings'
+				actions={
+					<>
+						<Button
+							variant='outlined'
+							onClick={handleCloseDrawer}
+							disabled={isSaving}
 						>
-							{t('labels.settings', { ns: 'nodes' })}
-						</Typography>
-					</Box>
-					<IconButton
-						onClick={onClose}
-						size='small'
-						className={styles.closeButton}
+							{t('buttons.cancel', { ns: 'common' })}
+						</Button>
+						<Button
+							variant='contained'
+							onClick={() => {
+								if (onLockChange && editingLocked !== isLocked) {
+									onLockChange(editingLocked)
+								}
+								const visualStateToSave = onVisualStateChange
+									? editingVisualState
+									: undefined
+								onSave(editingName, editingLocked, visualStateToSave)
+							}}
+							disabled={!isAdmin || !hasChanges || isSaving}
+						>
+							{isSaving
+								? t('messages.saving', { ns: 'common' })
+								: t('buttons.save', { ns: 'common' })}
+						</Button>
+					</>
+				}
+			>
+				<Box className={styles.settingGroup}>
+					<Typography
+						variant='subtitle2'
+						className={styles.label}
 					>
-						<CloseIcon />
-					</IconButton>
+						{t('labels.nodeName', { ns: 'nodes' })}
+					</Typography>
+					<TextField
+						fullWidth
+						value={editingName}
+						onChange={e => onEditingNameChange(e.target.value)}
+						placeholder={t('placeholders.nodeName', { ns: 'nodes' })}
+						disabled={!isAdmin || isSaving}
+						variant='outlined'
+						size='small'
+						className={styles.textField}
+						autoFocus
+					/>
+					{hasChanges && (
+						<Typography
+							variant='caption'
+							className={styles.hint}
+						>
+							{t('hints.saveChanges', { ns: 'nodes' })}
+						</Typography>
+					)}
 				</Box>
 
-				<Box className={styles.content}>
-					<Box className={styles.settingGroup}>
-						<Typography
-							variant='subtitle2'
-							className={styles.label}
-						>
-							{t('labels.nodeName', { ns: 'nodes' })}
-						</Typography>
-						<TextField
-							fullWidth
-							value={editingName}
-							onChange={e => onEditingNameChange(e.target.value)}
-							placeholder={t('placeholders.nodeName', { ns: 'nodes' })}
-							disabled={!isAdmin || isSaving}
-							variant='outlined'
-							size='small'
-							className={styles.textField}
-							autoFocus
-						/>
-						{hasChanges && (
-							<Typography
-								variant='caption'
-								className={styles.hint}
-							>
-								{t('hints.saveChanges', { ns: 'nodes' })}
-							</Typography>
-						)}
-					</Box>
-
-					{isAdmin && onLockChange ? (
-						<>
-							<Divider className={styles.sectionDivider} />
-							<Box className={styles.settingGroup}>
-								<Box className={styles.settingRow}>
-									<Box className={styles.settingInfo}>
-										<LockIcon className={styles.settingIcon} />
-										<Box className={styles.settingText}>
-											<Typography
-												variant='body2'
-												className={styles.settingLabel}
-											>
-												{t('labels.lockNode', { ns: 'nodes' })}
-											</Typography>
-											<Typography
-												variant='caption'
-												className={styles.settingHint}
-											>
-												{t('hints.lockNode', { ns: 'nodes' })}
-											</Typography>
-										</Box>
-									</Box>
-									<Switch
-										checked={editingLocked}
-										onChange={e => setEditingLocked(e.target.checked)}
-										disabled={isSaving}
-										color='primary'
-									/>
-								</Box>
-							</Box>
-						</>
-					) : null}
-
-					{isAdmin && onVisualStateChange ? (
-						<>
-							<Divider className={styles.sectionDivider} />
-							<Box className={styles.settingGroup}>
+				{isAdmin && onLockChange ? (
+					<>
+						<Divider className={styles.sectionDivider} />
+						<Box className={styles.settingGroup}>
+							<Box className={styles.settingRow}>
 								<Box className={styles.settingInfo}>
-									<PaletteIcon className={styles.settingIcon} />
+									<LockIcon className={styles.settingIcon} />
 									<Box className={styles.settingText}>
 										<Typography
 											variant='body2'
 											className={styles.settingLabel}
 										>
-											{t('labels.visualSettings', { ns: 'nodes' })}
+											{t('labels.lockNode', { ns: 'nodes' })}
 										</Typography>
 										<Typography
 											variant='caption'
 											className={styles.settingHint}
 										>
-											{t('hints.statusHint', { ns: 'nodes' })}
+											{t('hints.lockNode', { ns: 'nodes' })}
 										</Typography>
 									</Box>
 								</Box>
-
-								<FormControl
-									fullWidth
-									variant='outlined'
-									size='medium'
-									className={styles.textField}
-									sx={{ mt: 2 }}
-								>
-									<InputLabel>{t('labels.status', { ns: 'nodes' })}</InputLabel>
-									<Select
-										value={editingVisualState.status || 'normal'}
-										onChange={e => handleStatusChange(e.target.value)}
-										label={t('labels.status', { ns: 'nodes' })}
-										disabled={isSaving}
-										renderValue={value => {
-											const status = value as string
-											const color = getStatusBorderColor(status)
-											return (
-												<Box
-													sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
-												>
-													<Box
-														sx={{
-															width: 16,
-															height: 16,
-															borderRadius: '50%',
-															backgroundColor: color,
-															border: '2px solid',
-															borderColor: 'divider',
-															flexShrink: 0
-														}}
-													/>
-													{t(`status.${status}`, { ns: 'nodes' })}
-												</Box>
-											)
-										}}
-									>
-										<MenuItem value='normal'>
-											<Box
-												sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}
-											>
-												<Box
-													sx={{
-														width: 16,
-														height: 16,
-														borderRadius: '50%',
-														backgroundColor: STATUS_COLORS.normal.border,
-														border: '2px solid',
-														borderColor: 'divider'
-													}}
-												/>
-												{t('status.normal', { ns: 'nodes' })}
-											</Box>
-										</MenuItem>
-										<MenuItem value='warning'>
-											<Box
-												sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}
-											>
-												<Box
-													sx={{
-														width: 16,
-														height: 16,
-														borderRadius: '50%',
-														backgroundColor: STATUS_COLORS.warning.border,
-														border: '2px solid',
-														borderColor: 'divider'
-													}}
-												/>
-												{t('status.warning', { ns: 'nodes' })}
-											</Box>
-										</MenuItem>
-										<MenuItem value='error'>
-											<Box
-												sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}
-											>
-												<Box
-													sx={{
-														width: 16,
-														height: 16,
-														borderRadius: '50%',
-														backgroundColor: STATUS_COLORS.error.border,
-														border: '2px solid',
-														borderColor: 'divider'
-													}}
-												/>
-												{t('status.error', { ns: 'nodes' })}
-											</Box>
-										</MenuItem>
-										<MenuItem value='info'>
-											<Box
-												sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}
-											>
-												<Box
-													sx={{
-														width: 16,
-														height: 16,
-														borderRadius: '50%',
-														backgroundColor: STATUS_COLORS.info.border,
-														border: '2px solid',
-														borderColor: 'divider'
-													}}
-												/>
-												{t('status.info', { ns: 'nodes' })}
-											</Box>
-										</MenuItem>
-									</Select>
-								</FormControl>
+								<Switch
+									checked={editingLocked}
+									onChange={e => setEditingLocked(e.target.checked)}
+									disabled={isSaving}
+									color='primary'
+								/>
 							</Box>
-						</>
-					) : null}
+						</Box>
+					</>
+				) : null}
 
-					{isAdmin && nodeId ? (
-						<>
-							<Divider className={styles.sectionDivider} />
-							<Box className={styles.settingGroup}>
-								<Box className={styles.settingInfo}>
-									<HistoryIcon className={styles.settingIcon} />
-									<Box className={styles.settingText}>
-										<Typography
-											variant='body2'
-											className={styles.settingLabel}
-										>
-											{t('labels.history', { ns: 'node-history' })}
-										</Typography>
-										<Typography
-											variant='caption'
-											className={styles.settingHint}
-										>
-											{t('labels.recentChanges', { ns: 'node-history' })}
-										</Typography>
-									</Box>
-								</Box>
-
-								{isHistoryLoading ? (
-									<Box
-										sx={{
-											display: 'flex',
-											justifyContent: 'center',
-											py: 2
-										}}
-									>
-										<CircularProgress size={24} />
-									</Box>
-								) : historyItems.length > 0 ? (
-									<Box className={styles.historyList}>
-										{historyItems.map(item => (
-											<HistoryItem
-												key={item.id}
-												history={item}
-												onClick={() => setSelectedHistory(item.id)}
-											/>
-										))}
-										<Button
-											variant='outlined'
-											size='small'
-											fullWidth
-											onClick={() => {
-												navigate(`/node-history?nodeId=${nodeId}`)
-												onClose()
-											}}
-											sx={{ mt: 1 }}
-										>
-											{t('actions.showAll', { ns: 'node-history' })}
-										</Button>
-									</Box>
-								) : (
+				{isAdmin && onVisualStateChange ? (
+					<>
+						<Divider className={styles.sectionDivider} />
+						<Box className={styles.settingGroup}>
+							<Box className={styles.settingInfo}>
+								<PaletteIcon className={styles.settingIcon} />
+								<Box className={styles.settingText}>
 									<Typography
 										variant='body2'
-										color='text.secondary'
-										sx={{ py: 2, textAlign: 'center' }}
+										className={styles.settingLabel}
 									>
-										{t('messages.noHistory', { ns: 'node-history' })}
+										{t('labels.visualSettings', { ns: 'nodes' })}
 									</Typography>
-								)}
+									<Typography
+										variant='caption'
+										className={styles.settingHint}
+									>
+										{t('hints.statusHint', { ns: 'nodes' })}
+									</Typography>
+								</Box>
 							</Box>
-						</>
-					) : null}
-				</Box>
 
-				<Box className={styles.actions}>
-					<Button
-						variant='outlined'
-						onClick={handleCloseDrawer}
-						disabled={isSaving}
-					>
-						{t('buttons.cancel', { ns: 'common' })}
-					</Button>
-					<Button
-						variant='contained'
-						onClick={() => {
-							if (onLockChange && editingLocked !== isLocked) {
-								onLockChange(editingLocked)
-							}
-							const visualStateToSave = onVisualStateChange
-								? editingVisualState
-								: undefined
-							onSave(editingName, editingLocked, visualStateToSave)
-						}}
-						disabled={!isAdmin || !hasChanges || isSaving}
-					>
-						{isSaving
-							? t('messages.saving', { ns: 'common' })
-							: t('buttons.save', { ns: 'common' })}
-					</Button>
-				</Box>
-			</Box>
+							<FormControl
+								fullWidth
+								variant='outlined'
+								size='medium'
+								className={styles.textField}
+								sx={{ mt: 2 }}
+							>
+								<InputLabel>{t('labels.status', { ns: 'nodes' })}</InputLabel>
+								<Select
+									value={editingVisualState.status || 'normal'}
+									onChange={e => handleStatusChange(e.target.value)}
+									label={t('labels.status', { ns: 'nodes' })}
+									disabled={isSaving}
+									renderValue={value => {
+										const status = value as string
+										const color = getStatusBorderColor(status)
+										return (
+											<Box
+												sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
+											>
+												<Box
+													sx={{
+														width: 16,
+														height: 16,
+														borderRadius: '50%',
+														backgroundColor: color,
+														border: '2px solid',
+														borderColor: 'divider',
+														flexShrink: 0
+													}}
+												/>
+												{t(`status.${status}`, { ns: 'nodes' })}
+											</Box>
+										)
+									}}
+								>
+									<MenuItem value='normal'>
+										<Box
+											sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}
+										>
+											<Box
+												sx={{
+													width: 16,
+													height: 16,
+													borderRadius: '50%',
+													backgroundColor: STATUS_COLORS.normal.border,
+													border: '2px solid',
+													borderColor: 'divider'
+												}}
+											/>
+											{t('status.normal', { ns: 'nodes' })}
+										</Box>
+									</MenuItem>
+									<MenuItem value='warning'>
+										<Box
+											sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}
+										>
+											<Box
+												sx={{
+													width: 16,
+													height: 16,
+													borderRadius: '50%',
+													backgroundColor: STATUS_COLORS.warning.border,
+													border: '2px solid',
+													borderColor: 'divider'
+												}}
+											/>
+											{t('status.warning', { ns: 'nodes' })}
+										</Box>
+									</MenuItem>
+									<MenuItem value='error'>
+										<Box
+											sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}
+										>
+											<Box
+												sx={{
+													width: 16,
+													height: 16,
+													borderRadius: '50%',
+													backgroundColor: STATUS_COLORS.error.border,
+													border: '2px solid',
+													borderColor: 'divider'
+												}}
+											/>
+											{t('status.error', { ns: 'nodes' })}
+										</Box>
+									</MenuItem>
+									<MenuItem value='info'>
+										<Box
+											sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}
+										>
+											<Box
+												sx={{
+													width: 16,
+													height: 16,
+													borderRadius: '50%',
+													backgroundColor: STATUS_COLORS.info.border,
+													border: '2px solid',
+													borderColor: 'divider'
+												}}
+											/>
+											{t('status.info', { ns: 'nodes' })}
+										</Box>
+									</MenuItem>
+								</Select>
+							</FormControl>
+						</Box>
+					</>
+				) : null}
+
+				{isAdmin && nodeId ? (
+					<>
+						<Divider className={styles.sectionDivider} />
+						<Box className={styles.settingGroup}>
+							<Box className={styles.settingInfo}>
+								<HistoryIcon className={styles.settingIcon} />
+								<Box className={styles.settingText}>
+									<Typography
+										variant='body2'
+										className={styles.settingLabel}
+									>
+										{t('labels.history', { ns: 'node-history' })}
+									</Typography>
+									<Typography
+										variant='caption'
+										className={styles.settingHint}
+									>
+										{t('labels.recentChanges', { ns: 'node-history' })}
+									</Typography>
+								</Box>
+							</Box>
+
+							{isHistoryLoading ? (
+								<Box
+									sx={{
+										display: 'flex',
+										justifyContent: 'center',
+										py: 2
+									}}
+								>
+									<CircularProgress size={24} />
+								</Box>
+							) : historyItems.length > 0 ? (
+								<Box className={styles.historyList}>
+									{historyItems.map(item => (
+										<HistoryItem
+											key={item.id}
+											history={item}
+											onClick={() => setSelectedHistory(item.id)}
+										/>
+									))}
+									<Button
+										variant='outlined'
+										size='small'
+										fullWidth
+										onClick={() => setIsHistoryDrawerOpen(true)}
+										sx={{ mt: 1 }}
+									>
+										{t('actions.showAll', { ns: 'node-history' })}
+									</Button>
+								</Box>
+							) : (
+								<Typography
+									variant='body2'
+									color='text.secondary'
+									sx={{ py: 2, textAlign: 'center' }}
+								>
+									{t('messages.noHistory', { ns: 'node-history' })}
+								</Typography>
+							)}
+						</Box>
+					</>
+				) : null}
+			</AppDrawer>
 
 			<HistoryDetails
 				open={selectedHistory !== null}
 				history={selectedHistoryItem}
 				onClose={() => setSelectedHistory(null)}
 			/>
-		</Drawer>
+
+			{nodeId && (
+				<NodeHistoryDrawer
+					open={isHistoryDrawerOpen}
+					onClose={() => setIsHistoryDrawerOpen(false)}
+					nodeId={nodeId}
+					nodeName={nodeName}
+				/>
+			)}
+		</>
 	)
 }

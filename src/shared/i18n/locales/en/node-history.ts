@@ -29,6 +29,7 @@ export default {
 	},
 	info: {
 		showingResults: 'Showing {{from}}–{{to}} of {{total}}',
+		totalResults: 'Total records: {{total}}',
 		copyId: 'Copy ID',
 		idCopied: 'ID copied'
 	},

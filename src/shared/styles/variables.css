@@ -117,6 +117,7 @@
 	--max-width-info: 600px;
 	--min-height-empty-state: 400px;
 	--min-height-header: 60px;
+	--height-header: 81px;
 	--size-avatar-lg: 250px;
 	--size-node-medium: 150px;
 	--size-node-small: 100px;
@@ -274,4 +275,11 @@
 	--not-found-animation-scale-down: 0.9;
 	--not-found-blur: blur(12px);
 	--not-found-max-width: 600px;
+
+	/* ============================================
+	   Z-INDEX - Порядок наложения элементов
+	   ============================================ */
+	--z-index-drawer-settings: 1300;
+	--z-index-drawer-history: 1400;
+	--z-index-dialog-history-details: 1500;
 }

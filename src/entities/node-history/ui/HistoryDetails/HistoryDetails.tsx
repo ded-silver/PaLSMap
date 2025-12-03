@@ -95,6 +95,9 @@ export const HistoryDetails = ({
 			onClose={onClose}
 			maxWidth='md'
 			fullWidth
+			sx={{
+				zIndex: 'var(--z-index-dialog-history-details)'
+			}}
 			PaperProps={{
 				sx: MUI_STYLES.dialogPaper
 			}}
