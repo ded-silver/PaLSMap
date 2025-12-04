@@ -165,36 +165,20 @@ export const MapToolbar = ({ areaId }: Props) => {
 							</Tooltip>
 						)}
 
+						<Tooltip title={t('labels.versions', { ns: 'map-versions' })}>
+							<IconButton
+								onClick={handleVersionsClick}
+								className={styles['toolbar-button']}
+								size='small'
+								aria-label={t('labels.versions', { ns: 'map-versions' })}
+							>
+								<HistoryIcon />
+							</IconButton>
+						</Tooltip>
+
 						<FormControl
 							size='small'
-							sx={{
-								minWidth: 180,
-								'& .MuiOutlinedInput-root': {
-									height: 36,
-									background: 'var(--glass-blue-bg)',
-									backdropFilter: 'var(--effect-blur)',
-									border: '1px solid var(--glass-dark-border)',
-									borderRadius: 'var(--border-radius-md)',
-									boxShadow: 'var(--effect-shadow-blue)',
-									'& fieldset': {
-										borderColor: 'var(--glass-dark-border)'
-									},
-									'&:hover fieldset': {
-										borderColor: 'var(--glass-dark-border)'
-									},
-									'&.Mui-focused fieldset': {
-										borderColor: 'var(--glass-dark-border)'
-									},
-									'& .MuiSelect-select': {
-										padding: '6px 32px 6px 12px',
-										fontSize: 'var(--font-size-sm)',
-										color: 'var(--glass-blue-text)'
-									},
-									'& .MuiSelect-icon': {
-										color: 'var(--glass-blue-text)'
-									}
-								}
-							}}
+							className={styles['version-select']}
 						>
 							{isLoadingVersions ? (
 								<Box className={styles['select-loading']}>
@@ -226,6 +210,8 @@ export const MapToolbar = ({ areaId }: Props) => {
 							)}
 						</FormControl>
 
+						<div className={styles.divider} />
+
 						<Tooltip title={t('labels.exportPdf', { ns: 'map-versions' })}>
 							<span>
 								<IconButton
@@ -238,17 +224,6 @@ export const MapToolbar = ({ areaId }: Props) => {
 									<PictureAsPdfIcon />
 								</IconButton>
 							</span>
-						</Tooltip>
-
-						<Tooltip title={t('labels.versions', { ns: 'map-versions' })}>
-							<IconButton
-								onClick={handleVersionsClick}
-								className={styles['toolbar-button']}
-								size='small'
-								aria-label={t('labels.versions', { ns: 'map-versions' })}
-							>
-								<HistoryIcon />
-							</IconButton>
 						</Tooltip>
 					</Box>
 
@@ -300,7 +275,7 @@ export const MapToolbar = ({ areaId }: Props) => {
 						</>
 					}
 				>
-					<DialogContentText sx={{ marginTop: '16px' }}>
+					<DialogContentText className={styles['dialog-content-text']}>
 						{t('confirmations.restoreVersion', {
 							ns: 'map-versions',
 							name: currentVersion.name

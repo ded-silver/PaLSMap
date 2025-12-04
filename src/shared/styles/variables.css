@@ -336,6 +336,7 @@
 	--map-toolbar-icon-size: var(--size-base-20);
 	--map-toolbar-select-padding: var(--spacing-lg);
 	--map-toolbar-hover-translate: -1px;
+	--map-toolbar-divider-height: 28px;
 
 	/* ============================================
 	   CARD HOVER - Эффекты наведения для карточек

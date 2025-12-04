@@ -75,3 +75,51 @@
 	height: var(--map-toolbar-button-size);
 	padding: 0 var(--map-toolbar-select-padding);
 }
+
+.divider {
+	width: var(--border-width-sm);
+	height: var(--map-toolbar-divider-height);
+	margin: 0 var(--spacing-md);
+	background: var(--glass-dark-border);
+	border-radius: var(--border-radius-xs);
+	box-shadow: var(--effect-shadow-sm);
+}
+
+.version-select {
+	min-width: 180px;
+}
+
+.version-select :global(.MuiOutlinedInput-root) {
+	height: 36px;
+	background: var(--glass-blue-bg);
+	backdrop-filter: var(--effect-blur);
+	border: var(--border-width-xs) solid var(--glass-dark-border);
+	border-radius: var(--border-radius-md);
+	box-shadow: var(--effect-shadow-blue);
+}
+
+.version-select :global(.MuiOutlinedInput-root fieldset) {
+	border-color: var(--glass-dark-border);
+}
+
+.version-select :global(.MuiOutlinedInput-root:hover fieldset) {
+	border-color: var(--glass-dark-border);
+}
+
+.version-select :global(.MuiOutlinedInput-root.Mui-focused fieldset) {
+	border-color: var(--glass-dark-border);
+}
+
+.version-select :global(.MuiSelect-select) {
+	padding: 6px 32px 6px 12px;
+	font-size: var(--font-size-sm);
+	color: var(--glass-blue-text);
+}
+
+.version-select :global(.MuiSelect-icon) {
+	color: var(--glass-blue-text);
+}
+
+.dialog-content-text {
+	margin-top: var(--spacing-xl);
+}
