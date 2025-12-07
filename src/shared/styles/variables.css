@@ -127,6 +127,7 @@
 	/* Icon sizes */
 	--size-icon-sm: var(--size-base-40);
 	--size-icon-md: var(--size-base-48);
+	--size-base-24: 24px;
 
 	/* Avatar sizes */
 	--size-avatar-sm: var(--size-base-40);
@@ -365,4 +366,39 @@
 	   ============================================ */
 	--chip-small-font-size: var(--font-size-xs);
 	--chip-small-height: 22px;
+
+	/* ============================================
+	   NOTIFICATION COLORS - Цвета для уведомлений
+	   ============================================ */
+	--color-notification-success: #4caf50;
+	--color-notification-warning: #ff9800;
+	--color-notification-error: #f44336;
+	--color-notification-permission: #9c27b0;
+	--color-notification-unread-bg: rgba(0, 115, 230, 0.05);
+
+	/* ============================================
+	   NOTIFICATION SIZES - Размеры для уведомлений
+	   ============================================ */
+	--notification-popover-width: 420px;
+	--notification-popover-max-height: var(--size-base-600);
+	--notification-popover-content-max-height: var(--size-base-400);
+	--notification-popover-content-min-height: var(--size-base-200);
+	--notification-icon-size: var(--font-size-xxxl);
+	--notification-bell-size: var(--button-height-md);
+	--notification-badge-size: 8px;
+	--notification-delete-button-size: var(--size-base-24);
+	--notification-scrollbar-width: 6px;
+
+	/* ============================================
+	   DIVIDER COLORS - Цвета для разделителей
+	   ============================================ */
+	--color-divider-default: rgba(0, 0, 0, 0.12);
+	--color-divider-light: rgba(255, 255, 255, 0.2);
+
+	/* ============================================
+	   OPACITY VALUES - Значения прозрачности
+	   ============================================ */
+	--opacity-icon-default: 0.9;
+	--opacity-button-hover: 0.6;
+	--opacity-button-disabled: 0.5;
 }

@@ -10,10 +10,10 @@ import { memo, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import type { NodeHistory } from '../../model/types'
-import { formatRelativeTime } from '../utils/formatRelativeTime'
 import { getActionIcon } from '../utils/getActionIcon'
 
 import styles from './HistoryItem.module.css'
+import { formatRelativeTime } from '@/shared/lib/formatRelativeTime'
 
 interface HistoryItemProps {
 	history: NodeHistory
@@ -30,7 +30,7 @@ export const HistoryItem = memo(({ history, onClick }: HistoryItemProps) => {
 		userName
 	} = useMemo(() => {
 		const actionIcon = getActionIcon(history.actionType)
-		const relative = formatRelativeTime(history.createdAt, t)
+		const relative = formatRelativeTime(history.createdAt, t, 'node-history')
 		const user =
 			history.user?.name ||
 			history.user?.email ||

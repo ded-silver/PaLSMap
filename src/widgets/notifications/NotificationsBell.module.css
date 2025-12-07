@@ -1,0 +1,42 @@
+@keyframes pulse {
+	0% {
+		transform: scale(1);
+		opacity: 1;
+	}
+	50% {
+		transform: scale(1.1);
+		opacity: 0.9;
+	}
+	100% {
+		transform: scale(1);
+		opacity: 1;
+	}
+}
+
+.bellButton {
+	position: relative;
+	width: var(--notification-bell-size);
+	height: var(--notification-bell-size);
+	background: var(--glass-dark-bg);
+	backdrop-filter: var(--effect-blur);
+	box-shadow: var(--effect-shadow);
+	color: var(--glass-dark-text);
+}
+
+.bellButton:hover {
+	background: var(--glass-dark-bg-hover);
+	color: var(--glass-dark-text-hover);
+}
+
+.bellButton :global(svg) {
+	font-size: var(--notification-icon-size) !important;
+	opacity: var(--opacity-icon-default);
+}
+
+.badge {
+	animation: pulse 2s infinite;
+}
+
+.badge :global(.MuiBadge-badge) {
+	animation: pulse 2s infinite;
+}

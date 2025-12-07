@@ -16,10 +16,10 @@ import { useTranslation } from 'react-i18next'
 
 import type { NodeHistory } from '../../model/types'
 import { ChangesDiff } from '../ChangesDiff/ChangesDiff'
-import { formatRelativeTime } from '../utils/formatRelativeTime'
 import { getActionIcon } from '../utils/getActionIcon'
 
 import styles from './HistoryDetails.module.css'
+import { formatRelativeTime } from '@/shared/lib/formatRelativeTime'
 import { MUI_STYLES } from '@/shared/styles/mui-styles'
 
 interface HistoryDetailsProps {
@@ -58,7 +58,7 @@ export const HistoryDetails = ({
 			history.user?.name ||
 			history.user?.email ||
 			t('messages.unknownUser', { ns: 'node-history' })
-		const relative = formatRelativeTime(history.createdAt, t)
+		const relative = formatRelativeTime(history.createdAt, t, 'node-history')
 		const exact = new Date(history.createdAt).toLocaleString(
 			i18n.language === 'ru' ? 'ru-RU' : 'en-US',
 			{

@@ -16,8 +16,6 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
-import { formatRelativeTime } from '../utils/formatRelativeTime'
-
 import styles from './MapVersionItem.module.css'
 import {
 	type MapVersion,
@@ -27,6 +25,7 @@ import {
 	useRestoreVersion
 } from '@/entities/map-version'
 import { useIsAdmin } from '@/entities/user'
+import { formatRelativeTime } from '@/shared/lib/formatRelativeTime'
 import { AppModal } from '@/shared/ui'
 import { AppButton } from '@/shared/ui'
 
@@ -53,7 +52,7 @@ export const MapVersionItem = memo(
 		const { mutate: deleteVersion, isPending: isDeleting } = useDeleteVersion()
 
 		const { relativeTime, userName, nodeCount } = useMemo(() => {
-			const relative = formatRelativeTime(version.createdAt, t)
+			const relative = formatRelativeTime(version.createdAt, t, 'map-versions')
 			const user =
 				version.createdBy?.name ||
 				version.createdBy?.email ||

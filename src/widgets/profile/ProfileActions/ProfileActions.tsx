@@ -1,5 +1,6 @@
 import CloseIcon from '@mui/icons-material/Close'
 import LogoutIcon from '@mui/icons-material/Logout'
+import SecurityIcon from '@mui/icons-material/Security'
 import {
 	Button,
 	Dialog,
@@ -16,19 +17,21 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 import styles from './ProfileActions.module.css'
-import { authService, userService } from '@/entities/user'
+import { authService } from '@/entities/user'
 import { MUI_STYLES } from '@/shared/styles/mui-styles'
 import { AppButton } from '@/shared/ui'
+import { CreatePermissionRequestModal } from '@/widgets/permission-request-modal'
 
 interface ProfileActionsProps {
 	isAdmin: boolean
 }
 
 export const ProfileActions = ({ isAdmin }: ProfileActionsProps) => {
-	const { t } = useTranslation('common')
+	const { t } = useTranslation(['common', 'notifications'])
 	const navigate = useNavigate()
 	const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false)
-	const [isRequestingRights, setIsRequestingRights] = useState(false)
+	const [isCreateRequestModalOpen, setIsCreateRequestModalOpen] =
+		useState(false)
 
 	const handleLogout = async () => {
 		try {
@@ -41,31 +44,37 @@ export const ProfileActions = ({ isAdmin }: ProfileActionsProps) => {
 		}
 	}
 
-	const handleRequestRights = async () => {
-		try {
-			setIsRequestingRights(true)
-			await userService.requestRightsUpgrade()
-			toast.success(t('profile.requestRightsSuccess'))
-		} catch (error) {
-			toast.error(t('errors.profileUpdateError'))
-		} finally {
-			setIsRequestingRights(false)
-		}
+	const handleCreateRequest = () => {
+		setIsCreateRequestModalOpen(true)
+	}
+
+	const handleViewRequests = () => {
+		navigate('/profile/permission-requests')
 	}
 
 	return (
 		<div className={styles.container}>
 			<div className={styles.actions}>
 				{!isAdmin && (
-					<Button
-						variant='outlined'
-						color='primary'
-						onClick={handleRequestRights}
-						disabled={isRequestingRights}
-						className={styles.actionButton}
-					>
-						{t('profile.requestRights')}
-					</Button>
+					<>
+						<Button
+							variant='outlined'
+							color='primary'
+							startIcon={<SecurityIcon />}
+							onClick={handleCreateRequest}
+							className={styles.actionButton}
+						>
+							{t('labels.createRequest', { ns: 'notifications' })}
+						</Button>
+						<Button
+							variant='outlined'
+							color='primary'
+							onClick={handleViewRequests}
+							className={styles.actionButton}
+						>
+							{t('labels.myRequests', { ns: 'notifications' })}
+						</Button>
+					</>
 				)}
 
 				<Button
@@ -78,6 +87,13 @@ export const ProfileActions = ({ isAdmin }: ProfileActionsProps) => {
 					{t('profile.actions.logout')}
 				</Button>
 			</div>
+
+			{!isAdmin && (
+				<CreatePermissionRequestModal
+					open={isCreateRequestModalOpen}
+					onClose={() => setIsCreateRequestModalOpen(false)}
+				/>
+			)}
 
 			<Dialog
 				open={isLogoutDialogOpen}

@@ -10,6 +10,7 @@ import mapVersionsEn from './locales/en/map-versions'
 import nodeHistoryEn from './locales/en/node-history'
 import nodesEn from './locales/en/nodes'
 import notFoundEn from './locales/en/not-found'
+import notificationsEn from './locales/en/notifications'
 import pathAreasEn from './locales/en/path-areas'
 import validationEn from './locales/en/validation'
 import adminRu from './locales/ru/admin'
@@ -20,6 +21,7 @@ import mapVersionsRu from './locales/ru/map-versions'
 import nodeHistoryRu from './locales/ru/node-history'
 import nodesRu from './locales/ru/nodes'
 import notFoundRu from './locales/ru/not-found'
+import notificationsRu from './locales/ru/notifications'
 import pathAreasRu from './locales/ru/path-areas'
 import validationRu from './locales/ru/validation'
 
@@ -34,7 +36,8 @@ const resources = {
 		'node-history': nodeHistoryRu,
 		'path-areas': pathAreasRu,
 		'not-found': notFoundRu,
-		'map-versions': mapVersionsRu
+		'map-versions': mapVersionsRu,
+		notifications: notificationsRu
 	},
 	en: {
 		common: commonEn,
@@ -46,7 +49,8 @@ const resources = {
 		'node-history': nodeHistoryEn,
 		'path-areas': pathAreasEn,
 		'not-found': notFoundEn,
-		'map-versions': mapVersionsEn
+		'map-versions': mapVersionsEn,
+		notifications: notificationsEn
 	}
 }
 

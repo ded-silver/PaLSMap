@@ -1,0 +1,31 @@
+.group {
+	margin-bottom: var(--spacing-xxxl);
+	animation: fadeInSlideGroup 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+	animation-delay: calc(var(--group-index) * 0.15s);
+	animation-fill-mode: both;
+}
+
+.groupTitle {
+	font-weight: var(--font-weight-semibold) !important;
+	color: var(--color-text-primary) !important;
+	margin-bottom: var(--spacing-lg) !important;
+	padding-bottom: var(--spacing-md);
+	border-bottom: 1px solid var(--color-border-light);
+}
+
+.notifications {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-md);
+}
+
+@keyframes fadeInSlideGroup {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}

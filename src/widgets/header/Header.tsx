@@ -1,6 +1,7 @@
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import DensityMediumIcon from '@mui/icons-material/DensityMedium'
 import { Button, IconButton } from '@mui/material'
+import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -8,6 +9,10 @@ import styles from './Header.module.css'
 import { useUserProfile } from '@/entities/user'
 import { BUTTON_STYLES } from '@/shared/styles/tokens'
 import { LanguageSwitcher } from '@/shared/ui'
+import {
+	NotificationsBell,
+	NotificationsPopover
+} from '@/widgets/notifications'
 import { PathBreadcrumbs } from '@/widgets/path-breadcrumbs'
 
 interface Props {
@@ -18,8 +23,18 @@ export const Header = ({ toggleSidebar }: Props) => {
 	const { t } = useTranslation('common')
 	const { data: profile } = useUserProfile()
 	const navigate = useNavigate()
+	const [popoverAnchor, setPopoverAnchor] = useState<HTMLElement | null>(null)
+	const bellButtonRef = useRef<HTMLButtonElement>(null)
 
 	const userName = profile?.name ?? null
+
+	const handleNotificationsClick = () => {
+		setPopoverAnchor(bellButtonRef.current)
+	}
+
+	const handlePopoverClose = () => {
+		setPopoverAnchor(null)
+	}
 
 	return (
 		<header className={styles.header}>
@@ -53,6 +68,11 @@ export const Header = ({ toggleSidebar }: Props) => {
 			<div className={styles['header-actions']}>
 				<LanguageSwitcher />
 
+				<NotificationsBell
+					ref={bellButtonRef}
+					onClick={handleNotificationsClick}
+				/>
+
 				<Button
 					onClick={() => navigate('/profile')}
 					startIcon={<AccountCircleIcon />}
@@ -79,6 +99,12 @@ export const Header = ({ toggleSidebar }: Props) => {
 					{userName ? userName : t('titles.profile')}
 				</Button>
 			</div>
+
+			<NotificationsPopover
+				anchorEl={popoverAnchor}
+				open={Boolean(popoverAnchor)}
+				onClose={handlePopoverClose}
+			/>
 		</header>
 	)
 }

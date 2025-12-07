@@ -1,0 +1,19 @@
+.form {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-md);
+}
+
+.actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: var(--spacing-lg);
+	margin-top: var(--margin-xl);
+}
+
+.errorText {
+	color: var(--color-error);
+	font-size: 0.75rem;
+	margin-top: 4px;
+	margin-left: 14px;
+}

@@ -21,6 +21,8 @@ import { CountriesListPage, PathAreasListPage } from '@/pages/map'
 import { MapVersionsPage } from '@/pages/map-versions'
 import { NodeHistoryPage } from '@/pages/node-history'
 import { NotFoundPage } from '@/pages/not-found'
+import { NotificationsPage } from '@/pages/notifications'
+import { PermissionRequestsPage } from '@/pages/permission-requests'
 import { ProfilePage } from '@/pages/profile'
 import { resetAuthState } from '@/shared/lib/auth-manager'
 import { getAccessToken, hasRefreshTokenCookie } from '@/shared/lib/auth-token'
@@ -247,6 +249,48 @@ export const Router = () => {
 								<AdminRoute>
 									<NodeHistoryPage />
 								</AdminRoute>
+							</AppLayout>
+						</ProtectedRoute>
+					}
+				/>
+				<Route
+					path='/notifications'
+					element={
+						<ProtectedRoute>
+							<AppLayout
+								isSidebarOpen={isSidebarOpen}
+								toggleSidebar={toggleSidebar}
+								closeSidebar={closeSidebar}
+							>
+								<NotificationsPage />
+							</AppLayout>
+						</ProtectedRoute>
+					}
+				/>
+				<Route
+					path='/permission-requests'
+					element={
+						<ProtectedRoute>
+							<AppLayout
+								isSidebarOpen={isSidebarOpen}
+								toggleSidebar={toggleSidebar}
+								closeSidebar={closeSidebar}
+							>
+								<PermissionRequestsPage />
+							</AppLayout>
+						</ProtectedRoute>
+					}
+				/>
+				<Route
+					path='/profile/permission-requests'
+					element={
+						<ProtectedRoute>
+							<AppLayout
+								isSidebarOpen={isSidebarOpen}
+								toggleSidebar={toggleSidebar}
+								closeSidebar={closeSidebar}
+							>
+								<PermissionRequestsPage />
 							</AppLayout>
 						</ProtectedRoute>
 					}

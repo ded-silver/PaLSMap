@@ -1,0 +1,135 @@
+.container {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	max-height: var(--notification-popover-max-height);
+	background-color: var(--color-background);
+	border-radius: var(--border-radius-md);
+}
+
+.header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: var(--spacing-lg);
+	border-bottom: 1px solid var(--color-divider-light);
+	background-color: var(--color-primary);
+}
+
+.headerTitle {
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-md);
+}
+
+.headerIcon {
+	color: var(--color-white);
+	font-size: var(--notification-icon-size);
+	opacity: var(--opacity-icon-default);
+}
+
+.headerText {
+	font-size: var(--font-size-xl);
+	font-weight: var(--font-weight-semibold);
+	color: var(--color-white);
+}
+
+.content {
+	flex: 1;
+	overflow-y: auto;
+	padding: var(--spacing-md);
+	min-height: var(--notification-popover-content-min-height);
+	max-height: var(--notification-popover-content-max-height);
+	background-color: var(--color-background);
+}
+
+.content::-webkit-scrollbar {
+	width: var(--notification-scrollbar-width);
+}
+
+.content::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.content::-webkit-scrollbar-thumb {
+	background: var(--color-border-light);
+	border-radius: var(--border-radius-sm);
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+	background: var(--color-border);
+}
+
+.loading {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: var(--spacing-xxl);
+}
+
+.empty {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: var(--spacing-xxl);
+	text-align: center;
+}
+
+.notificationsList {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-xs);
+	animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+.footer {
+	padding: var(--spacing-md);
+	border-top: 1px solid var(--color-border-light);
+	background-color: var(--color-background);
+}
+
+.markAllButton {
+	font-size: var(--font-size-sm) !important;
+	text-transform: none !important;
+	min-width: auto !important;
+	padding: var(--spacing-xs) var(--spacing-lg) !important;
+	color: var(--color-white) !important;
+	background: var(--glass-dark-bg) !important;
+	border-radius: var(--border-radius-md) !important;
+}
+
+.markAllButton:hover {
+	background: var(--glass-dark-bg-hover) !important;
+}
+
+.markAllButton:disabled {
+	opacity: var(--opacity-button-disabled) !important;
+}
+
+.showAllButton {
+	text-transform: none !important;
+	font-size: var(--font-size-base) !important;
+	font-weight: var(--font-weight-medium) !important;
+	height: var(--button-height-sm) !important;
+	border-radius: var(--border-radius-lg) !important;
+	background: var(--glass-blue-bg) !important;
+	backdrop-filter: var(--effect-blur) !important;
+	box-shadow: var(--effect-shadow) !important;
+	color: var(--glass-blue-text) !important;
+	transition: var(--effect-transition) !important;
+}
+
+.showAllButton:hover {
+	background: var(--glass-blue-bg-hover) !important;
+	color: var(--glass-blue-text-hover) !important;
+	box-shadow: var(--effect-shadow-blue) !important;
+}

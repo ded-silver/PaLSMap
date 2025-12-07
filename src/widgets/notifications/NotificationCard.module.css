@@ -1,0 +1,149 @@
+.card {
+	position: relative;
+	padding: var(--spacing-md);
+	border-radius: var(--border-radius-md);
+	background-color: var(--color-white);
+	border: 1px solid var(--color-border-light);
+	cursor: pointer;
+	transition: var(--effect-transition);
+	display: flex;
+	align-items: flex-start;
+	gap: var(--spacing-md);
+	margin-bottom: var(--spacing-sm);
+	animation: fadeInSlide 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+	animation-fill-mode: both;
+	box-shadow: var(--effect-shadow-sm);
+}
+
+@keyframes fadeInSlide {
+	from {
+		opacity: 0;
+		transform: translateX(-10px) translateY(5px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0) translateY(0);
+	}
+}
+
+@keyframes fadeOut {
+	from {
+		opacity: 1;
+		transform: translateX(0);
+		max-height: var(--notification-popover-content-min-height);
+		margin-bottom: var(--spacing-sm);
+	}
+	to {
+		opacity: 0;
+		transform: translateX(-10px);
+		max-height: 0;
+		margin-bottom: 0;
+		padding-top: 0;
+		padding-bottom: 0;
+	}
+}
+
+.card.deleting {
+	animation: fadeOut 0.3s ease-out forwards;
+	pointer-events: none;
+}
+
+.card:hover {
+	background-color: var(--color-background-light);
+	box-shadow: var(--effect-shadow);
+	transform: translateY(-2px) scale(1.01);
+}
+
+.card.unread {
+	background-color: var(--color-notification-unread-bg);
+	border-left: var(--border-width-md) solid var(--color-primary);
+	box-shadow: var(--effect-shadow-blue-sm);
+}
+
+.cardContent {
+	display: flex;
+	gap: var(--spacing-md);
+	flex: 1;
+	min-width: 0;
+}
+
+.iconWrapper {
+	display: flex;
+	align-items: flex-start;
+	flex-shrink: 0;
+	margin-top: var(--spacing-xs);
+}
+
+.iconInfo {
+	color: var(--color-primary);
+	font-size: var(--notification-icon-size);
+}
+
+.iconSuccess {
+	color: var(--color-notification-success);
+	font-size: var(--notification-icon-size);
+}
+
+.iconWarning {
+	color: var(--color-notification-warning);
+	font-size: var(--notification-icon-size);
+}
+
+.iconError {
+	color: var(--color-notification-error);
+	font-size: var(--notification-icon-size);
+}
+
+.iconPermission {
+	color: var(--color-notification-permission);
+	font-size: var(--notification-icon-size);
+}
+
+.textContent {
+	flex: 1;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-xs);
+}
+
+.title {
+	font-size: var(--font-size-base);
+	line-height: var(--line-height-tight);
+}
+
+.message {
+	font-size: var(--font-size-md);
+	line-height: var(--line-height-tight);
+	word-wrap: break-word;
+}
+
+.time {
+	font-size: var(--font-size-sm);
+	margin-top: var(--spacing-xs);
+}
+
+.unreadIndicator {
+	position: absolute;
+	top: var(--spacing-md);
+	right: var(--spacing-md);
+	width: var(--notification-badge-size);
+	height: var(--notification-badge-size);
+	border-radius: var(--border-radius-round);
+	background-color: var(--color-primary);
+}
+
+.deleteButton {
+	position: absolute;
+	top: var(--spacing-xs);
+	right: var(--spacing-xs);
+	width: var(--notification-delete-button-size);
+	height: var(--notification-delete-button-size);
+	padding: 0;
+	opacity: var(--opacity-button-hover);
+	transition: opacity var(--effect-transition);
+}
+
+.deleteButton:hover {
+	opacity: 1;
+}
