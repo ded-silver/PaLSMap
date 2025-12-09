@@ -1,29 +1,34 @@
 .card {
-	margin-bottom: var(--spacing-md);
+	margin-bottom: var(--spacing-lg);
+	border-radius: var(--border-radius-xl) !important;
+	background-color: var(--color-white) !important;
+	border: 1px solid var(--color-border-light) !important;
+	overflow: hidden;
 }
 
 .content {
-	padding: var(--spacing-xl) !important;
+	padding: var(--spacing-xxxl) !important;
 }
 
 .header {
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-start;
-	gap: var(--spacing-xl);
+	gap: var(--spacing-xxxl);
 }
 
 .info {
 	flex: 1;
 	display: flex;
 	flex-direction: column;
-	gap: var(--spacing-md);
+	gap: var(--spacing-lg);
+	min-width: 0;
 }
 
 .topRow {
 	display: flex;
 	align-items: center;
-	gap: var(--spacing-md);
+	gap: var(--spacing-lg);
 	flex-wrap: wrap;
 }
 
@@ -31,38 +36,64 @@
 	font-weight: var(--font-weight-semibold) !important;
 	color: var(--color-text-primary) !important;
 	margin: 0 !important;
+	font-size: var(--font-size-xxl) !important;
+	line-height: var(--line-height-tight) !important;
 }
 
 .description {
 	color: var(--color-text-secondary) !important;
-	margin-top: var(--spacing-xs) !important;
+	margin: 0 !important;
+	font-size: var(--font-size-base) !important;
+	line-height: var(--line-height-normal) !important;
 }
 
 .meta {
 	display: flex;
 	align-items: center;
-	gap: var(--spacing-lg);
+	gap: var(--spacing-xl);
 	flex-wrap: wrap;
 	margin-top: var(--spacing-xs);
 }
 
 .metaItem {
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-sm);
 	color: var(--color-text-secondary) !important;
+}
+
+.metaIcon {
+	font-size: 16px !important;
+	color: var(--color-text-tertiary) !important;
+	flex-shrink: 0;
+}
+
+.metaText {
+	color: var(--color-text-secondary) !important;
+	font-size: var(--font-size-sm) !important;
 }
 
 .actions {
 	display: flex;
-	align-items: center;
+	align-items: flex-start;
 	gap: var(--spacing-xs);
+	flex-shrink: 0;
+	padding-top: var(--spacing-xs);
 }
 
 .actionButton {
 	color: var(--color-text-secondary) !important;
+	transition: var(--effect-transition) !important;
 }
 
 .actionButton:hover {
 	color: var(--color-primary) !important;
 	background-color: var(--color-primary-light) !important;
+	transform: scale(1.05);
+}
+
+.actionButton:active {
+	transform: scale(0.95);
 }
 
 .card-hover {
@@ -71,6 +102,7 @@
 }
 
 .card-hover:hover {
-	box-shadow: var(--card-hover-shadow);
+	box-shadow: var(--effect-shadow-md) !important;
 	transform: translateY(var(--card-hover-translate));
+	border-color: var(--color-border) !important;
 }

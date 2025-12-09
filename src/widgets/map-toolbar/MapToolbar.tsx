@@ -1,7 +1,7 @@
 import BookmarkIcon from '@mui/icons-material/Bookmark'
 import HistoryIcon from '@mui/icons-material/History'
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf'
-import RestoreIcon from '@mui/icons-material/Restore'
+import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore'
 import {
 	Box,
 	CircularProgress,
@@ -160,7 +160,7 @@ export const MapToolbar = ({ areaId }: Props) => {
 										ns: 'map-versions'
 									})}
 								>
-									<RestoreIcon />
+									<SettingsBackupRestoreIcon />
 								</IconButton>
 							</Tooltip>
 						)}

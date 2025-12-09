@@ -173,7 +173,6 @@ export const DictionaryPage = () => {
 							<AppButton
 								variant='primary'
 								onClick={handleAdd}
-								className={styles.createButton}
 								startIcon={<AddIcon />}
 							>
 								{t('buttons.add', { ns: 'dictionary' })}

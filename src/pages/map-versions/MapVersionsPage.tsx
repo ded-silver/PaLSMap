@@ -1,3 +1,4 @@
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import HistoryIcon from '@mui/icons-material/History'
 import { Box, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
@@ -44,8 +45,8 @@ export const MapVersionsPage = () => {
 						</Typography>
 					</div>
 					<AppButton
-						variant='secondary'
 						onClick={handleBackToMap}
+						startIcon={<ArrowBackIcon />}
 					>
 						{t('labels.backToMap', { ns: 'map-versions' })}
 					</AppButton>

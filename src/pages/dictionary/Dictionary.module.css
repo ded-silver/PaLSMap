@@ -50,24 +50,6 @@
 	display: flex;
 }
 
-.createButton {
-	background: var(--color-primary) !important;
-	color: var(--color-white) !important;
-	font-weight: var(--font-weight-medium) !important;
-	text-transform: none !important;
-	padding: var(--spacing-md-plus) var(--spacing-xxxl) !important;
-	font-size: var(--font-size-lg) !important;
-	border-radius: var(--border-radius-md) !important;
-	box-shadow: var(--effect-shadow-blue) !important;
-	transition: var(--effect-transition-ease) !important;
-}
-
-.createButton:hover {
-	background: var(--color-primary-hover) !important;
-	box-shadow: var(--effect-shadow-blue-lg) !important;
-	transform: translateY(-1px);
-}
-
 .grid {
 	display: flex;
 	flex-direction: column;

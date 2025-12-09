@@ -1,5 +1,8 @@
+import AccessTimeIcon from '@mui/icons-material/AccessTime'
+import AccountTreeIcon from '@mui/icons-material/AccountTree'
 import DeleteIcon from '@mui/icons-material/Delete'
-import RestoreIcon from '@mui/icons-material/Restore'
+import PersonIcon from '@mui/icons-material/Person'
+import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import {
 	Box,
@@ -74,9 +77,13 @@ export const MapVersionItem = memo(
 			}
 		}, [onView, countryId, areaId, navigate, version.id])
 
-		const handleRestoreClick = useCallback(() => {
-			setIsRestoreModalOpen(true)
-		}, [])
+		const handleRestoreClick = useCallback(
+			(event: React.MouseEvent<HTMLButtonElement>) => {
+				event.currentTarget.blur()
+				setIsRestoreModalOpen(true)
+			},
+			[]
+		)
 
 		const handleRestoreConfirm = useCallback(() => {
 			restoreVersion(version.id, {
@@ -98,9 +105,13 @@ export const MapVersionItem = memo(
 			})
 		}, [restoreVersion, version.id, countryId, areaId, navigate, t])
 
-		const handleDeleteClick = useCallback(() => {
-			setIsDeleteModalOpen(true)
-		}, [])
+		const handleDeleteClick = useCallback(
+			(event: React.MouseEvent<HTMLButtonElement>) => {
+				event.currentTarget.blur()
+				setIsDeleteModalOpen(true)
+			},
+			[]
+		)
 
 		const handleDeleteConfirm = useCallback(() => {
 			deleteVersion(version.id, {
@@ -150,27 +161,36 @@ export const MapVersionItem = memo(
 									</Typography>
 								)}
 								<Box className={styles.meta}>
-									<Typography
-										variant='caption'
-										className={styles.metaItem}
-									>
-										{t('info.nodeCount', {
-											ns: 'map-versions',
-											count: nodeCount
-										})}
-									</Typography>
-									<Typography
-										variant='caption'
-										className={styles.metaItem}
-									>
-										{userName}
-									</Typography>
-									<Typography
-										variant='caption'
-										className={styles.metaItem}
-									>
-										{relativeTime}
-									</Typography>
+									<Box className={styles.metaItem}>
+										<AccountTreeIcon className={styles.metaIcon} />
+										<Typography
+											variant='caption'
+											className={styles.metaText}
+										>
+											{t('info.nodeCount', {
+												ns: 'map-versions',
+												count: nodeCount
+											})}
+										</Typography>
+									</Box>
+									<Box className={styles.metaItem}>
+										<PersonIcon className={styles.metaIcon} />
+										<Typography
+											variant='caption'
+											className={styles.metaText}
+										>
+											{userName}
+										</Typography>
+									</Box>
+									<Box className={styles.metaItem}>
+										<AccessTimeIcon className={styles.metaIcon} />
+										<Typography
+											variant='caption'
+											className={styles.metaText}
+										>
+											{relativeTime}
+										</Typography>
+									</Box>
 								</Box>
 							</Box>
 							<Box className={styles.actions}>
@@ -195,7 +215,7 @@ export const MapVersionItem = memo(
 												onClick={handleRestoreClick}
 												className={styles.actionButton}
 											>
-												<RestoreIcon />
+												<SettingsBackupRestoreIcon />
 											</IconButton>
 										</Tooltip>
 										<Tooltip

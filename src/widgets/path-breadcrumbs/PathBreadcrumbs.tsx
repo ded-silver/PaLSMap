@@ -1,4 +1,4 @@
-import BookmarkIcon from '@mui/icons-material/Bookmark'
+import HistoryIcon from '@mui/icons-material/History'
 import PublicIcon from '@mui/icons-material/Public'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -131,7 +131,7 @@ export const PathBreadcrumbs = () => {
 							{index === 0 && <PublicIcon className={styles.breadcrumbIcon} />}
 							{(isVersionsPage || (versionId && !isVersionsPage)) &&
 								index === breadcrumbs.length - 1 && (
-									<BookmarkIcon className={styles.breadcrumbIcon} />
+									<HistoryIcon className={styles.breadcrumbIcon} />
 								)}
 							{crumb.label}
 						</span>
