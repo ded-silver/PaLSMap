@@ -20,7 +20,12 @@ export default {
 		unlock: 'Разблокировать',
 		lockNode: 'Заблокировать перемещение',
 		visualSettings: 'Состояние объекта',
-		status: 'Состояние объекта'
+		status: 'Состояние объекта',
+		copyNode: 'Копировать объект',
+		copyNodes: 'Копировать объекты',
+		pasteNodes: 'Вставить объекты',
+		copy: 'Копировать',
+		paste: 'Вставить'
 	},
 	hints: {
 		lockNode: 'Заблокированный объект не может быть перемещен',
@@ -47,7 +52,13 @@ export default {
 		createEdgeSuccess: 'Связь успешно создана',
 		createEdgeError: 'Ошибка при создании связи',
 		deleteEdgeSuccess: 'Связь удалена',
-		deleteEdgeError: 'Ошибка при удалении связи'
+		deleteEdgeError: 'Ошибка при удалении связи',
+		nodeCopied: 'Объект скопирован',
+		nodesCopied: 'Объекты скопированы',
+		nodesPasted: 'Объекты вставлены',
+		clipboardEmpty: 'Буфер обмена пуст',
+		copyError: 'Ошибка при копировании',
+		pasteError: 'Ошибка при вставке'
 	},
 	placeholders: {
 		nodeName: 'Введите имя узла',

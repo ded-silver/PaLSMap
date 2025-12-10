@@ -20,7 +20,12 @@ export default {
 		unlock: 'Unlock',
 		lockNode: 'Lock movement',
 		visualSettings: 'Object status',
-		status: 'Object status'
+		status: 'Object status',
+		copyNode: 'Copy object',
+		copyNodes: 'Copy objects',
+		pasteNodes: 'Paste objects',
+		copy: 'Copy',
+		paste: 'Paste'
 	},
 	hints: {
 		lockNode: 'Locked object cannot be moved',
@@ -47,7 +52,13 @@ export default {
 		createEdgeSuccess: 'Edge created successfully',
 		createEdgeError: 'Error creating edge',
 		deleteEdgeSuccess: 'Edge deleted',
-		deleteEdgeError: 'Error deleting edge'
+		deleteEdgeError: 'Error deleting edge',
+		nodeCopied: 'Object copied',
+		nodesCopied: 'Objects copied',
+		nodesPasted: 'Objects pasted',
+		clipboardEmpty: 'Clipboard is empty',
+		copyError: 'Error copying',
+		pasteError: 'Error pasting'
 	},
 	placeholders: {
 		nodeName: 'Enter node name',

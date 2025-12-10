@@ -1,3 +1,4 @@
+import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
 import LockIcon from '@mui/icons-material/Lock'
 import LockOpenIcon from '@mui/icons-material/LockOpen'
@@ -127,6 +128,23 @@ export const OPSNode = ({ data, id }: NodeProps<CustomNode>) => {
 						) : (
 							<LockOpenIcon fontSize='small' />
 						)}
+					</IconButton>
+				</div>
+			) : null}
+
+			{isAdmin && data.onCopy ? (
+				<div
+					className={styles['copyButtonWrapper']}
+					onClick={e => e.stopPropagation()}
+				>
+					<IconButton
+						onClick={e => {
+							e.stopPropagation()
+							data.onCopy?.(id)
+						}}
+						title={t('labels.copyNode', { ns: 'nodes' })}
+					>
+						<ContentCopyIcon fontSize='small' />
 					</IconButton>
 				</div>
 			) : null}

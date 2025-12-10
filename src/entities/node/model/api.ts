@@ -1,4 +1,11 @@
-import type { CustomNode, NodeDto } from './types'
+import type {
+	CustomNode,
+	DuplicateNodeOptions,
+	FlowPosition,
+	NodeDto,
+	PasteNodeOptions
+} from './types'
+import { COPY_PASTE_DEFAULTS } from './types'
 import { axiosWithAuth } from '@/shared/api'
 
 export const NodeService = {
@@ -41,5 +48,50 @@ export const NodeService = {
 
 	async delete(id: string): Promise<void> {
 		await axiosWithAuth.delete(`/nodes/${id}`)
+	},
+
+	async duplicateNode(
+		nodeId: string,
+		options?: DuplicateNodeOptions
+	): Promise<CustomNode> {
+		const response = await axiosWithAuth.post(`/nodes/${nodeId}/duplicate`, {
+			offsetX: options?.offsetX ?? COPY_PASTE_DEFAULTS.OFFSET_X,
+			offsetY: options?.offsetY ?? COPY_PASTE_DEFAULTS.OFFSET_Y,
+			copyChildren: options?.copyChildren ?? COPY_PASTE_DEFAULTS.COPY_CHILDREN,
+			copyTableData:
+				options?.copyTableData ?? COPY_PASTE_DEFAULTS.COPY_TABLE_DATA
+		})
+		return response.data
+	},
+
+	async duplicateNodes(
+		nodeIds: string[],
+		options?: DuplicateNodeOptions
+	): Promise<CustomNode[]> {
+		const response = await axiosWithAuth.post('/nodes/duplicate', {
+			nodeIds,
+			offsetX: options?.offsetX ?? COPY_PASTE_DEFAULTS.OFFSET_X,
+			offsetY: options?.offsetY ?? COPY_PASTE_DEFAULTS.OFFSET_Y,
+			copyChildren: options?.copyChildren ?? COPY_PASTE_DEFAULTS.COPY_CHILDREN,
+			copyTableData:
+				options?.copyTableData ?? COPY_PASTE_DEFAULTS.COPY_TABLE_DATA
+		})
+		return response.data
+	},
+
+	async pasteNodes(
+		nodeIds: string[],
+		position: FlowPosition,
+		options?: PasteNodeOptions
+	): Promise<CustomNode[]> {
+		const response = await axiosWithAuth.post('/nodes/paste', {
+			nodeIds,
+			positionX: position.x,
+			positionY: position.y,
+			copyChildren: options?.copyChildren ?? COPY_PASTE_DEFAULTS.COPY_CHILDREN,
+			copyTableData:
+				options?.copyTableData ?? COPY_PASTE_DEFAULTS.COPY_TABLE_DATA
+		})
+		return response.data
 	}
 }
