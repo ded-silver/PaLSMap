@@ -14,8 +14,6 @@ export default {
 	},
 	actions: {
 		create: 'Создать',
-		edit: 'Редактировать',
-		delete: 'Удалить',
 		back: 'Назад'
 	},
 	validation: {

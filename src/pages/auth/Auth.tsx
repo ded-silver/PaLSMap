@@ -30,7 +30,7 @@ export function Auth() {
 			authService.main(tab === 'login' ? 'login' : 'register', data),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: USER_PROFILE_QUERY_KEY })
-			toast.success(t('messages.success', { ns: 'auth' }))
+			toast.success(t('messages.success', { ns: 'common' }))
 			reset()
 			navigate('/')
 		},
@@ -82,7 +82,7 @@ export function Auth() {
 				</Typography>
 
 				<TextField
-					label={t('fields.email', { ns: 'auth' })}
+					label={t('labels.email', { ns: 'common' })}
 					type='email'
 					{...register('email', {
 						required: t('validation.emailRequired', { ns: 'auth' })
@@ -90,7 +90,7 @@ export function Auth() {
 				/>
 
 				<TextField
-					label={t('fields.password', { ns: 'auth' })}
+					label={t('labels.password', { ns: 'common' })}
 					type='password'
 					{...register('password', {
 						required: t('validation.passwordRequired', { ns: 'auth' })

@@ -14,6 +14,7 @@ export const useUpdateNode = (queryKey: string[] = ['nodes']) => {
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey })
 		},
-		onError: () => toast.error(i18n.t('messages.updateError', { ns: 'nodes' }))
+		onError: () =>
+			toast.error(i18n.t('messages.errorUpdating', { ns: 'common' }))
 	})
 }

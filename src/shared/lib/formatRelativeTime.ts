@@ -1,7 +1,6 @@
 export const formatRelativeTime = (
 	dateString: string,
-	t: (key: string, options?: { count?: number; ns?: string }) => string,
-	namespace: string = 'common'
+	t: (key: string, options?: { count?: number; ns?: string }) => string
 ): string => {
 	const date = new Date(dateString)
 	const now = new Date()
@@ -15,28 +14,28 @@ export const formatRelativeTime = (
 	const diffYears = Math.floor(diffDays / 365)
 
 	if (diffSeconds < 60) {
-		return t('time.justNow', { ns: namespace })
+		return t('time.justNow', { ns: 'common' })
 	}
 
 	if (diffMinutes < 60) {
-		return t('time.minutesAgo', { ns: namespace, count: diffMinutes })
+		return t('time.minutesAgo', { ns: 'common', count: diffMinutes })
 	}
 
 	if (diffHours < 24) {
-		return t('time.hoursAgo', { ns: namespace, count: diffHours })
+		return t('time.hoursAgo', { ns: 'common', count: diffHours })
 	}
 
 	if (diffDays < 7) {
-		return t('time.daysAgo', { ns: namespace, count: diffDays })
+		return t('time.daysAgo', { ns: 'common', count: diffDays })
 	}
 
 	if (diffWeeks < 4) {
-		return t('time.weeksAgo', { ns: namespace, count: diffWeeks })
+		return t('time.weeksAgo', { ns: 'common', count: diffWeeks })
 	}
 
 	if (diffMonths < 12) {
-		return t('time.monthsAgo', { ns: namespace, count: diffMonths })
+		return t('time.monthsAgo', { ns: 'common', count: diffMonths })
 	}
 
-	return t('time.yearsAgo', { ns: namespace, count: diffYears })
+	return t('time.yearsAgo', { ns: 'common', count: diffYears })
 }

@@ -225,7 +225,7 @@ export const PermissionRequestsPage = () => {
 								className={styles.emptyTitle}
 								color='error'
 							>
-								{t('messages.loadError')}
+								{t('messages.errorLoading', { ns: 'common' })}
 							</Typography>
 						</div>
 					) : requests.length === 0 ? (
@@ -309,11 +309,7 @@ export const PermissionRequestsPage = () => {
 													color='text.secondary'
 												>
 													{t('labels.createdAt')}:{' '}
-													{formatRelativeTime(
-														request.createdAt,
-														t,
-														'notifications'
-													)}
+													{formatRelativeTime(request.createdAt, t)}
 												</Typography>
 											</Box>
 
@@ -326,11 +322,7 @@ export const PermissionRequestsPage = () => {
 															color='text.secondary'
 														>
 															{t('labels.reviewedAt')}:{' '}
-															{formatRelativeTime(
-																request.reviewedAt,
-																t,
-																'notifications'
-															)}
+															{formatRelativeTime(request.reviewedAt, t)}
 														</Typography>
 													</Box>
 													<Box className={styles.cardMetaItem}>

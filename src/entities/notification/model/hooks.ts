@@ -264,8 +264,8 @@ export const useDeleteNotification = () => {
 				)
 			}
 			handleMutationError(error, {
-				defaultErrorKey: 'messages.deleteError',
-				namespace: 'notifications'
+				defaultErrorKey: 'messages.errorDeleting',
+				namespace: 'common'
 			})
 		},
 		onSuccess: () => {
@@ -274,8 +274,8 @@ export const useDeleteNotification = () => {
 				queryKey: ['notifications', 'unread-count']
 			})
 			handleMutationSuccess({
-				successKey: 'messages.deleteSuccess',
-				namespace: 'notifications'
+				successKey: 'messages.deletedSuccess',
+				namespace: 'common'
 			})
 		}
 	})

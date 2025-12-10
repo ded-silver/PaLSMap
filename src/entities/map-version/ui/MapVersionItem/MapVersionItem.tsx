@@ -55,7 +55,7 @@ export const MapVersionItem = memo(
 		const { mutate: deleteVersion, isPending: isDeleting } = useDeleteVersion()
 
 		const { relativeTime, userName, nodeCount } = useMemo(() => {
-			const relative = formatRelativeTime(version.createdAt, t, 'map-versions')
+			const relative = formatRelativeTime(version.createdAt, t)
 			const user =
 				version.createdBy?.name ||
 				version.createdBy?.email ||
@@ -123,7 +123,7 @@ export const MapVersionItem = memo(
 					toast.error(
 						getErrorMessage(
 							error,
-							t('messages.deleteError', { ns: 'map-versions' })
+							t('messages.errorDeleting', { ns: 'common' })
 						)
 					)
 				}
@@ -219,8 +219,8 @@ export const MapVersionItem = memo(
 											</IconButton>
 										</Tooltip>
 										<Tooltip
-											title={t('labels.deleteVersion', {
-												ns: 'map-versions'
+											title={t('buttons.delete', {
+												ns: 'common'
 											})}
 										>
 											<IconButton
@@ -279,7 +279,7 @@ export const MapVersionItem = memo(
 						<AppModal
 							open={isDeleteModalOpen}
 							onClose={() => setIsDeleteModalOpen(false)}
-							title={t('labels.deleteVersion', { ns: 'map-versions' })}
+							title={t('buttons.delete', { ns: 'common' })}
 							variant='error'
 							actions={
 								<>

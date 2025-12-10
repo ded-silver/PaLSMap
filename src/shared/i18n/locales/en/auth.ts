@@ -4,8 +4,6 @@ export default {
 		register: 'Register'
 	},
 	fields: {
-		email: 'Email',
-		password: 'Password',
 		name: 'Full Name (optional)',
 		namePlaceholder: 'John Doe'
 	},
@@ -18,7 +16,6 @@ export default {
 		passwordRequired: 'Password is required'
 	},
 	messages: {
-		success: 'Success!',
 		loginError: 'Login error',
 		registerError: 'Registration error'
 	}

@@ -28,7 +28,7 @@ export const DeleteConfirmDialog = ({
 		<AppModal
 			open={isOpen}
 			onClose={onClose}
-			title={t('messages.deleteTitle', { ns: 'dictionary' })}
+			title={t('confirmations.deleteTitle', { ns: 'common' })}
 			variant='error'
 			actions={
 				<>
@@ -53,7 +53,7 @@ export const DeleteConfirmDialog = ({
 			}
 		>
 			<DialogContentText sx={{ marginTop: '16px' }}>
-				{t('messages.deleteConfirm', { ns: 'dictionary' })}
+				{t('confirmations.deleteConfirm', { ns: 'common' })}
 			</DialogContentText>
 			<div className={styles.itemInfo}>
 				<Typography

@@ -74,7 +74,7 @@ export const NodeContextMenu = ({
 				<ListItemIcon>
 					<ContentCopyIcon fontSize='small' />
 				</ListItemIcon>
-				<ListItemText>{t('labels.copy', { ns: 'nodes' })}</ListItemText>
+				<ListItemText>{t('buttons.copy', { ns: 'common' })}</ListItemText>
 			</MenuItem>
 		)
 
@@ -91,7 +91,7 @@ export const NodeContextMenu = ({
 				<ListItemIcon>
 					<ContentPasteIcon fontSize='small' />
 				</ListItemIcon>
-				<ListItemText>{t('labels.paste', { ns: 'nodes' })}</ListItemText>
+				<ListItemText>{t('buttons.paste', { ns: 'common' })}</ListItemText>
 			</MenuItem>
 		)
 

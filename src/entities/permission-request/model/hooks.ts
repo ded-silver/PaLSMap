@@ -48,8 +48,8 @@ export const useCreatePermissionRequest = () => {
 		},
 		onError: (error: ErrorResponse) => {
 			handleMutationError(error, {
-				defaultErrorKey: 'messages.createError',
-				namespace: 'notifications'
+				defaultErrorKey: 'messages.errorCreating',
+				namespace: 'common'
 			})
 		}
 	})

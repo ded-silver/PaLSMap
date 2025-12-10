@@ -9,7 +9,9 @@ export default {
 		confirm: 'Confirm',
 		logout: 'Logout',
 		login: 'Login',
-		register: 'Register'
+		register: 'Register',
+		copy: 'Copy',
+		paste: 'Paste'
 	},
 	titles: {
 		dictionary: 'Reference Information',
@@ -25,15 +27,24 @@ export default {
 		loading: 'Loading...',
 		saving: 'Saving...',
 		deleting: 'Deleting...',
-		uploading: 'Uploading...',
+		uploading: 'Uploading file...',
 		noResults: 'No results found',
 		error: 'Error',
-		success: 'Success'
+		success: 'Success',
+		errorDeleting: 'Error deleting',
+		errorCreating: 'Error creating',
+		errorUpdating: 'Error updating',
+		errorLoading: 'Error loading',
+		createdSuccess: 'Record created successfully',
+		updatedSuccess: 'Record updated successfully',
+		deletedSuccess: 'Record deleted successfully'
 	},
 	confirmations: {
 		delete: 'Are you sure you want to delete {{item}}?',
 		deleteObject: 'Are you sure you want to delete object {{name}}?',
-		deleteRow: 'Are you sure you want to delete this row?'
+		deleteRow: 'Are you sure you want to delete this row?',
+		deleteTitle: 'Confirm deletion',
+		deleteConfirm: 'Are you sure you want to delete this record?'
 	},
 	labels: {
 		email: 'Email',
@@ -112,5 +123,18 @@ export default {
 	dndSidebar: {
 		collapse: 'Collapse',
 		expand: 'Expand'
+	},
+	time: {
+		justNow: 'Just now',
+		minutesAgo: '{{count}} minutes ago',
+		hoursAgo: '{{count}} hours ago',
+		daysAgo: '{{count}} days ago',
+		weeksAgo: '{{count}} weeks ago',
+		monthsAgo: '{{count}} months ago',
+		yearsAgo: '{{count}} years ago'
+	},
+	languages: {
+		ru: 'Русский',
+		en: 'English'
 	}
 } as const

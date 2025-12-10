@@ -1,11 +1,7 @@
 export default {
 	tableTitle: 'Table of protection settings of the technological object',
 	actions: {
-		edit: 'Edit',
-		delete: 'Delete',
-		save: 'Save',
-		saveToExcel: 'Save to Excel',
-		add: 'Add'
+		saveToExcel: 'Save to Excel'
 	},
 	confirmations: {
 		deleteObject: 'Are you sure you want to delete object {{name}}?',
@@ -23,9 +19,7 @@ export default {
 		status: 'Object status',
 		copyNode: 'Copy object',
 		copyNodes: 'Copy objects',
-		pasteNodes: 'Paste objects',
-		copy: 'Copy',
-		paste: 'Paste'
+		pasteNodes: 'Paste objects'
 	},
 	hints: {
 		lockNode: 'Locked object cannot be moved',
@@ -66,7 +60,6 @@ export default {
 		name: 'Name'
 	},
 	dialogs: {
-		deleteTitle: 'Confirm deletion',
 		deleteConfirm: 'Are you sure you want to delete object',
 		deleteRowTitle: 'Confirm deletion'
 	},
@@ -93,7 +86,6 @@ export default {
 		columnMenuSortDesc: 'Sort by DESC',
 		columnMenuUnsort: 'Unsort',
 		filterPanelAddFilter: 'Add filter',
-		filterPanelDeleteIconLabel: 'Delete',
 		filterPanelOperators: 'Operators',
 		filterPanelOperatorAnd: 'And',
 		filterPanelOperatorOr: 'Or',
@@ -110,7 +102,6 @@ export default {
 		noRowsLabel: 'No rows',
 		noResultsOverlayLabel: 'No results found.',
 		errorOverlayDefaultLabel: 'An error occurred.',
-		loadingOverlayLabel: 'Loading...',
 		columnHeaderFiltersTooltipActive: '{{count}} filter(s) active',
 		columnHeaderFiltersLabel: 'Show filters',
 		columnHeaderSortIconLabel: 'Sort'

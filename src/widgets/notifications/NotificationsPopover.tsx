@@ -131,7 +131,7 @@ export const NotificationsPopover = ({
 								variant='body2'
 								color='error'
 							>
-								{t('messages.loadError')}
+								{t('messages.errorLoading', { ns: 'common' })}
 							</Typography>
 						</Box>
 					) : notifications.length === 0 ? (

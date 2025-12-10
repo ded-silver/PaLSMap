@@ -121,7 +121,7 @@ export function useNodeSettings({
 			queryClient.invalidateQueries({ queryKey: ['childNodes'] })
 		},
 		onError: () => {
-			toast.error(t('messages.deleteError', { ns: 'nodes' }))
+			toast.error(t('messages.errorDeleting', { ns: 'common' }))
 		}
 	})
 

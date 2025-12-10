@@ -6,7 +6,6 @@ export default {
 		viewVersion: 'Просмотреть',
 		view: 'Просмотреть',
 		restoreVersion: 'Восстановить',
-		deleteVersion: 'Удалить',
 		versionName: 'Название версии',
 		versionDescription: 'Описание',
 		version: 'Версия',
@@ -40,8 +39,7 @@ export default {
 	},
 	confirmations: {
 		restoreVersion:
-			"Восстановить карту к версии '{{name}}'? Текущие изменения будут потеряны.",
-		deleteVersion: 'Удалить версию'
+			"Восстановить карту к версии '{{name}}'? Текущие изменения будут потеряны."
 	},
 	placeholders: {
 		versionName: 'Версия 1.1 2025',
@@ -61,14 +59,5 @@ export default {
 		viewingVersionMode: 'Просмотр версии: {{name}}',
 		readOnlyMode: 'Режим просмотра',
 		totalVersions: 'Всего версий: {{count}}'
-	},
-	time: {
-		justNow: 'только что',
-		minutesAgo: '{{count}} мин. назад',
-		hoursAgo: '{{count}} ч. назад',
-		daysAgo: '{{count}} дн. назад',
-		weeksAgo: '{{count}} нед. назад',
-		monthsAgo: '{{count}} мес. назад',
-		yearsAgo: '{{count}} г. назад'
 	}
 } as const

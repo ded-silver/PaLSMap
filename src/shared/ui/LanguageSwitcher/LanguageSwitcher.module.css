@@ -1,5 +1,5 @@
 .select {
-	min-width: 120px;
+	width: auto;
 	background-color: var(--glass-dark-bg);
 	border-radius: var(--border-radius-lg) !important;
 	backdrop-filter: var(--effect-blur);
@@ -23,12 +23,13 @@
 }
 
 .select :global(.MuiSelect-select) {
-	padding: 0 var(--spacing-xxxxxl) 0 var(--spacing-xl) !important;
+	padding: 0 32px 0 12px !important;
 	height: 100% !important;
 	display: flex !important;
 	align-items: center !important;
+	justify-content: center !important;
 	color: var(--glass-dark-text) !important;
-	font-size: 0.875rem !important;
+	font-size: var(--font-size-base) !important;
 	font-weight: var(--font-weight-semibold) !important;
 	line-height: var(--line-height-normal) !important;
 }
@@ -51,4 +52,10 @@
 
 .select:global(.Mui-focused) :global(.MuiOutlinedInput-notchedOutline) {
 	border: none !important;
+}
+
+.code {
+	margin-left: var(--spacing-md);
+	opacity: 0.6;
+	font-size: var(--font-size-base);
 }

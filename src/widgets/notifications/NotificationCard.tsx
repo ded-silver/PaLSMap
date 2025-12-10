@@ -77,7 +77,7 @@ export const NotificationCard = memo(
 		)
 
 		const relativeTime = useMemo(
-			() => formatRelativeTime(notification.createdAt, t, 'notifications'),
+			() => formatRelativeTime(notification.createdAt, t),
 			[notification.createdAt, t]
 		)
 

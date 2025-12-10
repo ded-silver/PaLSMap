@@ -98,7 +98,7 @@ export const HistoryList = ({
 						color='text.secondary'
 					>
 						{hasActiveFilters
-							? t('messages.noResults', { ns: 'node-history' })
+							? t('messages.noResults', { ns: 'common' })
 							: t('messages.noHistory', { ns: 'node-history' })}
 					</Typography>
 				</Box>

@@ -24,8 +24,7 @@ export default {
 		loading: 'Loading history...',
 		error: 'Error loading history',
 		noChanges: 'No changes to display',
-		unknownUser: 'Unknown User',
-		noResults: 'No results found for selected filters'
+		unknownUser: 'Unknown User'
 	},
 	info: {
 		showingResults: 'Showing {{from}}–{{to}} of {{total}}',
@@ -62,14 +61,5 @@ export default {
 		selectActionType: 'Select action type',
 		selectUser: 'Select user',
 		enterNodeId: 'Enter object ID'
-	},
-	time: {
-		justNow: 'Just now',
-		minutesAgo: '{{count}} minutes ago',
-		hoursAgo: '{{count}} hours ago',
-		daysAgo: '{{count}} days ago',
-		weeksAgo: '{{count}} weeks ago',
-		monthsAgo: '{{count}} months ago',
-		yearsAgo: '{{count}} years ago'
 	}
 } as const

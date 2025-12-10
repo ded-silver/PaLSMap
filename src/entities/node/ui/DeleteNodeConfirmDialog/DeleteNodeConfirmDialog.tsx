@@ -24,7 +24,7 @@ export const DeleteNodeConfirmDialog = ({
 		<AppModal
 			open={isOpen}
 			onClose={onClose}
-			title={t('dialogs.deleteTitle', { ns: 'nodes' })}
+			title={t('confirmations.deleteTitle', { ns: 'common' })}
 			variant='error'
 			actions={
 				<>
@@ -49,7 +49,7 @@ export const DeleteNodeConfirmDialog = ({
 			}
 		>
 			<DialogContentText sx={{ marginTop: '16px' }}>
-				{t('dialogs.deleteConfirm', { ns: 'nodes' })}{' '}
+				{t('confirmations.deleteConfirm', { ns: 'common' })}{' '}
 				<b>{nodeName || t('labels.withoutName', { ns: 'nodes' })}</b>?
 			</DialogContentText>
 		</AppModal>

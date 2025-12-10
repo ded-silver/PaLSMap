@@ -16,7 +16,6 @@ export default {
 	},
 	messages: {
 		empty: 'Dictionary is empty',
-		noResults: 'No results found',
 		deleteConfirm: 'Are you sure you want to delete this record?',
 		abbreviation: 'Abbreviation:',
 		fullName: 'Full name:',

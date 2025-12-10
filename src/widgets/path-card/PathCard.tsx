@@ -76,7 +76,7 @@ export const PathCard = ({ type, item, onEdit, onDelete }: PathCardProps) => {
 						<IconButton
 							size='small'
 							onClick={handleEdit}
-							aria-label={t('actions.edit')}
+							aria-label={t('buttons.edit', { ns: 'common' })}
 							className={styles.actionButton}
 						>
 							<EditIcon fontSize='small' />
@@ -86,7 +86,7 @@ export const PathCard = ({ type, item, onEdit, onDelete }: PathCardProps) => {
 						<IconButton
 							size='small'
 							onClick={handleDelete}
-							aria-label={t('actions.delete')}
+							aria-label={t('buttons.delete', { ns: 'common' })}
 							className={`${styles.actionButton} ${styles.deleteButton}`}
 						>
 							<DeleteIcon fontSize='small' />

@@ -196,7 +196,7 @@ export const NotificationsPage = () => {
 								className={styles.emptyTitle}
 								color='error'
 							>
-								{t('messages.loadError')}
+								{t('messages.errorLoading', { ns: 'common' })}
 							</Typography>
 						</div>
 					) : notifications.length === 0 ? (

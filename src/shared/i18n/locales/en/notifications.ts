@@ -6,7 +6,6 @@ export default {
 		markAllAsRead: 'Mark all as read',
 		noNotifications: 'No notifications',
 		showAll: 'Show all',
-		delete: 'Delete',
 		permissionRequests: 'Permission Requests',
 		createRequest: 'Request Permissions',
 		myRequests: 'My Permission Requests',
@@ -26,8 +25,6 @@ export default {
 		rejectRequest: 'Reject Request',
 		rejectionReason: 'Rejection Reason',
 		user: 'User',
-		email: 'Email',
-		name: 'Name',
 		noRequests: 'No requests',
 		notificationsWithCount: 'Notifications ({{count}} unread)',
 		unreadNotificationsCount: '{{count}} unread notifications',
@@ -67,13 +64,5 @@ export default {
 	placeholders: {
 		reason: 'Specify reason for request (optional)',
 		rejectionReason: 'Specify reason for rejection (optional)'
-	},
-	time: {
-		justNow: 'Just now',
-		minutesAgo: '{{count}} minutes ago',
-		hoursAgo: '{{count}} hours ago',
-		daysAgo: '{{count}} days ago',
-		weeksAgo: '{{count}} weeks ago',
-		monthsAgo: '{{count}} months ago'
 	}
 } as const

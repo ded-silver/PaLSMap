@@ -272,7 +272,7 @@ export const DialogData = ({
 											variant='contained'
 											startIcon={<AddIcon />}
 										>
-											{t('actions.add')}
+											{t('buttons.add', { ns: 'common' })}
 										</Button>
 									)}
 									<Button

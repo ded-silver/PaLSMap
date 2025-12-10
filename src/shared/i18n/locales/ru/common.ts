@@ -10,7 +10,8 @@ export default {
 		logout: 'Выйти',
 		login: 'Войти',
 		register: 'Зарегистрироваться',
-		copy: 'Копировать'
+		copy: 'Копировать',
+		paste: 'Вставить'
 	},
 	titles: {
 		dictionary: 'Справочная информация',
@@ -26,15 +27,24 @@ export default {
 		loading: 'Загрузка...',
 		saving: 'Сохранение...',
 		deleting: 'Удаление...',
-		uploading: 'Загрузка...',
+		uploading: 'Загрузка файла...',
 		noResults: 'Ничего не найдено',
 		error: 'Ошибка',
-		success: 'Успешно'
+		success: 'Успешно',
+		errorDeleting: 'Ошибка при удалении',
+		errorCreating: 'Ошибка при создании',
+		errorUpdating: 'Ошибка при обновлении',
+		errorLoading: 'Ошибка при загрузке',
+		createdSuccess: 'Запись успешно создана',
+		updatedSuccess: 'Запись успешно обновлена',
+		deletedSuccess: 'Запись успешно удалена'
 	},
 	confirmations: {
 		delete: 'Вы уверены, что хотите удалить {{item}}?',
 		deleteObject: 'Вы уверены, что хотите удалить объект {{name}}?',
-		deleteRow: 'Вы уверены, что хотите удалить эту строку?'
+		deleteRow: 'Вы уверены, что хотите удалить эту строку?',
+		deleteTitle: 'Подтверждение удаления',
+		deleteConfirm: 'Вы уверены, что хотите удалить эту запись?'
 	},
 	labels: {
 		email: 'Email',
@@ -122,5 +132,18 @@ export default {
 	dndSidebar: {
 		collapse: 'Свернуть',
 		expand: 'Развернуть'
+	},
+	time: {
+		justNow: 'Только что',
+		minutesAgo: '{{count}} минут назад',
+		hoursAgo: '{{count}} часов назад',
+		daysAgo: '{{count}} дней назад',
+		weeksAgo: '{{count}} недель назад',
+		monthsAgo: '{{count}} месяцев назад',
+		yearsAgo: '{{count}} лет назад'
+	},
+	languages: {
+		ru: 'Русский',
+		en: 'English'
 	}
 } as const

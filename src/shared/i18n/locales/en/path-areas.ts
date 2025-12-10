@@ -14,8 +14,6 @@ export default {
 	},
 	actions: {
 		create: 'Create',
-		edit: 'Edit',
-		delete: 'Delete',
 		back: 'Back'
 	},
 	validation: {

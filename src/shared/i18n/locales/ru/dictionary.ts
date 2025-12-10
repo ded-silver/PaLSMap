@@ -16,7 +16,6 @@ export default {
 	},
 	messages: {
 		empty: 'Справочник пуст',
-		noResults: 'Ничего не найдено',
 		deleteConfirm: 'Вы уверены, что хотите удалить запись?',
 		abbreviation: 'Аббревиатура:',
 		fullName: 'Полное название:',

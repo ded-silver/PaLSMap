@@ -32,14 +32,14 @@ export const useCreateCountry = () => {
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['countries'] })
 			handleMutationSuccess({
-				successKey: 'messages.createSuccess',
-				namespace: 'path-areas'
+				successKey: 'messages.createdSuccess',
+				namespace: 'common'
 			})
 		},
 		onError: (error: ErrorResponse) => {
 			handleMutationError(error, {
-				defaultErrorKey: 'messages.createError',
-				namespace: 'path-areas'
+				defaultErrorKey: 'messages.errorCreating',
+				namespace: 'common'
 			})
 		}
 	})
@@ -57,14 +57,14 @@ export const useUpdateCountry = () => {
 				queryKey: ['country', variables.id]
 			})
 			handleMutationSuccess({
-				successKey: 'messages.updateSuccess',
-				namespace: 'path-areas'
+				successKey: 'messages.updatedSuccess',
+				namespace: 'common'
 			})
 		},
 		onError: (error: ErrorResponse) => {
 			handleMutationError(error, {
-				defaultErrorKey: 'messages.updateError',
-				namespace: 'path-areas'
+				defaultErrorKey: 'messages.errorUpdating',
+				namespace: 'common'
 			})
 		}
 	})
@@ -78,14 +78,14 @@ export const useDeleteCountry = () => {
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['countries'] })
 			handleMutationSuccess({
-				successKey: 'messages.deleteSuccess',
-				namespace: 'path-areas'
+				successKey: 'messages.deletedSuccess',
+				namespace: 'common'
 			})
 		},
 		onError: (error: ErrorResponse) => {
 			handleMutationError(error, {
-				defaultErrorKey: 'messages.deleteError',
-				namespace: 'path-areas'
+				defaultErrorKey: 'messages.errorDeleting',
+				namespace: 'common'
 			})
 		}
 	})

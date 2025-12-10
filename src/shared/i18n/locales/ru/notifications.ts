@@ -6,7 +6,6 @@ export default {
 		markAllAsRead: 'Отметить все как прочитанные',
 		noNotifications: 'Нет уведомлений',
 		showAll: 'Показать все',
-		delete: 'Удалить',
 		permissionRequests: 'Запросы прав',
 		createRequest: 'Запросить права',
 		myRequests: 'Мои запросы прав',
@@ -26,8 +25,6 @@ export default {
 		rejectRequest: 'Отклонить запрос',
 		rejectionReason: 'Причина отклонения',
 		user: 'Пользователь',
-		email: 'Email',
-		name: 'Имя',
 		noRequests: 'Нет запросов',
 		notificationsWithCount: 'Уведомления ({{count}} непрочитанных)',
 		unreadNotificationsCount: '{{count}} непрочитанных уведомлений',
@@ -67,13 +64,5 @@ export default {
 	placeholders: {
 		reason: 'Укажите причину запроса (необязательно)',
 		rejectionReason: 'Укажите причину отклонения (необязательно)'
-	},
-	time: {
-		justNow: 'Только что',
-		minutesAgo: '{{count}} минут назад',
-		hoursAgo: '{{count}} часов назад',
-		daysAgo: '{{count}} дней назад',
-		weeksAgo: '{{count}} недель назад',
-		monthsAgo: '{{count}} месяцев назад'
 	}
 } as const

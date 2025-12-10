@@ -29,7 +29,7 @@ export const DeleteConfirmDialog = ({
 		<AppModal
 			open={isOpen}
 			onClose={onClose}
-			title={t('messages.deleteTitle', { ns: 'path-areas' })}
+			title={t('confirmations.deleteTitle', { ns: 'common' })}
 			variant='error'
 			actions={
 				<>
@@ -48,13 +48,13 @@ export const DeleteConfirmDialog = ({
 					>
 						{isLoading
 							? t('messages.deleting', { ns: 'common' })
-							: t('actions.delete', { ns: 'path-areas' })}
+							: t('buttons.delete', { ns: 'common' })}
 					</AppButton>
 				</>
 			}
 		>
 			<DialogContentText sx={{ marginTop: '16px' }}>
-				{t('messages.deleteConfirm', { ns: 'path-areas' })}
+				{t('confirmations.deleteConfirm', { ns: 'common' })}
 			</DialogContentText>
 			<div style={{ marginTop: '16px' }}>
 				<Typography

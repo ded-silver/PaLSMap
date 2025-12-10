@@ -58,7 +58,7 @@ export const HistoryDetails = ({
 			history.user?.name ||
 			history.user?.email ||
 			t('messages.unknownUser', { ns: 'node-history' })
-		const relative = formatRelativeTime(history.createdAt, t, 'node-history')
+		const relative = formatRelativeTime(history.createdAt, t)
 		const exact = new Date(history.createdAt).toLocaleString(
 			i18n.language === 'ru' ? 'ru-RU' : 'en-US',
 			{

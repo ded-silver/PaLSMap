@@ -6,7 +6,6 @@ export default {
 		viewVersion: 'View',
 		view: 'View',
 		restoreVersion: 'Restore',
-		deleteVersion: 'Delete',
 		versionName: 'Version Name',
 		versionDescription: 'Description',
 		version: 'Version',
@@ -40,8 +39,7 @@ export default {
 	},
 	confirmations: {
 		restoreVersion:
-			"Restore map to version '{{name}}'? Current changes will be lost.",
-		deleteVersion: 'Delete version'
+			"Restore map to version '{{name}}'? Current changes will be lost."
 	},
 	placeholders: {
 		versionName: 'Version 1.1 2025',
@@ -61,14 +59,5 @@ export default {
 		viewingVersionMode: 'Viewing version: {{name}}',
 		readOnlyMode: 'Read-only mode',
 		totalVersions: 'Total versions: {{count}}'
-	},
-	time: {
-		justNow: 'just now',
-		minutesAgo: '{{count}} min. ago',
-		hoursAgo: '{{count}} hr. ago',
-		daysAgo: '{{count}} days ago',
-		weeksAgo: '{{count}} weeks ago',
-		monthsAgo: '{{count}} months ago',
-		yearsAgo: '{{count}} years ago'
 	}
 } as const

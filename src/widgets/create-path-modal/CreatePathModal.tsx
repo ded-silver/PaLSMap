@@ -43,7 +43,9 @@ export const CreatePathModal = ({
 				? t('labels.createCountry')
 				: t('labels.createPathArea')
 		}
-		return type === 'country' ? t('actions.edit') : t('actions.edit')
+		return type === 'country'
+			? t('buttons.edit', { ns: 'common' })
+			: t('buttons.edit', { ns: 'common' })
 	}
 
 	return (

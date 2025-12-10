@@ -38,14 +38,14 @@ export const useCreateDictionary = () => {
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['dictionaries'] })
 			handleMutationSuccess({
-				successKey: 'messages.createSuccess',
-				namespace: 'dictionary'
+				successKey: 'messages.createdSuccess',
+				namespace: 'common'
 			})
 		},
 		onError: (error: ErrorResponse) => {
 			handleMutationError(error, {
-				defaultErrorKey: 'messages.createError',
-				namespace: 'dictionary'
+				defaultErrorKey: 'messages.errorCreating',
+				namespace: 'common'
 			})
 		}
 	})
@@ -63,14 +63,14 @@ export const useUpdateDictionary = () => {
 				queryKey: ['dictionary', variables.id]
 			})
 			handleMutationSuccess({
-				successKey: 'messages.updateSuccess',
-				namespace: 'dictionary'
+				successKey: 'messages.updatedSuccess',
+				namespace: 'common'
 			})
 		},
 		onError: (error: ErrorResponse) => {
 			handleMutationError(error, {
-				defaultErrorKey: 'messages.updateError',
-				namespace: 'dictionary'
+				defaultErrorKey: 'messages.errorUpdating',
+				namespace: 'common'
 			})
 		}
 	})
@@ -84,14 +84,14 @@ export const useDeleteDictionary = () => {
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['dictionaries'] })
 			handleMutationSuccess({
-				successKey: 'messages.deleteSuccess',
-				namespace: 'dictionary'
+				successKey: 'messages.deletedSuccess',
+				namespace: 'common'
 			})
 		},
 		onError: (error: ErrorResponse) => {
 			handleMutationError(error, {
-				defaultErrorKey: 'messages.deleteError',
-				namespace: 'dictionary'
+				defaultErrorKey: 'messages.errorDeleting',
+				namespace: 'common'
 			})
 		}
 	})

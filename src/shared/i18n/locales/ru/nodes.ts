@@ -1,11 +1,7 @@
 export default {
 	tableTitle: 'Таблица уставок защит технологического объекта',
 	actions: {
-		edit: 'Редактировать',
-		delete: 'Удалить',
-		save: 'Сохранить',
-		saveToExcel: 'Сохранить в Excel',
-		add: 'Добавить'
+		saveToExcel: 'Сохранить в Excel'
 	},
 	confirmations: {
 		deleteObject: 'Вы уверены, что хотите удалить объект {{name}}?',
@@ -23,9 +19,7 @@ export default {
 		status: 'Состояние объекта',
 		copyNode: 'Копировать объект',
 		copyNodes: 'Копировать объекты',
-		pasteNodes: 'Вставить объекты',
-		copy: 'Копировать',
-		paste: 'Вставить'
+		pasteNodes: 'Вставить объекты'
 	},
 	hints: {
 		lockNode: 'Заблокированный объект не может быть перемещен',
@@ -66,7 +60,6 @@ export default {
 		name: 'Название'
 	},
 	dialogs: {
-		deleteTitle: 'Подтверждение удаления',
 		deleteConfirm: 'Вы уверены, что хотите удалить объект',
 		deleteRowTitle: 'Подтвердите удаление'
 	},
@@ -93,7 +86,6 @@ export default {
 		columnMenuSortDesc: 'Сортировать по убыванию',
 		columnMenuUnsort: 'Отменить сортировку',
 		filterPanelAddFilter: 'Добавить фильтр',
-		filterPanelDeleteIconLabel: 'Удалить',
 		filterPanelOperators: 'Операторы',
 		filterPanelOperatorAnd: 'И',
 		filterPanelOperatorOr: 'ИЛИ',
@@ -110,7 +102,6 @@ export default {
 		noRowsLabel: 'Нет строк',
 		noResultsOverlayLabel: 'Не найдено результатов.',
 		errorOverlayDefaultLabel: 'Произошла ошибка.',
-		loadingOverlayLabel: 'Загрузка...',
 		columnHeaderFiltersTooltipActive: '{{count}} фильтр активен',
 		columnHeaderFiltersLabel: 'Показать фильтры',
 		columnHeaderSortIconLabel: 'Сортировать'

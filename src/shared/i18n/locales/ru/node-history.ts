@@ -24,8 +24,7 @@ export default {
 		loading: 'Загрузка истории...',
 		error: 'Ошибка при загрузке истории',
 		noChanges: 'Нет изменений для отображения',
-		unknownUser: 'Неизвестный пользователь',
-		noResults: 'По выбранным фильтрам ничего не найдено'
+		unknownUser: 'Неизвестный пользователь'
 	},
 	info: {
 		showingResults: 'Показано {{from}}–{{to}} из {{total}}',
@@ -62,14 +61,5 @@ export default {
 		selectActionType: 'Выберите тип действия',
 		selectUser: 'Выберите пользователя',
 		enterNodeId: 'Введите ID объекта'
-	},
-	time: {
-		justNow: 'Только что',
-		minutesAgo: '{{count}} минут назад',
-		hoursAgo: '{{count}} часов назад',
-		daysAgo: '{{count}} дней назад',
-		weeksAgo: '{{count}} недель назад',
-		monthsAgo: '{{count}} месяцев назад',
-		yearsAgo: '{{count}} лет назад'
 	}
 } as const

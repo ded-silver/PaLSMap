@@ -232,7 +232,7 @@ export const DictionaryPage = () => {
 							variant='h6'
 							className={styles.emptyTitle}
 						>
-							{t('messages.noResults', { ns: 'dictionary' })}
+							{t('messages.noResults', { ns: 'common' })}
 						</Typography>
 						<Typography
 							variant='body2'

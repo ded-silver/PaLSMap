@@ -304,10 +304,10 @@ export const AdminUsersPage = () => {
 							<TableHead>
 								<TableRow className={styles.tableHeaderRow}>
 									<TableCell className={styles.tableHeaderCell}>
-										{t('name', { ns: 'admin' })}
+										{t('labels.name', { ns: 'common' })}
 									</TableCell>
 									<TableCell className={styles.tableHeaderCell}>
-										{t('email', { ns: 'admin' })}
+										{t('labels.email', { ns: 'common' })}
 									</TableCell>
 									<TableCell className={styles.tableHeaderCell}>
 										{t('position', { ns: 'admin' })}

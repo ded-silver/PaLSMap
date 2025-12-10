@@ -4,8 +4,6 @@ export default {
 		register: 'Регистрация'
 	},
 	fields: {
-		email: 'Email',
-		password: 'Пароль',
 		name: 'ФИО (необязательно)',
 		namePlaceholder: 'Иванов Иван Иванович'
 	},
@@ -18,7 +16,6 @@ export default {
 		passwordRequired: 'Пароль обязателен'
 	},
 	messages: {
-		success: 'Успешно!',
 		loginError: 'Ошибка входа',
 		registerError: 'Ошибка регистрации'
 	}

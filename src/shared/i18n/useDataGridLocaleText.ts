@@ -3,7 +3,7 @@ import { enUS, ruRU } from '@mui/x-data-grid/locales'
 import { useTranslation } from 'react-i18next'
 
 export const useDataGridLocaleText = (): Partial<GridLocaleText> => {
-	const { t, i18n } = useTranslation('nodes')
+	const { t, i18n } = useTranslation(['nodes', 'common'])
 	const currentLanguage = i18n.language
 
 	const baseLocaleText =
@@ -19,7 +19,7 @@ export const useDataGridLocaleText = (): Partial<GridLocaleText> => {
 		columnMenuSortDesc: t('dataGrid.columnMenuSortDesc'),
 		columnMenuUnsort: t('dataGrid.columnMenuUnsort'),
 		filterPanelAddFilter: t('dataGrid.filterPanelAddFilter'),
-		filterPanelDeleteIconLabel: t('dataGrid.filterPanelDeleteIconLabel'),
+		filterPanelDeleteIconLabel: t('buttons.delete', { ns: 'common' }),
 		filterPanelOperators: t('dataGrid.filterPanelOperators'),
 		filterPanelOperatorAnd: t('dataGrid.filterPanelOperatorAnd'),
 		filterPanelOperatorOr: t('dataGrid.filterPanelOperatorOr'),
@@ -38,7 +38,7 @@ export const useDataGridLocaleText = (): Partial<GridLocaleText> => {
 		noRowsLabel: t('dataGrid.noRowsLabel'),
 		noResultsOverlayLabel: t('dataGrid.noResultsOverlayLabel'),
 		errorOverlayDefaultLabel: t('dataGrid.errorOverlayDefaultLabel'),
-		loadingOverlayLabel: t('dataGrid.loadingOverlayLabel'),
+		loadingOverlayLabel: t('messages.loading', { ns: 'common' }),
 		columnHeaderFiltersTooltipActive: (count: number) => {
 			return t('dataGrid.columnHeaderFiltersTooltipActive', { count })
 		},

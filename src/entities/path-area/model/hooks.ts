@@ -36,14 +36,14 @@ export const useCreatePathArea = () => {
 			})
 			queryClient.invalidateQueries({ queryKey: ['path-areas'] })
 			handleMutationSuccess({
-				successKey: 'messages.createSuccess',
-				namespace: 'path-areas'
+				successKey: 'messages.createdSuccess',
+				namespace: 'common'
 			})
 		},
 		onError: (error: ErrorResponse) => {
 			handleMutationError(error, {
-				defaultErrorKey: 'messages.createError',
-				namespace: 'path-areas'
+				defaultErrorKey: 'messages.errorCreating',
+				namespace: 'common'
 			})
 		}
 	})
@@ -64,14 +64,14 @@ export const useUpdatePathArea = () => {
 			})
 			queryClient.invalidateQueries({ queryKey: ['path-areas'] })
 			handleMutationSuccess({
-				successKey: 'messages.updateSuccess',
-				namespace: 'path-areas'
+				successKey: 'messages.updatedSuccess',
+				namespace: 'common'
 			})
 		},
 		onError: (error: ErrorResponse) => {
 			handleMutationError(error, {
-				defaultErrorKey: 'messages.updateError',
-				namespace: 'path-areas'
+				defaultErrorKey: 'messages.errorUpdating',
+				namespace: 'common'
 			})
 		}
 	})
@@ -90,14 +90,14 @@ export const useDeletePathArea = () => {
 			queryClient.invalidateQueries({ queryKey: ['path-areas'] })
 			queryClient.invalidateQueries({ queryKey: ['path-area', variables.id] })
 			handleMutationSuccess({
-				successKey: 'messages.deleteSuccess',
-				namespace: 'path-areas'
+				successKey: 'messages.deletedSuccess',
+				namespace: 'common'
 			})
 		},
 		onError: (error: ErrorResponse) => {
 			handleMutationError(error, {
-				defaultErrorKey: 'messages.deleteError',
-				namespace: 'path-areas'
+				defaultErrorKey: 'messages.errorDeleting',
+				namespace: 'common'
 			})
 		}
 	})

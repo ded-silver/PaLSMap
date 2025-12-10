@@ -30,7 +30,7 @@ export const HistoryItem = memo(({ history, onClick }: HistoryItemProps) => {
 		userName
 	} = useMemo(() => {
 		const actionIcon = getActionIcon(history.actionType)
-		const relative = formatRelativeTime(history.createdAt, t, 'node-history')
+		const relative = formatRelativeTime(history.createdAt, t)
 		const user =
 			history.user?.name ||
 			history.user?.email ||
